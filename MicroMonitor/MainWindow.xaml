@@ -1,0 +1,49 @@
+﻿<Window x:Class="MicroMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MicroMonitor"
+        mc:Ignorable="d"
+        Title="Micro Monitor" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
+    <Window.Resources>
+        <local:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></local:DateTimeToTimeStringConverter>
+        <local:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></local:SeverityToBackgroundColorConverter>
+        <local:SeverityToIconConverter x:Key="SeverityToIconConverter"></local:SeverityToIconConverter>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" x:Name="HeaderPanel" Background="Black">
+            <TextBlock x:Name="LastRead" Foreground="White"></TextBlock>
+            <TextBlock x:Name="NextRead" Foreground="White"></TextBlock>
+            <Button Content="Read now" Click="OnReadNow"></Button>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="LogEntries">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9"></TextBlock>
+                                <Button Grid.Column="1" Click="OnShowLogEntryDetails">
+                                    <Button.ContentTemplate>
+                                        <DataTemplate>
+                                            <Image Width="13" Height="13" Source="Images/icon-caret-right.png"></Image>
+                                        </DataTemplate>
+                                    </Button.ContentTemplate>
+                                </Button>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>
