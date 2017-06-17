@@ -70,24 +70,19 @@ namespace MicroMonitor
 
             if (e.Key == Key.LeftShift)
             {
-                //if (_peekWindow != null && !_peekWindow.IsActive)
-                //{
-                //    _peekWindow.Show();
-                //}
-
                 var ele = Mouse.DirectlyOver as UIElement;
                 
                 var textBlock = ele as TextBlock;
 
                 if (textBlock != null)
                 {
-                    Logger.Info("Mouse is over log entry");
+                    Logger.Info("Mouse is over TextBlock");
 
                     var logEntry = textBlock.DataContext as MicroLogEntry;
 
                     if (logEntry == null)
                     {
-                        Logger.Info("Could not cast to log entry");
+                        Logger.Info($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
                         return;
                     }
 
@@ -95,62 +90,28 @@ namespace MicroMonitor
                     {
                         _peekWindow?.Close();
 
-                        _peekWindow = CreateDetailsWindow(logEntry);
-                        _peekWindow.Show();
-                        _peekWindowId = logEntry.Id;
-
+                        ShowPeekWindow(logEntry);
                         this.Focus();
                     }
 
                     if (_peekWindow == null)
                     {
-                        _peekWindow = CreateDetailsWindow(logEntry);
-                        _peekWindow.Show();
-                        _peekWindowId = logEntry.Id;
-
+                        ShowPeekWindow(logEntry);
                         this.Focus();
                     }
                 }
                 else
                 {
-                    Logger.Info("Mouse is not over log entry");
+                    Logger.Info("Mouse is not over TextBlock");
                 }
-
-                //var textBlock = sender as TextBlock;
-
-                //if (textBlock == null)
-                //{
-                //    Logger.Info("Could not cast to text block");
-                //    return;
-                //}
-
-                //var logEntry = textBlock.DataContext as MicroLogEntry;
-
-                //if (logEntry == null)
-                //{
-                //    Logger.Info("Could not cast to log entry");
-                //    return;
-                //}
-
-                //var isMouseOver = (bool)e.NewValue;
-
-                //if (isMouseOver && KeyboardFacade.IsLeftShiftDown() && _peekWindowId != logEntry.Id)
-                //{
-                //    _peekWindow?.Close();
-
-                //    _peekWindow = CreateDetailsWindow(logEntry);
-                //    _peekWindowId = logEntry.Id;
-                //}
             }
+        }
 
-
-
-
-
-            //if (e.Key == Key.X && (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == (ModifierKeys.Control | ModifierKeys.Shift))
-            //{
-            //    Logger.Info("CTRL + SHIFT + X");
-            //}
+        private void ShowPeekWindow(MicroLogEntry logEntry)
+        {
+            _peekWindow = CreateDetailsWindow(logEntry);
+            _peekWindow.Show();
+            _peekWindowId = logEntry.Id;
         }
 
         private void OnContentRendered(object o, EventArgs eventArgs)
@@ -257,62 +218,7 @@ namespace MicroMonitor
             var logName = AppConfiguration.LogName();
             GetInitialEventViewerLogs(logName);
         }
-
-        private void OnMouseOverLogEntry(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            //var textBlock = sender as TextBlock;
-
-            //if (textBlock == null)
-            //{
-            //    Logger.Info("Could not cast to text block");
-            //    return;
-            //}
-
-            //var logEntry = textBlock.DataContext as MicroLogEntry;
-
-            //if (logEntry == null)
-            //{
-            //    Logger.Info("Could not cast to log entry");
-            //    return;
-            //}
-
-            //var isMouseOver = (bool)e.NewValue;
-
-            //if (isMouseOver && _peekWindowId != logEntry.Id)
-            //{
-            //    _peekWindow?.Close();
-
-            //    _peekWindow = CreateDetailsWindow(logEntry);
-            //    _peekWindowId = logEntry.Id;
-            //}
-
-            //var textBlock = sender as TextBlock;
-
-            //if (textBlock == null)
-            //{
-            //    Logger.Info("Could not cast to text block");
-            //    return;
-            //}
-
-            //var logEntry = textBlock.DataContext as MicroLogEntry;
-
-            //if (logEntry == null)
-            //{
-            //    Logger.Info("Could not cast to log entry");
-            //    return;
-            //}
-
-            //var isMouseOver = (bool)e.NewValue;
-
-            //if (isMouseOver && KeyboardFacade.IsLeftShiftDown() && _peekWindowId != logEntry.Id)
-            //{
-            //    _peekWindow?.Close();
-
-            //    _peekWindow = CreateDetailsWindow(logEntry);
-            //    _peekWindowId = logEntry.Id;
-            //}
-        }
-
+        
         private void OnCloseAllDetailWindows(object sender, RoutedEventArgs e)
         {
             foreach (var openDetailWindow in _openDetailWindows)

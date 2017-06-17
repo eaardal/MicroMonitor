@@ -35,7 +35,7 @@
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9" IsMouseDirectlyOverChanged="OnMouseOverLogEntry"></TextBlock>
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9"></TextBlock>
                                 <Button Grid.Column="1" Click="OnShowLogEntryDetails">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
