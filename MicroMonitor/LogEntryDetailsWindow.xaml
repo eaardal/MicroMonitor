@@ -26,14 +26,33 @@
                     <ColumnDefinition Width="100"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TimestampLabel" FontWeight="Bold" Text="Timestamp"></TextBlock>
-                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TimestampValue"></TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="SourceLabel" FontWeight="Bold" Text="Source"></TextBlock>
-                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SourceValue"></TextBlock>
-                <StackPanel Grid.ColumnSpan="2" Grid.Row="2" Grid.Column="0" Orientation="Horizontal">
-                    <Button Content="Copy message" Click="OnCopyMessageToClipboard" Margin="0 0 3 0" Padding="3"></Button>
-                    <Button Content="Copy log entry as JSON" Click="OnCopyLogEntryAsJson" Padding="3"></Button>
+                <StackPanel Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                    <Button Content="Close" Click="OnCloseClick" Margin="0 0 3 0" Width="30" Height="30" Padding="3" Background="LightCoral" BorderBrush="Gray" ToolTip="Close this window">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <Image Source="Images/icon-close.png"></Image>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button Content="Copy message" Click="OnCopyMessageToClipboard" Margin="0 0 3 0" Width="30" Height="30" Padding="3" Background="LightGray" BorderBrush="Gray" ToolTip="Copy log entry message">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <Image Source="Images/icon-copy.png"></Image>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button Content="Copy log entry as JSON" Click="OnCopyLogEntryAsJson" Width="30" Height="30" Padding="3" Background="LightGray" BorderBrush="Gray" ToolTip="Copy entire log entry as JSON">
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <Image Source="Images/icon-copy-json.png"></Image>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
                 </StackPanel>
+                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="TimestampLabel" FontWeight="Bold" Text="Timestamp"></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="TimestampValue"></TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="0" x:Name="SourceLabel" FontWeight="Bold" Text="Source"></TextBlock>
+                <TextBlock Grid.Row="2" Grid.Column="1" x:Name="SourceValue"></TextBlock>
             </Grid>
         </Border>
         <Border Grid.Row="1" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}, ConverterParameter=Light}" Padding="3">

@@ -33,5 +33,10 @@ namespace MicroMonitor
             var json = JsonConvert.SerializeObject(LogEntry, Formatting.Indented);
             Clipboard.SetText(json);
         }
+
+        private void OnCloseClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

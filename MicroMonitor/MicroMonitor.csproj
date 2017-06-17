@@ -139,6 +139,7 @@
     <Resource Include="Images\icon-caret-right.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\icon-copy-json.png" />
     <Resource Include="Images\icon-error.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
@@ -159,6 +160,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MicroMonitor.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon-copy.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
