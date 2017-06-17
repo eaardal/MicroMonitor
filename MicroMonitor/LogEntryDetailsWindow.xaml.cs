@@ -18,7 +18,7 @@ namespace MicroMonitor
             this.DataContext = LogEntry;
             this.LogDetails.Text = LogEntry.Message;
             this.LogDetails.FontSize = AppConfiguration.DetailsWindowFontSize();
-            this.Title = $"Log details: {LogEntry.Severity} - {LogEntry.Timestamp:dd.MM.yy HH:mm:ss} - {LogEntry.Source}";
+            this.Title = $"{LogEntry.Severity} {LogEntry.Timestamp:HH:mm:ss}";
             this.TimestampValue.Text = this.LogEntry.Timestamp.ToString("dd.MM.yy HH:mm:ss");
             this.SourceValue.Text = $"{this.LogEntry.LogName}/{this.LogEntry.Source}";
         }

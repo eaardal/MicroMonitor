@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MicroMonitor"
         xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
-        Title="MiMon" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="Micro Monitor" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Window.Resources>
         <converters:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></converters:DateTimeToTimeStringConverter>
         <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>
@@ -29,14 +29,14 @@
             <ItemsControl x:Name="LogEntries">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
+                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" BorderBrush="Black" BorderThickness="1 1 0 1">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9"></TextBlock>
-                                <Button Grid.Column="1" Click="OnShowLogEntryDetails">
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9" Margin="3 0 0 0"></TextBlock>
+                                <Button Grid.Column="1" Click="OnShowLogEntryDetails" BorderThickness="1 0 1 0" BorderBrush="Black">
                                     <Button.ContentTemplate>
                                         <DataTemplate>
                                             <Image Width="13" Height="13" Source="Images/icon-caret-right.png"></Image>

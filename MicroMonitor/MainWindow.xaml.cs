@@ -28,6 +28,7 @@ namespace MicroMonitor
             InitializeComponent();
 
             this.HeaderPanel.Visibility = Visibility.Collapsed;
+            this.BtnCloseAllDetailWindows.IsEnabled = false;
 
             this.ContentRendered += OnContentRendered;
             this.Loaded += OnLoaded;
