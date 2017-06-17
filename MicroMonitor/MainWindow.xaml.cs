@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
@@ -23,12 +24,14 @@ namespace MicroMonitor
 {
     public partial class MainWindow : Window
     {
-        private readonly EventViewerReader _eventViewerReader = new EventViewerReader();
-        private readonly EventViewerPoller _eventViewerPoller = new EventViewerPoller();
-        private readonly MicroLogRetriever _microLogRetriever = new MicroLogRetriever();
+        private readonly EventLogReader _eventLogReader = new EventLogReader();
+        private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
+        private readonly MicroLogReader _microLogReader = new MicroLogReader();
+        private readonly MicroLogPersistedRegistry _persistedRegistry = new MicroLogPersistedRegistry();
         private readonly Timer _nextReadTimer = new Timer();
         private DateTime _lastReadTime = DateTime.MinValue;
         private DateTime _expectedNextReadTime = DateTime.MinValue;
+        private bool _isHoldingLeftShiftDown = false;
 
         public MainWindow()
         {
@@ -47,6 +50,11 @@ namespace MicroMonitor
             {
                 this.HeaderPanel.Visibility = Visibility.Collapsed;
             }
+
+            if (keyEventArgs.Key == Key.LeftShift)
+            {
+                _isHoldingLeftShiftDown = false;
+            }
         }
 
         private void OnKeyDown(object o, KeyEventArgs keyEventArgs)
@@ -54,6 +62,11 @@ namespace MicroMonitor
             if (keyEventArgs.Key == Key.LeftCtrl)
             {
                 this.HeaderPanel.Visibility = Visibility.Visible;
+            }
+
+            if (keyEventArgs.Key == Key.LeftShift)
+            {
+                _isHoldingLeftShiftDown = true;
             }
         }
 
@@ -70,7 +83,7 @@ namespace MicroMonitor
 
         private void StartPollingForEventViewerLogs(string logName, int pollIntervalSeconds)
         {
-            _eventViewerPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
+            _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
 
             var readInterval = pollIntervalSeconds + 2;
 
@@ -95,7 +108,7 @@ namespace MicroMonitor
             };
             _nextReadTimer.Start();
 
-            _microLogRetriever.RetrieveEvery(logName, readInterval, newLogEntries =>
+            _microLogReader.ReadOnInterval(logName, readInterval, newLogEntries =>
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -110,7 +123,7 @@ namespace MicroMonitor
 
         private void GetInitialEventViewerLogs(string logName)
         {
-            var logEntries = _eventViewerReader.ReadEventViewerLog(logName);
+            var logEntries = _eventLogReader.ReadEventLog(logName);
             this.LogEntries.ItemsSource = logEntries;
             UpdateLastRead();
         }
@@ -136,6 +149,20 @@ namespace MicroMonitor
         {
             var logName = AppConfiguration.LogName();
             GetInitialEventViewerLogs(logName);
+        }
+
+        private void OnLogEntryMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var textBlock = (TextBlock) sender;
+            var logEntry = (MicroLogEntry) textBlock.DataContext;
+
+            if (_isHoldingLeftShiftDown)
+            {
+                _persistedRegistry.Save(logEntry);
+
+                logEntry.Meta.IsMarkedAsRead = true;
+                logEntry.Meta.MarkedAsReadTimestamp = DateTime.Now;
+            }
         }
     }
 }

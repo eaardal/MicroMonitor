@@ -4,11 +4,11 @@ using System.Timers;
 
 namespace MicroMonitor
 {
-    class MicroLogRetriever
+    class MicroLogReader
     {
         private readonly Timer _timer = new Timer();
         
-        public void RetrieveEvery(string logName, int seconds, Action<IEnumerable<MicroLogEntry>> onRetrieved)
+        public void ReadOnInterval(string logName, int seconds, Action<IEnumerable<MicroLogEntry>> onRetrieved)
         {
             _timer.Interval = seconds * 1000;
             _timer.Elapsed += (sender, args) =>

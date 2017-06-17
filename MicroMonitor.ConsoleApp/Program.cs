@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,8 @@ namespace MicroMonitor.ConsoleApp
 {
     class Program
     {
-        private const string DefaultDebugEventLog = "MicroMonitor-Debug";
+        private const string DefaultDebugEventLog = "MicroMonitor.Debug";
+        private const string DefaultDebugEventSource = "MicroMonitor.ConsoleApp";
 
         static void Main(string[] args)
         {
@@ -21,6 +23,8 @@ namespace MicroMonitor.ConsoleApp
             var input = string.Empty;
             while (input != "exit")
             {
+                Console.WriteLine(@"Enter command:");
+
                 input = Console.ReadLine();
                 switch (input)
                 {
@@ -39,17 +43,38 @@ namespace MicroMonitor.ConsoleApp
 
         private static void CreateWarningEventInEventViewer(string logName)
         {
-            throw new NotImplementedException();
+            EnsureEventLogExists(logName);
+
+            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an warning event log", EventLogEntryType.Warning);
+
+            Console.WriteLine(@"Successfully wrote to event log");
         }
 
         private static void CreateInfoEventInEventViewer(string logName)
         {
-            throw new NotImplementedException();
+            EnsureEventLogExists(logName);
+
+            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an info event log", EventLogEntryType.Information);
+
+            Console.WriteLine(@"Successfully wrote to event log");
         }
 
         private static void CreateErrorEventInEventViewer(string logName)
         {
-            throw new NotImplementedException();
+            EnsureEventLogExists(logName);
+
+            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an error event log", EventLogEntryType.Error);
+
+            Console.WriteLine(@"Successfully wrote to event log");
+        }
+
+        private static void EnsureEventLogExists(string logName)
+        {
+            if (!EventLog.SourceExists(logName))
+            {
+                Console.WriteLine($@"The Event Log {logName} does not exist");
+                EventLog.CreateEventSource(DefaultDebugEventSource, logName);
+            }
         }
 
         private static void Exit()

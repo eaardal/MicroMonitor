@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicroMonitor"
+        xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
         Title="Micro Monitor" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Window.Resources>
-        <local:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></local:DateTimeToTimeStringConverter>
-        <local:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></local:SeverityToBackgroundColorConverter>
-        <local:SeverityToIconConverter x:Key="SeverityToIconConverter"></local:SeverityToIconConverter>
+        <converters:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></converters:DateTimeToTimeStringConverter>
+        <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>
+        <converters:SeverityToIconConverter x:Key="SeverityToIconConverter"></converters:SeverityToIconConverter>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -25,13 +26,13 @@
             <ItemsControl x:Name="LogEntries">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
+                        <Border Background="{Binding Path=SeverityHack, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9"></TextBlock>
+                                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" FontSize="9" MouseDown="OnLogEntryMouseDown"></TextBlock>
                                 <Button Grid.Column="1" Click="OnShowLogEntryDetails">
                                     <Button.ContentTemplate>
                                         <DataTemplate>

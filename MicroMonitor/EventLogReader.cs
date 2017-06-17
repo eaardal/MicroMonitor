@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
 namespace MicroMonitor
 {
-    class EventViewerReader
+    class EventLogReader
     {
-        public IEnumerable<MicroLogEntry> ReadEventViewerLog(string logName)
+        public IEnumerable<MicroLogEntry> ReadEventLog(string logName)
         {
             if (!EventLog.Exists(logName)) return new List<MicroLogEntry>();
 
@@ -22,10 +23,15 @@ namespace MicroMonitor
 
             return eventLogEntriesBuffer.Select(l => new MicroLogEntry
             {
+                Id = $"{l.TimeGenerated.Ticks}-{l.EntryType.ToString()}",
                 Source = l.Source,
                 Message = l.Message,
                 Severity = MicroLogSeverityHelper.MapSeverity(l),
-                Timestamp = l.TimeWritten
+                Timestamp = l.TimeWritten,
+                Meta =
+                {
+                    ReadFromEventLogTimestamp = DateTime.Now
+                }
             }).OrderByDescending(l => l.Timestamp);
         }
     }

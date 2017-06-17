@@ -5,10 +5,10 @@ using Timer = System.Timers.Timer;
 
 namespace MicroMonitor
 {
-    public class EventViewerPoller
+    public class EventLogPoller
     {
         private readonly Timer _timer = new Timer();
-        private readonly EventViewerReader _eventViewerReader = new EventViewerReader();
+        private readonly EventLogReader _eventLogReader = new EventLogReader();
         
         public void StartPollingAtIntervals(string logDisplayName, double pollIntervalSeconds)
         {
@@ -36,7 +36,7 @@ namespace MicroMonitor
                 return;
             }
 
-            var logEntries = _eventViewerReader.ReadEventViewerLog(logDisplayName);
+            var logEntries = _eventLogReader.ReadEventLog(logDisplayName);
 
             MicroLogCache.Instance.InsertOrUpdate(logDisplayName, logEntries);
         }

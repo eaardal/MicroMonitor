@@ -65,8 +65,11 @@
     <Compile Include="LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SeverityToBackgroundColorConverter.cs" />
-    <Compile Include="SeverityToIconConverter.cs" />
+    <Compile Include="Converters\SeverityToBackgroundColorConverter.cs" />
+    <Compile Include="Converters\SeverityToIconConverter.cs" />
+    <Compile Include="MicroLogEntryMeta.cs" />
+    <Compile Include="MicroLogPersistedRegistry.cs" />
+    <Compile Include="MicroLogRepository.cs" />
     <Compile Include="WindowHelper.cs" />
     <Page Include="LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
@@ -80,10 +83,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DateTimeToTimeStringConverter.cs" />
+    <Compile Include="Converters\DateTimeToTimeStringConverter.cs" />
     <Compile Include="MicroLogCache.cs" />
-    <Compile Include="EventViewerPoller.cs" />
-    <Compile Include="EventViewerReader.cs" />
+    <Compile Include="EventLogPoller.cs" />
+    <Compile Include="EventLogReader.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -92,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MicroLogEntry.cs" />
-    <Compile Include="MicroLogRetriever.cs" />
+    <Compile Include="MicroLogReader.cs" />
     <Compile Include="MicroLogSeverity.cs" />
     <Compile Include="MicroLogSeverityHelper.cs" />
     <Compile Include="MouseInterop.cs" />
@@ -135,6 +138,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\icon-warning.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon-close.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
