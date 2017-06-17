@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -31,7 +18,8 @@ namespace MicroMonitor
         private readonly Timer _nextReadTimer = new Timer();
         private DateTime _lastReadTime = DateTime.MinValue;
         private DateTime _expectedNextReadTime = DateTime.MinValue;
-        private bool _isHoldingLeftShiftDown = false;
+        private string _peekWindowId;
+        private Window _peekWindow;
 
         public MainWindow()
         {
@@ -40,8 +28,27 @@ namespace MicroMonitor
             this.HeaderPanel.Visibility = Visibility.Collapsed;
 
             this.ContentRendered += OnContentRendered;
+            this.Loaded += OnLoaded;
             this.KeyDown += OnKeyDown;
             this.KeyUp += OnKeyUp;
+        }
+
+        private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
+        {
+            this.Width = AppConfiguration.MainWindowWidth();
+            this.Height = AppConfiguration.MainWindowHeight();
+
+            var startupLoc = AppConfiguration.MainWindowSpawnMethod();
+            switch (startupLoc)
+            {
+                case WindowSpawnMethod.Cursor:
+                    WindowHelper.PositionWindowAtMouseCursor(this);
+                    break;
+                case WindowSpawnMethod.CenterScreen:
+                    WindowHelper.PositionWindowAtCenterScreen(this);
+                    break;
+            }
+
         }
 
         private void OnKeyUp(object o, KeyEventArgs keyEventArgs)
@@ -49,11 +56,6 @@ namespace MicroMonitor
             if (keyEventArgs.Key == Key.LeftCtrl)
             {
                 this.HeaderPanel.Visibility = Visibility.Collapsed;
-            }
-
-            if (keyEventArgs.Key == Key.LeftShift)
-            {
-                _isHoldingLeftShiftDown = false;
             }
         }
 
@@ -63,16 +65,11 @@ namespace MicroMonitor
             {
                 this.HeaderPanel.Visibility = Visibility.Visible;
             }
-
-            if (keyEventArgs.Key == Key.LeftShift)
-            {
-                _isHoldingLeftShiftDown = true;
-            }
         }
 
         private void OnContentRendered(object o, EventArgs eventArgs)
         {
-            WindowHelper.PositionWindowAtMouseCursor(this);
+
 
             var logName = AppConfiguration.LogName();
             var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
@@ -103,7 +100,7 @@ namespace MicroMonitor
                     {
                         this.NextRead.Text = $"Next read: TBD";
                     }
-                    
+
                 });
             };
             _nextReadTimer.Start();
@@ -135,14 +132,33 @@ namespace MicroMonitor
 
         private void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
         {
-            var btn = (Button) sender;
-            var logEntry = (MicroLogEntry) btn.DataContext;
+            var btn = (Button)sender;
+            var logEntry = (MicroLogEntry)btn.DataContext;
 
-            var detailsWindow = new LogEntryDetailsWindow {LogEntry = logEntry};
-            detailsWindow.Left = this.Left + this.Width;
-            detailsWindow.Top = this.Top;
-            detailsWindow.Height = this.Height;
+            ShowDetailsWindow(logEntry);
+        }
+
+        private Window ShowDetailsWindow(MicroLogEntry logEntry)
+        {
+            var configuredHeight = AppConfiguration.DetailsWindowHeight();
+            var height = configuredHeight > 0 ? configuredHeight : this.Height;
+
+            var top = AppConfiguration.DetailsWindowGrowDirection() == GrowDirection.Down
+                ? this.Top
+                : this.Top + (this.Height - height);
+
+            var detailsWindow = new LogEntryDetailsWindow
+            {
+                LogEntry = logEntry,
+                Left = this.Left + this.Width,
+                Top = top,
+                Height = height,
+                Width = AppConfiguration.DetailsWindowWidth()
+            };
+
             detailsWindow.Show();
+
+            return detailsWindow;
         }
 
         private void OnReadNow(object sender, RoutedEventArgs e)
@@ -151,17 +167,32 @@ namespace MicroMonitor
             GetInitialEventViewerLogs(logName);
         }
 
-        private void OnLogEntryMouseDown(object sender, MouseButtonEventArgs e)
+        private void OnMouseOverLogEntry(object sender, DependencyPropertyChangedEventArgs e)
         {
-            var textBlock = (TextBlock) sender;
-            var logEntry = (MicroLogEntry) textBlock.DataContext;
+            var textBlock = sender as TextBlock;
 
-            if (_isHoldingLeftShiftDown)
+            if (textBlock == null)
             {
-                _persistedRegistry.Save(logEntry);
+                Logger.Info("Could not cast to text block");
+                return;
+            }
 
-                logEntry.Meta.IsMarkedAsRead = true;
-                logEntry.Meta.MarkedAsReadTimestamp = DateTime.Now;
+            var logEntry = textBlock.DataContext as MicroLogEntry;
+
+            if (logEntry == null)
+            {
+                Logger.Info("Could not cast to log entry");
+                return;
+            }
+
+            var isMouseOver = (bool)e.NewValue;
+
+            if (isMouseOver && KeyboardFacade.IsLeftShiftDown() && _peekWindowId != logEntry.Id)
+            {
+                _peekWindow?.Close();
+
+                _peekWindow = ShowDetailsWindow(logEntry);
+                _peekWindowId = logEntry.Id;
             }
         }
     }

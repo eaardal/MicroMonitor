@@ -62,6 +62,8 @@
     </ApplicationDefinition>
     <Compile Include="AppConfiguration.cs" />
     <Compile Include="ConsoleWindow.cs" />
+    <Compile Include="GrowDirection.cs" />
+    <Compile Include="KeyboardFacade.cs" />
     <Compile Include="LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
     </Compile>
@@ -71,6 +73,7 @@
     <Compile Include="MicroLogPersistedRegistry.cs" />
     <Compile Include="MicroLogRepository.cs" />
     <Compile Include="WindowHelper.cs" />
+    <Compile Include="WindowSpawnMethod.cs" />
     <Page Include="LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

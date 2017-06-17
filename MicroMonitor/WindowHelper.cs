@@ -55,5 +55,12 @@ namespace MicroMonitor
             }
             return default(Point);
         }
+
+        public static void PositionWindowAtCenterScreen(MainWindow window)
+        {
+            var workingArea = GetScreen(window).WorkingArea;
+            window.Left = (int)(workingArea.Width / 2) - (window.Width / 2);
+            window.Top = (int) (workingArea.Height / 2) - (window.Height / 2);
+        }
     }
 }
