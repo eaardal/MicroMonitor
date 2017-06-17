@@ -4,11 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MicroMonitor"
+        xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
         Title="Log details" Height="150" Width="450" WindowStartupLocation="Manual">
+    <Window.Resources>
+        <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>
+    </Window.Resources>
     <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <TextBox Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" FontSize="9" x:Name="LogDetails"></TextBox>
-        </ScrollViewer>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Padding="3" BorderBrush="DimGray" BorderThickness="0 0 0 1" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TimestampLabel" FontWeight="Bold" Text="Timestamp"></TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TimestampValue"></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="SourceLabel" FontWeight="Bold" Text="Source"></TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SourceValue"></TextBlock>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}, ConverterParameter=Light}" Padding="3">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <TextBox Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" FontSize="9" x:Name="LogDetails"></TextBox>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>
+

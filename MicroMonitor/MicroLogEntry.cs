@@ -8,11 +8,9 @@ namespace MicroMonitor
         public string Source { get; set; }
         public string Message { get; set; }
         public MicroLogSeverity Severity { get; set; }
-
-        // Ugly af hack to get more than one parameter into the value converter for now...
-        public string SeverityHack => $"{Severity};{Meta.IsMarkedAsRead}";
         public DateTime Timestamp { get; set; }
         public string Id { get; set; }
+        public string LogName { get; set; }
 
         public MicroLogEntry()
         {

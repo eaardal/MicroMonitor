@@ -20,13 +20,16 @@
         <StackPanel Grid.Row="0" x:Name="HeaderPanel" Background="Black">
             <TextBlock x:Name="LastRead" Foreground="White"></TextBlock>
             <TextBlock x:Name="NextRead" Foreground="White"></TextBlock>
-            <Button Content="Read now" Click="OnReadNow"></Button>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Read now" Click="OnReadNow" Margin="1"></Button>
+                <Button x:Name="BtnCloseAllDetailWindows" Content="Close all" Click="OnCloseAllDetailWindows" Margin="0 1 1 1"></Button>
+            </StackPanel>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
             <ItemsControl x:Name="LogEntries">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="{Binding Path=SeverityHack, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
+                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" CornerRadius="0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"></ColumnDefinition>

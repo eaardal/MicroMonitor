@@ -9,36 +9,34 @@ namespace MicroMonitor.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var severityHack = (string)value;
-            var parts = severityHack.Split(';');
-            var severity = Enum.Parse(typeof(MicroLogSeverity), parts[0]);
-            var isMarkedAsRead = bool.Parse(parts[1]);
+            var severity = (MicroLogSeverity) Enum.Parse(typeof(MicroLogSeverity), value.ToString());
+            var severityParam = parameter as string;
 
-            if (isMarkedAsRead)
+            if (severityParam != null && severityParam == "Light")
             {
                 switch (severity)
                 {
                     case MicroLogSeverity.Info:
-                        return new SolidColorBrush(Colors.LightGray);
+                        return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColorLight);
                     case MicroLogSeverity.Warning:
-                        return new SolidColorBrush(Colors.LightSalmon);
+                        return HexUtil.HexToSolidColorBrush(ColorConstants.WarningColorLight);
                     case MicroLogSeverity.Error:
-                        return new SolidColorBrush(Colors.LightCoral);
+                        return HexUtil.HexToSolidColorBrush(ColorConstants.ErrorColorLight);
                     default:
-                        return new SolidColorBrush(Colors.LightGray);
+                        return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColorLight);
                 }
             }
 
             switch (severity)
             {
                 case MicroLogSeverity.Info:
-                    return new SolidColorBrush(Colors.DarkGray);
+                    return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColor);
                 case MicroLogSeverity.Warning:
-                    return new SolidColorBrush(Colors.Orange);
+                    return HexUtil.HexToSolidColorBrush(ColorConstants.WarningColor);
                 case MicroLogSeverity.Error:
-                    return new SolidColorBrush(Colors.Red);
+                    return HexUtil.HexToSolidColorBrush(ColorConstants.ErrorColor);
                 default:
-                    return new SolidColorBrush(Colors.DarkGray);
+                    return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColor);
             }
         }
 

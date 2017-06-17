@@ -28,6 +28,7 @@ namespace MicroMonitor
                 Message = l.Message,
                 Severity = MicroLogSeverityHelper.MapSeverity(l),
                 Timestamp = l.TimeWritten,
+                LogName = logName,
                 Meta =
                 {
                     ReadFromEventLogTimestamp = DateTime.Now

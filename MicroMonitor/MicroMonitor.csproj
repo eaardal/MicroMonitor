@@ -61,8 +61,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AppConfiguration.cs" />
+    <Compile Include="ColorConstants.cs" />
     <Compile Include="ConsoleWindow.cs" />
     <Compile Include="GrowDirection.cs" />
+    <Compile Include="HexUtil.cs" />
     <Compile Include="KeyboardFacade.cs" />
     <Compile Include="LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
