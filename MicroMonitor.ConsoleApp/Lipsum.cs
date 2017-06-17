@@ -1,0 +1,17 @@
+﻿namespace MicroMonitor.ConsoleApp
+{
+    class Lipsum
+    {
+        public static string Text = @"
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pulvinar, ex a ullamcorper laoreet, lectus mi interdum libero, a suscipit odio libero ut sapien. Etiam mattis malesuada tempus. Nullam tincidunt, urna at vehicula interdum, enim lacus laoreet quam, a feugiat leo dui sit amet arcu. Praesent interdum, arcu sit amet congue facilisis, tellus augue vehicula erat, eget ullamcorper magna elit quis sapien. Vivamus ligula odio, pulvinar a consequat ac, accumsan sit amet sapien. Mauris viverra, nisl a rutrum ultrices, enim risus consequat erat, eget suscipit arcu ligula vel mi. Etiam bibendum magna et ipsum semper, rhoncus consectetur eros gravida. In ultricies mauris et velit venenatis, id malesuada diam lacinia. Donec volutpat vulputate tincidunt. Praesent magna nunc, mattis id auctor id, pretium et est. Cras eros turpis, elementum vel lorem a, pellentesque varius felis. Phasellus est leo, porttitor quis est quis, rutrum varius lectus.
+
+Vestibulum viverra, urna sed laoreet scelerisque, leo arcu condimentum magna, at viverra orci augue vitae massa. Sed enim nisl, faucibus quis ultricies et, rutrum vel leo. Nulla pellentesque vel est in pharetra. Curabitur scelerisque mauris eu enim suscipit, ac consectetur sem bibendum. Nunc in neque quis mauris porttitor luctus. Fusce ornare felis sit amet leo posuere, vel convallis urna aliquet. Sed ac lectus eleifend, dapibus odio non, euismod urna. Curabitur vehicula ligula hendrerit, ornare ligula at, auctor ligula. Sed sollicitudin eget ante lacinia molestie.
+
+Etiam convallis augue id nisi luctus, quis auctor nulla tempor. In aliquam neque leo, tempor pharetra augue varius sed. Duis id quam ut lorem interdum rhoncus. Sed sollicitudin sed neque imperdiet fringilla. Aenean in leo quis enim tincidunt imperdiet id in eros. Praesent id volutpat quam. Ut velit est, semper at consectetur a, laoreet et tortor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;
+
+Vestibulum finibus placerat libero et lobortis. Curabitur dui metus, consequat nec sagittis non, cursus at risus. Duis quis porttitor ligula, ut suscipit urna. Nunc enim nisi, suscipit vitae nulla vel, dictum commodo nisi. Nullam dui metus, scelerisque ac tempor id, tempor in felis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Suspendisse vel blandit enim, eu vestibulum enim. Curabitur arcu nibh, mattis elementum nunc ac, vehicula tempor est. Donec vel auctor quam. Curabitur eleifend varius velit, sit amet imperdiet ipsum vestibulum hendrerit. Aliquam rutrum sed sapien eget placerat. Nunc in cursus nulla, id dictum dui. Donec porta orci mauris, sit amet tempor urna blandit ac. Sed accumsan neque non justo condimentum pulvinar.
+
+In hac habitasse platea dictumst. Integer tincidunt erat augue, in tristique magna suscipit efficitur. Sed sagittis pretium ex, et egestas est rhoncus quis. Praesent neque risus, finibus id purus vel, fermentum vestibulum ligula. Etiam accumsan ligula ligula, quis pellentesque est efficitur sed. In placerat tempus fermentum. Aenean tortor justo, pulvinar sit amet pretium eget, tristique at nisi. Sed nec nunc in metus tempor accumsan ut non nisl. Quisque vitae ultrices est. Curabitur vitae congue arcu. Nulla semper sapien vitae aliquam gravida. Pellentesque iaculis congue nibh tristique iaculis. Sed scelerisque commodo est, et dignissim sem consequat in.
+";
+    }
+}

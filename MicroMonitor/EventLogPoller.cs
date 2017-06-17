@@ -10,13 +10,18 @@ namespace MicroMonitor
         private readonly Timer _timer = new Timer();
         private readonly EventLogReader _eventLogReader = new EventLogReader();
         
-        public void StartPollingAtIntervals(string logDisplayName, double pollIntervalSeconds)
+        public void StartPollingAtIntervals(string logName, double pollIntervalSeconds)
         {
             _timer.Interval = pollIntervalSeconds * 1000;
+
+            Logger.Info($"Timer polling Event Log {logName} every {pollIntervalSeconds}s / {_timer.Interval}ms");
+
             _timer.Elapsed += (sender, args) =>
             {
                 var thread = new Thread(Poll);
-                thread.Start(new List<object> {logDisplayName});
+                thread.Start(new List<object> {logName});
+
+                Logger.Info($"Spawned thread {thread.ManagedThreadId} for polling Event Log \"{logName}\"");
             };
             _timer.Start();
         }
@@ -32,7 +37,7 @@ namespace MicroMonitor
 
             if (!ok)
             {
-                Logger.Error("Could not parse Poll arguments");
+                Logger.Error("Could not parse arguments passed as object to EventLogPoller.Poll");
                 return;
             }
 

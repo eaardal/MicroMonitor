@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MicroMonitor"
         xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
-        Title="Micro Monitor" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="MiMon" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Window.Resources>
         <converters:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></converters:DateTimeToTimeStringConverter>
         <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>

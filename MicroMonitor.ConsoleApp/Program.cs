@@ -45,7 +45,7 @@ namespace MicroMonitor.ConsoleApp
         {
             EnsureEventLogExists(logName);
 
-            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an warning event log", EventLogEntryType.Warning);
+            EventLog.WriteEntry(DefaultDebugEventSource, Lipsum.Text, EventLogEntryType.Warning);
 
             Console.WriteLine(@"Successfully wrote to event log");
         }
@@ -54,7 +54,7 @@ namespace MicroMonitor.ConsoleApp
         {
             EnsureEventLogExists(logName);
 
-            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an info event log", EventLogEntryType.Information);
+            EventLog.WriteEntry(DefaultDebugEventSource, Lipsum.Text, EventLogEntryType.Information);
 
             Console.WriteLine(@"Successfully wrote to event log");
         }
@@ -63,7 +63,7 @@ namespace MicroMonitor.ConsoleApp
         {
             EnsureEventLogExists(logName);
 
-            EventLog.WriteEntry(DefaultDebugEventSource, "Text for generating an error event log", EventLogEntryType.Error);
+            EventLog.WriteEntry(DefaultDebugEventSource, Lipsum.Text, EventLogEntryType.Error);
 
             Console.WriteLine(@"Successfully wrote to event log");
         }

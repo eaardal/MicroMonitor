@@ -9,9 +9,11 @@ namespace MicroMonitor
     {
         public IEnumerable<MicroLogEntry> ReadEventLog(string logName)
         {
-            if (!EventLog.Exists(logName)) return new List<MicroLogEntry>();
-
-            Logger.Info($"Event log {logName} exists");
+            if (!EventLog.Exists(logName))
+            {
+                Logger.Info($"Event Log \"{logName}\" does not exist");
+                return new List<MicroLogEntry>();
+            }
 
             var allEventLogs = EventLog.GetEventLogs();
 
@@ -21,6 +23,8 @@ namespace MicroMonitor
 
             eventLog.Entries.CopyTo(eventLogEntriesBuffer, 0);
 
+            Logger.Info($"Read {eventLogEntriesBuffer.Length} log entries from Event Log \"{logName}\"");
+
             return eventLogEntriesBuffer.Select(l => new MicroLogEntry
             {
                 Id = $"{l.TimeGenerated.Ticks}-{l.EntryType.ToString()}",
@@ -28,11 +32,7 @@ namespace MicroMonitor
                 Message = l.Message,
                 Severity = MicroLogSeverityHelper.MapSeverity(l),
                 Timestamp = l.TimeWritten,
-                LogName = logName,
-                Meta =
-                {
-                    ReadFromEventLogTimestamp = DateTime.Now
-                }
+                LogName = logName
             }).OrderByDescending(l => l.Timestamp);
         }
     }
