@@ -4,7 +4,7 @@ using MicroMonitor.Config;
 using MicroMonitor.Model;
 using Newtonsoft.Json;
 
-namespace MicroMonitor
+namespace MicroMonitor.Views.DetailsView
 {
     public partial class LogEntryDetailsWindow : Window
     {

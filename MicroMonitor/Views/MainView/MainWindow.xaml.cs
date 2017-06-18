@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -15,7 +14,7 @@ using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using Timer = System.Timers.Timer;
 
-namespace MicroMonitor
+namespace MicroMonitor.Views.MainView
 {
     public partial class MainWindow : Window
     {
@@ -205,7 +204,7 @@ namespace MicroMonitor
 
             const int marginBuffer = 20;
 
-            var detailsWindow = new LogEntryDetailsWindow
+            var detailsWindow = new Views.DetailsView.LogEntryDetailsWindow
             {
                 LogEntry = logEntry,
                 Left = this.Left + this.Width + marginBuffer,

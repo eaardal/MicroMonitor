@@ -62,7 +62,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
+    <ApplicationDefinition Include="Views\App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
@@ -72,22 +72,22 @@
     <Compile Include="Model\GrowDirection.cs" />
     <Compile Include="Utilities\HexUtil.cs" />
     <Compile Include="Helpers\KeyboardFacade.cs" />
-    <Compile Include="LogEntryDetailsWindow.xaml.cs">
+    <Compile Include="Views\DetailsView\LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\SeverityToBackgroundColorConverter.cs" />
     <Compile Include="Converters\SeverityToIconConverter.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Model\WindowSpawnMethod.cs" />
-    <Page Include="LogEntryDetailsWindow.xaml">
+    <Page Include="Views\DetailsView\LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainView\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="App.xaml.cs">
+    <Compile Include="Views\App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
@@ -96,7 +96,7 @@
     <Compile Include="Engine\EventLog\EventLogPoller.cs" />
     <Compile Include="Engine\EventLog\EventLogReader.cs" />
     <Compile Include="Infrastructure\Logger.cs" />
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Views\MainView\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>

@@ -14,8 +14,8 @@ namespace MicroMonitor.Helpers
             Logger.Info($@"Mouse X{mousePos.X}, Y{mousePos.Y}");
 
             // Get the screen area minus the Windows taskbar
-            var workingArea = WindowHelper.GetScreen(window).WorkingArea;
-            var workingAreaAsPoint = WindowHelper.RealPixelsToWpf(window, new Point(workingArea.Left, workingArea.Bottom));
+            var workingArea = GetScreen(window).WorkingArea;
+            var workingAreaAsPoint = RealPixelsToWpf(window, new Point(workingArea.Left, workingArea.Bottom));
             Logger.Info($"Working area point {workingAreaAsPoint.X}X {workingAreaAsPoint.Y}Y");
 
             double yOffset = 0;
@@ -58,7 +58,7 @@ namespace MicroMonitor.Helpers
             return default(Point);
         }
 
-        public static void PositionWindowAtCenterScreen(MainWindow window)
+        public static void PositionWindowAtCenterScreen(Views.MainView.MainWindow window)
         {
             var workingArea = GetScreen(window).WorkingArea;
             window.Left = (int)(workingArea.Width / 2) - (window.Width / 2);
