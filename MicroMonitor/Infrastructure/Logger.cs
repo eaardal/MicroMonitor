@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MicroMonitor
+namespace MicroMonitor.Infrastructure
 {
     public class Logger
     {

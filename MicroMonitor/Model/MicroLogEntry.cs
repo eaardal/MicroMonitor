@@ -2,7 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace MicroMonitor
+namespace MicroMonitor.Model
 {
     public class MicroLogEntry
     {

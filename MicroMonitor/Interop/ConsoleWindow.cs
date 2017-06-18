@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Security;
 
-namespace MicroMonitor
+namespace MicroMonitor.Interop
 {
     public static class ConsoleWindow
     {

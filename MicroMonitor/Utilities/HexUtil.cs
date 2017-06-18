@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace MicroMonitor
+namespace MicroMonitor.Utilities
 {
     class HexUtil
     {

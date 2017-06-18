@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace MicroMonitor
+namespace MicroMonitor.Model
 {
     public class MicroLogSeverityHelper
     {

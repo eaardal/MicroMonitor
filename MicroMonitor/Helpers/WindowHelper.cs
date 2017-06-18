@@ -1,8 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Interop;
+using MicroMonitor.Infrastructure;
+using MicroMonitor.Interop;
 
-namespace MicroMonitor
+namespace MicroMonitor.Helpers
 {
     class WindowHelper
     {

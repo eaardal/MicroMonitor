@@ -66,19 +66,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AppConfiguration.cs" />
-    <Compile Include="ColorConstants.cs" />
-    <Compile Include="ConsoleWindow.cs" />
-    <Compile Include="GrowDirection.cs" />
-    <Compile Include="HexUtil.cs" />
-    <Compile Include="KeyboardFacade.cs" />
+    <Compile Include="Config\AppConfiguration.cs" />
+    <Compile Include="Model\ColorConstants.cs" />
+    <Compile Include="Interop\ConsoleWindow.cs" />
+    <Compile Include="Model\GrowDirection.cs" />
+    <Compile Include="Utilities\HexUtil.cs" />
+    <Compile Include="Helpers\KeyboardFacade.cs" />
     <Compile Include="LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\SeverityToBackgroundColorConverter.cs" />
     <Compile Include="Converters\SeverityToIconConverter.cs" />
-    <Compile Include="WindowHelper.cs" />
-    <Compile Include="WindowSpawnMethod.cs" />
+    <Compile Include="Helpers\WindowHelper.cs" />
+    <Compile Include="Model\WindowSpawnMethod.cs" />
     <Page Include="LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -92,21 +92,21 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\DateTimeToTimeStringConverter.cs" />
-    <Compile Include="MicroLogCache.cs" />
-    <Compile Include="EventLogPoller.cs" />
-    <Compile Include="EventLogReader.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Engine\MicroLog\MicroLog\MicroLogCache.cs" />
+    <Compile Include="Engine\EventLog\EventLogPoller.cs" />
+    <Compile Include="Engine\EventLog\EventLogReader.cs" />
+    <Compile Include="Infrastructure\Logger.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MicroLogEntry.cs" />
-    <Compile Include="MicroLogReader.cs" />
-    <Compile Include="MicroLogSeverity.cs" />
-    <Compile Include="MicroLogSeverityHelper.cs" />
-    <Compile Include="MouseInterop.cs" />
+    <Compile Include="Model\MicroLogEntry.cs" />
+    <Compile Include="Engine\MicroLog\MicroLog\MicroLogReader.cs" />
+    <Compile Include="Model\MicroLogSeverity.cs" />
+    <Compile Include="Model\MicroLogSeverityHelper.cs" />
+    <Compile Include="Interop\MouseInterop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using MicroMonitor.Infrastructure;
+using MicroMonitor.Model;
 
-namespace MicroMonitor
+namespace MicroMonitor.Engine.MicroLog.MicroLog
 {
     class MicroLogReader
     {

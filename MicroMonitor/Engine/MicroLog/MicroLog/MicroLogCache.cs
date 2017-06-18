@@ -1,8 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using MicroMonitor.Model;
 
-namespace MicroMonitor
+namespace MicroMonitor.Engine.MicroLog.MicroLog
 {
     class MicroLogCache
     {

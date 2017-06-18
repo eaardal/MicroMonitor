@@ -1,21 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using MicroMonitor.Infrastructure;
+using MicroMonitor.Model;
 
-namespace MicroMonitor
+namespace MicroMonitor.Engine.EventLog
 {
     class EventLogReader
     {
         public IEnumerable<MicroLogEntry> ReadEventLog(string logName)
         {
-            if (!EventLog.Exists(logName))
+            if (!System.Diagnostics.EventLog.Exists(logName))
             {
                 Logger.Info($"Event Log \"{logName}\" does not exist");
                 return new List<MicroLogEntry>();
             }
 
-            var allEventLogs = EventLog.GetEventLogs();
+            var allEventLogs = System.Diagnostics.EventLog.GetEventLogs();
 
             var eventLog = allEventLogs.First(log => log.LogDisplayName == logName);
 

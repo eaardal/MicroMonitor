@@ -27,27 +27,10 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.ColumnSpan="2" Grid.Row="2" Grid.Column="0" Orientation="Horizontal" Margin="0 3 0 0">
-                    <Button Content="x" FontFamily="Consolas" Click="OnCloseClick" Margin="0 0 3 0" Width="25" Height="20" Background="IndianRed" BorderBrush="Gray" ToolTip="Close this window">
-                        <!--<Button.ContentTemplate>
-                            <DataTemplate>
-                                <Image Source="Images/icon-close.png"></Image>
-                            </DataTemplate>
-                        </Button.ContentTemplate>-->
-                    </Button>
-                    <Button Content="copy" FontFamily="Consolas" Click="OnCopyMessageToClipboard" Margin="0 0 3 0" Width="35" Height="20" Background="LightGray" BorderBrush="Gray" ToolTip="Copy log entry message">
-                        <!--<Button.ContentTemplate>
-                            <DataTemplate>
-                                <Image Source="Images/icon-copy.png"></Image>
-                            </DataTemplate>
-                        </Button.ContentTemplate>-->
-                    </Button>
-                    <Button Content="json" FontFamily="Consolas" Click="OnCopyLogEntryAsJson" Width="35" Height="20" Background="LightGray" BorderBrush="Gray" ToolTip="Copy entire log entry as JSON">
-                        <!--<Button.ContentTemplate>
-                            <DataTemplate>
-                                <Image Source="Images/icon-copy-json.png"></Image>
-                            </DataTemplate>
-                        </Button.ContentTemplate>-->
-                    </Button>
+                    <Button Content="x" FontFamily="Consolas" Click="OnCloseClick" Margin="0 0 3 0" Width="25" Height="20" Background="IndianRed" BorderBrush="Gray" ToolTip="Close this window"></Button>
+                    <Button Content="copy" FontFamily="Consolas" Click="OnCopyMessageToClipboard" Margin="0 0 3 0" Width="35" Height="20" Background="LightGray" BorderBrush="Gray" ToolTip="Copy log entry message"></Button>
+                    <Button Content="json" FontFamily="Consolas" Click="OnCopyLogEntryAsJson" Margin="0 0 3 0" Width="35" Height="20" Background="LightGray" BorderBrush="Gray" ToolTip="Copy entire log entry as JSON"></Button>
+                    <Button x:Name="BtnToggleInfoPanel" Content="details" FontFamily="Consolas" Click="OnToggleInfoPanel" Width="55" Height="20" Background="LightGray" BorderBrush="Gray" ToolTip="Toggle expand/collapse info panel"></Button>
                 </StackPanel>
                 <TextBlock Grid.Row="0" Grid.Column="0" x:Name="TimestampLabel" FontWeight="Bold" Text="Timestamp"></TextBlock>
                 <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TimestampValue"></TextBlock>

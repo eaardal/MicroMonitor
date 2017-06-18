@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace MicroMonitor
+namespace MicroMonitor.Helpers
 {
     class KeyboardFacade
     {

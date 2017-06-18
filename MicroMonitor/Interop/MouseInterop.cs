@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 
-namespace MicroMonitor
+namespace MicroMonitor.Interop
 {
     class MouseInterop
     {

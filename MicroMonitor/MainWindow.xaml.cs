@@ -4,6 +4,12 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MicroMonitor.Config;
+using MicroMonitor.Engine.EventLog;
+using MicroMonitor.Engine.MicroLog.MicroLog;
+using MicroMonitor.Helpers;
+using MicroMonitor.Infrastructure;
+using MicroMonitor.Model;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -51,7 +57,6 @@ namespace MicroMonitor
                     WindowHelper.PositionWindowAtCenterScreen(this);
                     break;
             }
-
         }
 
         private void OnKeyUp(object o, KeyEventArgs keyEventArgs)
@@ -117,8 +122,6 @@ namespace MicroMonitor
 
         private void OnContentRendered(object o, EventArgs eventArgs)
         {
-
-
             var logName = AppConfiguration.LogName();
             var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
 
@@ -146,7 +149,7 @@ namespace MicroMonitor
                     }
                     else
                     {
-                        this.NextRead.Text = $"Next read: TBD";
+                        this.NextRead.Text = "Next read: TBD";
                     }
 
                 });

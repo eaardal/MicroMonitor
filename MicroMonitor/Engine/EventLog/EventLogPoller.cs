@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using MicroMonitor.Engine.MicroLog.MicroLog;
+using MicroMonitor.Infrastructure;
 using Timer = System.Timers.Timer;
 
-namespace MicroMonitor
+namespace MicroMonitor.Engine.EventLog
 {
     public class EventLogPoller
     {

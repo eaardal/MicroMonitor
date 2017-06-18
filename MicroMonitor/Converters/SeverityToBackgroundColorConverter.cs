@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using MicroMonitor.Model;
+using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Converters
 {

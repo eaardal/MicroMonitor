@@ -1,4 +1,4 @@
-﻿namespace MicroMonitor
+﻿namespace MicroMonitor.Model
 {
     public enum MicroLogSeverity
     {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Configuration;
+using MicroMonitor.Model;
 
-namespace MicroMonitor
+namespace MicroMonitor.Config
 {
     class AppConfiguration
     {
