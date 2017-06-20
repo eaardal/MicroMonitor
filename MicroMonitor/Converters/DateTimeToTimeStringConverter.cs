@@ -9,7 +9,7 @@ namespace MicroMonitor.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var dateTime = (DateTime) value;
-            return dateTime.ToString("dd.MM.yy HH:mm:ss");
+            return dateTime.ToString("HH:mm:ss");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
