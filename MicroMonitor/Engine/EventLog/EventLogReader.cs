@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MicroMonitor.Infrastructure;
@@ -28,7 +29,7 @@ namespace MicroMonitor.Engine.EventLog
 
             return eventLogEntriesBuffer.Select(l => new MicroLogEntry
             {
-                Id = $"{l.TimeGenerated.Ticks}-{l.EntryType.ToString()}",
+                Id = Guid.NewGuid().ToString(),
                 Source = l.Source,
                 Message = l.Message,
                 Severity = MicroLogSeverityHelper.MapSeverity(l),

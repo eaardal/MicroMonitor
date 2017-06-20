@@ -10,6 +10,7 @@ using MicroMonitor.Engine.MicroLog.MicroLog;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
+using MicroMonitor.Views.DetailsView;
 using Newtonsoft.Json;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
@@ -204,7 +205,7 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Add(detailsWindow);
             
-            this.BtnCloseAllDetailWindows.IsEnabled = true;
+            this.BtnCloseAllDetailWindows.IsEnabled = _openDetailWindows.Any();
         }
 
         private Window CreateDetailsWindow(MicroLogEntry logEntry)
@@ -218,7 +219,7 @@ namespace MicroMonitor.Views.MainView
 
             const int marginBuffer = 20;
 
-            var detailsWindow = new Views.DetailsView.LogEntryDetailsWindow
+            var detailsWindow = new LogEntryDetailsWindow
             {
                 LogEntry = logEntry,
                 Left = this.Left + this.Width + marginBuffer,
