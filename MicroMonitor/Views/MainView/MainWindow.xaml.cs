@@ -11,7 +11,6 @@ using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 using MicroMonitor.Views.DetailsView;
-using Newtonsoft.Json;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -267,8 +266,8 @@ namespace MicroMonitor.Views.MainView
 
         private void OnLogEntryClick(object sender, MouseButtonEventArgs e)
         {
-            var textblock = (TextBlock) sender;
-            var logEntry = (MicroLogEntry) textblock.DataContext;
+            var stackPanel = (StackPanel) sender;
+            var logEntry = (MicroLogEntry) stackPanel.DataContext;
 
             if (e.ChangedButton == MouseButton.Left)
             {
