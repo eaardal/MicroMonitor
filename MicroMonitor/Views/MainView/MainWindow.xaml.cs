@@ -91,19 +91,7 @@ namespace MicroMonitor.Views.MainView
                         return;
                     }
 
-                    if (_peekWindow != null && _peekWindowId != logEntry.Id)
-                    {
-                        _peekWindow?.Close();
-
-                        ShowPeekWindow(logEntry);
-                        this.Focus();
-                    }
-
-                    if (_peekWindow == null)
-                    {
-                        ShowPeekWindow(logEntry);
-                        this.Focus();
-                    }
+                    OpenPeekWindow(logEntry);
                 }
                 else
                 {
@@ -112,10 +100,33 @@ namespace MicroMonitor.Views.MainView
             }
         }
 
-        private void ShowPeekWindow(MicroLogEntry logEntry)
+        private void OpenPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
+        {
+            if (_peekWindow != null && _peekWindowId != logEntry.Id)
+            {
+                _peekWindow?.Close();
+
+                ShowPeekWindow(logEntry, fullscreen);
+                this.Focus();
+            }
+
+            if (_peekWindow == null)
+            {
+                ShowPeekWindow(logEntry, fullscreen);
+                this.Focus();
+            }
+        }
+
+        private void ShowPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
         {
             _peekWindow = CreateDetailsWindow(logEntry);
             _peekWindow.Show();
+
+            if (fullscreen)
+            {
+                _peekWindow.WindowState = WindowState.Maximized;
+            }
+
             _peekWindowId = logEntry.Id;
         }
 
@@ -185,11 +196,16 @@ namespace MicroMonitor.Views.MainView
             var btn = (Button)sender;
             var logEntry = (MicroLogEntry)btn.DataContext;
 
+            OpenNewDetailsWindow(logEntry);
+        }
+
+        private void OpenNewDetailsWindow(MicroLogEntry logEntry)
+        {
             var detailsWindow = CreateDetailsWindow(logEntry);
             detailsWindow.Show();
 
             _openDetailWindows.Add(detailsWindow);
-            
+
             this.BtnCloseAllDetailWindows.IsEnabled = true;
         }
 
@@ -232,6 +248,22 @@ namespace MicroMonitor.Views.MainView
             _openDetailWindows.Clear();
 
             this.BtnCloseAllDetailWindows.IsEnabled = false;
+        }
+
+        private void OnLogEntryClick(object sender, MouseButtonEventArgs e)
+        {
+            var textblock = (TextBlock) sender;
+            var logEntry = (MicroLogEntry) textblock.DataContext;
+
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                OpenPeekWindow(logEntry);
+            }
+
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                OpenPeekWindow(logEntry, true);
+            }
         }
     }
 }
