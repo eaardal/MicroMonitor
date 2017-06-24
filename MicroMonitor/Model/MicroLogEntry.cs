@@ -18,5 +18,9 @@ namespace MicroMonitor.Model
         public string Id { get; set; }
 
         public string LogName { get; set; }
+
+        public string LongSummary => $"{Timestamp:dd.MM.yy HH:mm:ss} {LogName}\\{Source}\n\n {Message}";
+
+        public string ShortSummary => $"{Timestamp:dd.MM.yy HH:mm:ss} {LogName}\\{Source}";
     }
 }

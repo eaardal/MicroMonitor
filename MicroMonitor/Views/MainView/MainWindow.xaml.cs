@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,8 @@ using MicroMonitor.Engine.MicroLog.MicroLog;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
+using MicroMonitor.Views.DetailsView;
+using Newtonsoft.Json;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -173,7 +176,7 @@ namespace MicroMonitor.Views.MainView
                     _lastReadTime = DateTime.Now;
                     _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
 
-                    this.LogEntries.ItemsSource = newLogEntries;
+                    GroupAndBindLogEntries(newLogEntries);
                     UpdateLastRead();
                 });
             });
@@ -181,9 +184,21 @@ namespace MicroMonitor.Views.MainView
 
         private void GetInitialEventViewerLogs(string logName)
         {
-            var logEntries = _eventLogReader.ReadEventLog(logName);
-            this.LogEntries.ItemsSource = logEntries;
+            var logEntries = _eventLogReader.ReadEventLog(logName).ToArray();
+            GroupAndBindLogEntries(logEntries);
+            
             UpdateLastRead();
+        }
+
+        private void GroupAndBindLogEntries(IEnumerable<MicroLogEntry> logEntries)
+        {
+            var grouped = logEntries.GroupBy(e => e.Timestamp.Date).Select(grp => new
+            {
+                Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
+                LogEntries = grp.Select(e => e)
+            });
+
+            this.LogEntries.ItemsSource = grouped;
         }
 
         private void UpdateLastRead()
@@ -206,7 +221,7 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Add(detailsWindow);
 
-            this.BtnCloseAllDetailWindows.IsEnabled = true;
+            this.BtnCloseAllDetailWindows.IsEnabled = _openDetailWindows.Any();
         }
 
         private Window CreateDetailsWindow(MicroLogEntry logEntry)
@@ -220,7 +235,7 @@ namespace MicroMonitor.Views.MainView
 
             const int marginBuffer = 20;
 
-            var detailsWindow = new Views.DetailsView.LogEntryDetailsWindow
+            var detailsWindow = new LogEntryDetailsWindow
             {
                 LogEntry = logEntry,
                 Left = this.Left + this.Width + marginBuffer,
