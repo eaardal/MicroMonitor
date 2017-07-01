@@ -34,22 +34,23 @@ namespace MicroMonitor.Views.MainView
         {
             InitializeComponent();
 
-            this.HeaderPanel.Visibility = Visibility.Collapsed;
-            this.BtnCloseAllDetailWindows.IsEnabled = false;
+            HeaderPanel.Visibility = Visibility.Collapsed;
+            BtnCloseAllDetailWindows.IsEnabled = false;
 
-            this.ContentRendered += OnContentRendered;
-            this.Loaded += OnLoaded;
-            this.KeyDown += OnKeyDown;
-            this.KeyUp += OnKeyUp;
+            ContentRendered += OnContentRendered;
+            Loaded += OnLoaded;
+            KeyDown += OnKeyDown;
+            KeyUp += OnKeyUp;
         }
 
         private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
         {
-            this.Width = AppConfiguration.MainWindowWidth();
-            this.Height = AppConfiguration.MainWindowHeight();
+            Width = AppConfiguration.MainWindowWidth();
+            Height = AppConfiguration.MainWindowHeight();
 
-            var startupLoc = AppConfiguration.MainWindowSpawnMethod();
-            switch (startupLoc)
+            var spawnMethod = AppConfiguration.MainWindowSpawnMethod();
+
+            switch (spawnMethod)
             {
                 case WindowSpawnMethod.Cursor:
                     WindowHelper.PositionWindowAtMouseCursor(this);
@@ -57,6 +58,8 @@ namespace MicroMonitor.Views.MainView
                 case WindowSpawnMethod.CenterScreen:
                     WindowHelper.PositionWindowAtCenterScreen(this);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -64,7 +67,7 @@ namespace MicroMonitor.Views.MainView
         {
             if (keyEventArgs.Key == Key.LeftCtrl)
             {
-                this.HeaderPanel.Visibility = Visibility.Collapsed;
+                HeaderPanel.Visibility = Visibility.Collapsed;
             }
         }
 
@@ -72,7 +75,7 @@ namespace MicroMonitor.Views.MainView
         {
             if (e.Key == Key.LeftCtrl)
             {
-                this.HeaderPanel.Visibility = Visibility.Visible;
+                HeaderPanel.Visibility = Visibility.Visible;
             }
 
             if (e.Key == Key.LeftShift)
@@ -109,13 +112,13 @@ namespace MicroMonitor.Views.MainView
                 _peekWindow?.Close();
 
                 ShowPeekWindow(logEntry, fullscreen);
-                this.Focus();
+                Focus();
             }
 
             if (_peekWindow == null)
             {
                 ShowPeekWindow(logEntry, fullscreen);
-                this.Focus();
+                Focus();
             }
         }
 
@@ -157,11 +160,11 @@ namespace MicroMonitor.Views.MainView
                     if (_expectedNextReadTime != DateTime.MinValue)
                     {
                         var nextReadInSeconds = _expectedNextReadTime.Subtract(DateTime.Now).Seconds;
-                        this.NextRead.Text = $"Next read: {nextReadInSeconds}s";
+                        NextRead.Text = $"Next read: {nextReadInSeconds}s";
                     }
                     else
                     {
-                        this.NextRead.Text = "Next read: TBD";
+                        NextRead.Text = "Next read: TBD";
                     }
 
                 });
@@ -197,12 +200,12 @@ namespace MicroMonitor.Views.MainView
                 LogEntries = grp.Select(e => e)
             });
 
-            this.LogEntries.ItemsSource = grouped;
+            LogEntries.ItemsSource = grouped;
         }
 
         private void UpdateLastRead()
         {
-            this.LastRead.Text = $"Last read: {DateTime.Now:HH:mm:ss}";
+            LastRead.Text = $"Last read: {DateTime.Now:HH:mm:ss}";
         }
 
         private void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
@@ -220,24 +223,24 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Add(detailsWindow);
 
-            this.BtnCloseAllDetailWindows.IsEnabled = _openDetailWindows.Any();
+            BtnCloseAllDetailWindows.IsEnabled = _openDetailWindows.Any();
         }
 
         private Window CreateDetailsWindow(MicroLogEntry logEntry)
         {
             var configuredHeight = AppConfiguration.DetailsWindowHeight();
-            var height = configuredHeight > 0 ? configuredHeight : this.Height;
+            var height = configuredHeight > 0 ? configuredHeight : Height;
 
             var top = AppConfiguration.DetailsWindowGrowDirection() == GrowDirection.Down
-                ? this.Top
-                : this.Top + (this.Height - height);
+                ? Top
+                : Top + (Height - height);
 
             const int marginBuffer = 20;
 
             var detailsWindow = new LogEntryDetailsWindow
             {
                 LogEntry = logEntry,
-                Left = this.Left + this.Width + marginBuffer,
+                Left = Left + Width + marginBuffer,
                 Top = top,
                 Height = height,
                 Width = AppConfiguration.DetailsWindowWidth()
@@ -261,7 +264,7 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Clear();
 
-            this.BtnCloseAllDetailWindows.IsEnabled = false;
+            BtnCloseAllDetailWindows.IsEnabled = false;
         }
 
         private void OnLogEntryClick(object sender, MouseButtonEventArgs e)
