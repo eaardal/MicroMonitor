@@ -16,7 +16,7 @@ _Open several events at once by clicking the arrow button at each log entry_
 
 _MicroMonitor polls the event log on the given interval (10 secs by default). Hold CTRL to inspect the last poll time and manually trigger a refresh_
 
-![img04](./images/img04.PNG)
+![img04](./images/img04.png)
 
 _Configure it through `MicroMonitor.exe.config`_
 
