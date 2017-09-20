@@ -39,7 +39,7 @@
             </Grid>
         </Border>
         <Border Grid.Row="1" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}, ConverterParameter=Light}" Padding="3">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <TextBox Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" FontSize="9" x:Name="LogDetails"></TextBox>
             </ScrollViewer>
         </Border>

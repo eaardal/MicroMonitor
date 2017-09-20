@@ -5,7 +5,7 @@ using System.Timers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Engine.MicroLog.MicroLog
+namespace MicroMonitor.Engine.MicroLog
 {
     class MicroLogReader
     {

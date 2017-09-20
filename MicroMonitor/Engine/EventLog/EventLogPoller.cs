@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using MicroMonitor.Engine.MicroLog.MicroLog;
+using MicroMonitor.Engine.MicroLog;
 using MicroMonitor.Infrastructure;
 using Timer = System.Timers.Timer;
 

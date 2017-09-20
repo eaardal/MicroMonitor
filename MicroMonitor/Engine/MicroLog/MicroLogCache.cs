@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Engine.MicroLog.MicroLog
+namespace MicroMonitor.Engine.MicroLog
 {
     class MicroLogCache
     {

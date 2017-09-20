@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using MicroMonitor.Config;
 using MicroMonitor.Engine.EventLog;
-using MicroMonitor.Engine.MicroLog.MicroLog;
+using MicroMonitor.Engine.MicroLog;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;

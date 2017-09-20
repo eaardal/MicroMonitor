@@ -92,7 +92,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\DateTimeToTimeStringConverter.cs" />
-    <Compile Include="Engine\MicroLog\MicroLog\MicroLogCache.cs" />
+    <Compile Include="Engine\MicroLog\MicroLogCache.cs" />
     <Compile Include="Engine\EventLog\EventLogPoller.cs" />
     <Compile Include="Engine\EventLog\EventLogReader.cs" />
     <Compile Include="Infrastructure\Logger.cs" />
@@ -103,7 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MicroLogEntry.cs" />
-    <Compile Include="Engine\MicroLog\MicroLog\MicroLogReader.cs" />
+    <Compile Include="Engine\MicroLog\MicroLogReader.cs" />
     <Compile Include="Model\MicroLogSeverity.cs" />
     <Compile Include="Model\MicroLogSeverityHelper.cs" />
     <Compile Include="Interop\MouseInterop.cs" />
