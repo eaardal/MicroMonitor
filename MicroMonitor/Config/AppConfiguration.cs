@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using MicroMonitor.Model;
+using Serilog.Events;
 
 namespace MicroMonitor.Config
 {
@@ -37,5 +38,9 @@ namespace MicroMonitor.Config
 
         public static int MainWindowFontSize() =>
             int.Parse(ConfigurationManager.AppSettings["MainWindow.FontSize"]);
+
+        public static LogEventLevel LogLevel() =>
+            (LogEventLevel) Enum.Parse(typeof(LogEventLevel),
+                ConfigurationManager.AppSettings["SerilogLogLevel"]);
     }
 }

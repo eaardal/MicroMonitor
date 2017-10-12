@@ -32,6 +32,8 @@ namespace MicroMonitor.Views.MainView
 
         public MainWindow()
         {
+            Logger.Create();
+
             InitializeComponent();
 
             HeaderPanel.Visibility = Visibility.Collapsed;
@@ -42,7 +44,7 @@ namespace MicroMonitor.Views.MainView
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
         }
-
+        
         private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
         {
             Width = AppConfiguration.MainWindowWidth();
@@ -86,13 +88,13 @@ namespace MicroMonitor.Views.MainView
 
                 if (textBlock != null)
                 {
-                    Logger.Info("Mouse is over TextBlock");
+                    Logger.Debug("Mouse is over TextBlock");
 
                     var logEntry = textBlock.DataContext as MicroLogEntry;
 
                     if (logEntry == null)
                     {
-                        Logger.Info($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
+                        Logger.Debug($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
                         return;
                     }
 
@@ -100,7 +102,7 @@ namespace MicroMonitor.Views.MainView
                 }
                 else
                 {
-                    Logger.Info("Mouse is not over TextBlock");
+                    Logger.Debug("Mouse is not over TextBlock");
                 }
             }
         }

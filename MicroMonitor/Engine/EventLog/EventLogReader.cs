@@ -13,7 +13,7 @@ namespace MicroMonitor.Engine.EventLog
         {
             if (!System.Diagnostics.EventLog.Exists(logName))
             {
-                Logger.Info($"Event Log \"{logName}\" does not exist");
+                Logger.Warning($"Event Log \"{logName}\" does not exist");
                 return new List<MicroLogEntry>();
             }
 
@@ -25,7 +25,7 @@ namespace MicroMonitor.Engine.EventLog
 
             eventLog.Entries.CopyTo(eventLogEntriesBuffer, 0);
 
-            Logger.Info($"Read {eventLogEntriesBuffer.Length} log entries from Event Log \"{logName}\"");
+            Logger.Debug($"Read {eventLogEntriesBuffer.Length} log entries from Event Log \"{logName}\"");
 
             return eventLogEntriesBuffer.Select(l => new MicroLogEntry
             {

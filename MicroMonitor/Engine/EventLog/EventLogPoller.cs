@@ -16,14 +16,14 @@ namespace MicroMonitor.Engine.EventLog
         {
             _timer.Interval = pollIntervalSeconds * 1000;
 
-            Logger.Info($"Timer polling Event Log {logName} every {pollIntervalSeconds}s / {_timer.Interval}ms");
+            Logger.Debug($"Timer polling Event Log {logName} every {pollIntervalSeconds}s / {_timer.Interval}ms");
 
             _timer.Elapsed += (sender, args) =>
             {
                 var thread = new Thread(Poll);
                 thread.Start(new List<object> {logName});
 
-                Logger.Info($"Spawned thread {thread.ManagedThreadId} for polling Event Log \"{logName}\"");
+                Logger.Debug($"Spawned thread {thread.ManagedThreadId} for polling Event Log \"{logName}\"");
             };
             _timer.Start();
         }

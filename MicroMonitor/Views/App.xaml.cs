@@ -1,4 +1,7 @@
-﻿using MicroMonitor.Interop;
+﻿using System;
+using System.Windows;
+using MicroMonitor.Infrastructure;
+using MicroMonitor.Interop;
 
 namespace MicroMonitor.Views
 {
@@ -7,7 +10,7 @@ namespace MicroMonitor.Views
         public App()
         {
 #if DEBUG
-            Startup += (sender, args) =>
+            LoadCompleted += (sender, args) =>
             {
                 ConsoleWindow.Create();
             };
@@ -17,7 +20,16 @@ namespace MicroMonitor.Views
                 ConsoleWindow.Destroy();
             };
 #endif
-        }
 
+            Application.Current.DispatcherUnhandledException += (sender, args) =>
+            {
+                Logger.Error(args.Exception, "Dispatcher unhandled exception");
+            };
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
+            {
+                Logger.Error(args.ExceptionObject as Exception, "App domain unhandled exception");
+            };
+        }
     }
 }

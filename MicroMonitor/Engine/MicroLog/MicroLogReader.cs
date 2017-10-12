@@ -19,7 +19,7 @@ namespace MicroMonitor.Engine.MicroLog
             {
                 var logEntries = MicroLogCache.Instance.Get(logName).ToArray();
 
-                Logger.Info($"Read {logEntries.Length} log entries from {nameof(MicroLogCache)}");
+                Logger.Debug($"Read {logEntries.Length} log entries from {nameof(MicroLogCache)}");
 
                 onRetrieved(logEntries);
             };

@@ -11,12 +11,12 @@ namespace MicroMonitor.Helpers
         public static void PositionWindowAtMouseCursor(Window window)
         {
             var mousePos = MouseInterop.GetPosition();
-            Logger.Info($@"Mouse X{mousePos.X}, Y{mousePos.Y}");
+            Logger.Verbose($@"Mouse X{mousePos.X}, Y{mousePos.Y}");
 
             // Get the screen area minus the Windows taskbar
             var workingArea = GetScreen(window).WorkingArea;
             var workingAreaAsPoint = RealPixelsToWpf(window, new Point(workingArea.Left, workingArea.Bottom));
-            Logger.Info($"Working area point {workingAreaAsPoint.X}X {workingAreaAsPoint.Y}Y");
+            Logger.Verbose($"Working area point {workingAreaAsPoint.X}X {workingAreaAsPoint.Y}Y");
 
             double yOffset = 0;
 
@@ -26,14 +26,14 @@ namespace MicroMonitor.Helpers
                 // Set Y offset to the current mouse position minus the working area bottom point aka the distance between the mouse cursor and the border of the task bar
                 yOffset = mousePos.Y - workingAreaAsPoint.Y;
 
-                Logger.Info($"yOffset={yOffset}");
+                Logger.Verbose($"yOffset={yOffset}");
             }
 
             // Set the window's upper left corner position so that it's positioned centered over the mouse cursor
             window.Left = mousePos.X - window.Width / 2;
             window.Top = mousePos.Y - (window.Height + yOffset);
 
-            Logger.Info($"Window positioned at {window.Left} left, {window.Top} top");
+            Logger.Verbose($"Window positioned at {window.Left} left, {window.Top} top");
         }
 
         private static Screen GetScreen(Window window)
