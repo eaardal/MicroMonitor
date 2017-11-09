@@ -11,6 +11,8 @@ namespace MicroMonitor.Utilities
 
         public static Color ChangeLightness(this Color color, int lightness)
         {
+            // Thanks to Nikolay Khil: https://stackoverflow.com/questions/12894605/how-to-make-specific-color-darken-or-lighten-based-on-value-in-wpf
+
             if (lightness < MinLightness)
                 lightness = MinLightness;
             else if (lightness > MaxLightness)

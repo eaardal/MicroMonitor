@@ -96,6 +96,18 @@ namespace MicroMonitor.Views.MainView
             {
                 HeaderPanel.Visibility = Visibility.Collapsed;
             }
+
+            if (keyEventArgs.Key == Key.G)
+            {
+                OverlayContainer.Visibility = Visibility.Visible;
+                Overlay.Visibility = Visibility.Visible;
+            }
+
+            if (keyEventArgs.Key == Key.H)
+            {
+                OverlayContainer.Visibility = Visibility.Collapsed;
+                Overlay.Visibility = Visibility.Collapsed;
+            }
         }
 
         private void OnKeyDown(object o, KeyEventArgs e)

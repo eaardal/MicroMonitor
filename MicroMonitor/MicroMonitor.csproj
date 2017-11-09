@@ -79,6 +79,7 @@
     <Compile Include="Model\ColorConstants.cs" />
     <Compile Include="Interop\ConsoleWindow.cs" />
     <Compile Include="Model\GrowDirection.cs" />
+    <Compile Include="Utilities\ColorExtensions.cs" />
     <Compile Include="Utilities\HexUtil.cs" />
     <Compile Include="Helpers\KeyboardFacade.cs" />
     <Compile Include="Views\DetailsView\LogEntryDetailsWindow.xaml.cs">
