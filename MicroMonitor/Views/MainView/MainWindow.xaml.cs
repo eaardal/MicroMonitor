@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using MicroMonitor.Config;
 using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Engine.MicroLog;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
+using MicroMonitor.Utilities;
 using MicroMonitor.Views.DetailsView;
 using Application = System.Windows.Application;
 using Button = System.Windows.Controls.Button;
@@ -29,6 +32,7 @@ namespace MicroMonitor.Views.MainView
         private string _peekWindowId;
         private Window _peekWindow;
         private readonly List<Window> _openDetailWindows = new List<Window>();
+        private bool _activatedOnce = false;
 
         public MainWindow()
         {
@@ -38,13 +42,13 @@ namespace MicroMonitor.Views.MainView
 
             HeaderPanel.Visibility = Visibility.Collapsed;
             BtnCloseAllDetailWindows.IsEnabled = false;
-
-            ContentRendered += OnContentRendered;
+            
             Loaded += OnLoaded;
             KeyDown += OnKeyDown;
             KeyUp += OnKeyUp;
+            Activated += OnActivated;
         }
-        
+
         private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
         {
             Width = AppConfiguration.MainWindowWidth();
@@ -65,9 +69,30 @@ namespace MicroMonitor.Views.MainView
             }
         }
 
+        private void OnActivated(object o, EventArgs eventArgs)
+        {
+            var logName = AppConfiguration.LogName();
+
+            // Get fresh events from event log if the window got focus,
+            // but the first time (when the app starts) it should also start polling on a timer.
+            if (_activatedOnce)
+            {
+                GetInitialEventViewerLogs(logName);
+            }
+            else
+            {
+                _activatedOnce = true;
+                
+                var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
+
+                GetInitialEventViewerLogs(logName);
+                StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
+            }
+        }
+
         private void OnKeyUp(object o, KeyEventArgs keyEventArgs)
         {
-            if (keyEventArgs.Key == Key.LeftCtrl)
+            if (keyEventArgs.SystemKey == Key.LeftAlt)
             {
                 HeaderPanel.Visibility = Visibility.Collapsed;
             }
@@ -75,7 +100,7 @@ namespace MicroMonitor.Views.MainView
 
         private void OnKeyDown(object o, KeyEventArgs e)
         {
-            if (e.Key == Key.LeftCtrl)
+            if (e.SystemKey == Key.LeftAlt)
             {
                 HeaderPanel.Visibility = Visibility.Visible;
             }
@@ -104,6 +129,11 @@ namespace MicroMonitor.Views.MainView
                 {
                     Logger.Debug("Mouse is not over TextBlock");
                 }
+            }
+
+            if (e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
+            {
+                GetInitialEventViewerLogs(AppConfiguration.LogName());
             }
         }
 
@@ -136,16 +166,7 @@ namespace MicroMonitor.Views.MainView
 
             _peekWindowId = logEntry.Id;
         }
-
-        private void OnContentRendered(object o, EventArgs eventArgs)
-        {
-            var logName = AppConfiguration.LogName();
-            var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
-
-            GetInitialEventViewerLogs(logName);
-            StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
-        }
-
+        
         private void StartPollingForEventViewerLogs(string logName, int pollIntervalSeconds)
         {
             _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
@@ -282,6 +303,32 @@ namespace MicroMonitor.Views.MainView
             if (e.ChangedButton == MouseButton.Right)
             {
                 OpenPeekWindow(logEntry, true);
+            }
+        }
+
+        private Border _currentMouseOverBorder;
+        
+        private void OnMouseOverLogEntry(object sender, MouseEventArgs e)
+        {
+            var border = (Border)sender;
+            _currentMouseOverBorder = border;
+
+            var brush = (SolidColorBrush)border.Background;
+            border.Background = new SolidColorBrush(brush.Color.ChangeLightness(3));
+
+            // Store original brush in Tag so it can be restored later
+            border.Tag = brush;
+        }
+
+        private void OnMouseLeaveLogEntry(object sender, MouseEventArgs e)
+        {
+            var border = (Border)sender;
+
+            if (_currentMouseOverBorder != null && Equals(border, _currentMouseOverBorder))
+            {
+                // Restore original brush
+                var brush = (SolidColorBrush)border.Tag;
+                border.Background = brush;
             }
         }
     }

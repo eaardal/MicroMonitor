@@ -35,10 +35,13 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border 
-                                            Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" 
+                                            Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}"
                                             Margin="1" 
                                             BorderBrush="Black" 
-                                            BorderThickness="1 1 0 1">
+                                            BorderThickness="1 1 0 1"
+                                            MouseEnter="OnMouseOverLogEntry"
+                                            MouseLeave="OnMouseLeaveLogEntry"
+                                            >
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -55,7 +58,7 @@
                                                                FontSize="9"
                                                                />
                                                 </StackPanel>
-                                                
+
                                                 <Button Grid.Column="1" Click="OnShowLogEntryDetails" BorderThickness="1 0 1 0" BorderBrush="Black">
                                                     <Button.ContentTemplate>
                                                         <DataTemplate>
@@ -72,35 +75,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <!--<ItemsControl x:Name="LogEntries">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Margin="1" BorderBrush="Black" BorderThickness="1 1 0 1">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock
-                                    Grid.Column="0"
-                                    VerticalAlignment="Center"
-                                    Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}"
-                                    FontSize="9"
-                                    Margin="3 0 0 0"
-                                    MouseDown="OnLogEntryClick"
-                                    />
-                                <Button Grid.Column="1" Click="OnShowLogEntryDetails" BorderThickness="1 0 1 0" BorderBrush="Black">
-                                    <Button.ContentTemplate>
-                                        <DataTemplate>
-                                            <Image Width="13" Height="13" Source="../../Images/icon-caret-right.png"></Image>
-                                        </DataTemplate>
-                                    </Button.ContentTemplate>
-                                </Button>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>-->
         </ScrollViewer>
     </Grid>
 </Window>

@@ -6,8 +6,14 @@ namespace MicroMonitor.Helpers
     {
         public static bool IsLeftShiftDown()
         {
-            var shiftState = Keyboard.GetKeyStates(Key.LeftShift);
-            return (shiftState & KeyStates.Down) > 0;
+            var state = Keyboard.GetKeyStates(Key.LeftShift);
+            return (state & KeyStates.Down) > 0;
+        }
+
+        public static bool IsLeftCtrlDown()
+        {
+            var state = Keyboard.GetKeyStates(Key.LeftCtrl);
+            return (state & KeyStates.Down) > 0;
         }
     }
 }
