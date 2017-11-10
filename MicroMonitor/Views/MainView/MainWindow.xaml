@@ -6,100 +6,141 @@
         xmlns:local="clr-namespace:MicroMonitor"
         xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
-        Title="Micro Monitor" Height="200" Width="105" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="Micro Monitor" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
     <Window.Resources>
         <converters:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></converters:DateTimeToTimeStringConverter>
         <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>
         <converters:SeverityToIconConverter x:Key="SeverityToIconConverter"></converters:SeverityToIconConverter>
+        <Storyboard x:Key="Storyboard" x:Name="LogEntryOverlay">
+            <ColorAnimation
+                AutoReverse="True"
+                Storyboard.TargetProperty="Fill.Color"
+                Duration="00:00:01"
+                Storyboard.TargetName=""
+                To="LimeGreen" />
+        </Storyboard>
     </Window.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid x:Name="OverlayContainer" Panel.ZIndex="1000" Visibility="Collapsed">
-            <Grid Background="Black" Opacity="0.5">
-                <Rectangle x:Name="Overlay" Fill="Transparent" Height="50">
-                    <Rectangle.Style>
-                        <Style TargetType="{x:Type Rectangle}">
-                            <Style.Triggers>
-                                <Trigger Property="Visibility" Value="Visible">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <ColorAnimation
-                                                    AutoReverse="True"
-                                                    Storyboard.TargetProperty="Fill.Color"
-                                                    Duration="00:00:01"
-                                                    To="LimeGreen" />
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Rectangle.Style>
-                </Rectangle>
-            </Grid>
-        </Grid>
-        <StackPanel Grid.Row="0" x:Name="HeaderPanel" Background="Black">
-            <TextBlock x:Name="LastRead" Foreground="White"></TextBlock>
-            <TextBlock x:Name="NextRead" Foreground="White"></TextBlock>
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Read now" Click="OnReadNow" Margin="1"></Button>
-                <Button x:Name="BtnCloseAllDetailWindows" Content="Close all" Click="OnCloseAllDetailWindows" Margin="0 1 1 1"></Button>
-            </StackPanel>
-        </StackPanel>
-        <ScrollViewer Grid.Row="1">
-            <ItemsControl x:Name="LogEntries">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Path=Key}" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 3 0 1" Foreground="Black"></TextBlock>
-                            <ItemsControl ItemsSource="{Binding Path=LogEntries}">
-                                <ItemsControl.ItemTemplate>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Border x:Name="HeaderPanel" Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
+                    <StackPanel Margin="0, 5, 0, 3">
+                        <TextBlock HorizontalAlignment="Center" x:Name="LastRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" x:Name="NextRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
+                        <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
+                            <Button
+                                Click="OnReadNow"
+                                BorderThickness="1"
+                                BorderBrush="DimGray"
+                                Background="White"
+                                Margin="0, 0, 2, 0"
+                                Padding="3"
+                                ToolTip="Refresh events"
+                            >
+                                <Button.ContentTemplate>
                                     <DataTemplate>
-                                        <Border 
-                                            Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}"
-                                            Margin="1" 
-                                            BorderBrush="Black" 
-                                            BorderThickness="1 1 0 1"
-                                            MouseEnter="OnMouseOverLogEntry"
-                                            MouseLeave="OnMouseLeaveLogEntry"
-                                        >
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <StackPanel Grid.Column="0" Orientation="Horizontal" ToolTip="{Binding Path=ShortSummary}" MouseDown="OnLogEntryClick">
-                                                    <TextBlock VerticalAlignment="Center" 
-                                                               Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" 
-                                                               FontSize="9" 
-                                                               Margin="3 0 3 0"
-                                                    />
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="{Binding Path=Source}"
-                                                               FontSize="9"
-                                                               />
-                                                </StackPanel>
-
-                                                <Button Grid.Column="1" Click="OnShowLogEntryDetails" BorderThickness="1 0 1 0" BorderBrush="Black">
-                                                    <Button.ContentTemplate>
-                                                        <DataTemplate>
-                                                            <Image Width="13" Height="13" Source="../../Images/icon-caret-right.png"></Image>
-                                                        </DataTemplate>
-                                                    </Button.ContentTemplate>
-                                                </Button>
-                                            </Grid>
+                                        <Image Width="18" Height="18" Source="../../Images/icon-refresh-small-green.png" />
+                                    </DataTemplate>
+                                </Button.ContentTemplate>
+                            </Button>
+                            <Button
+                                x:Name="BtnCloseAllDetailWindows"
+                                Click="OnCloseAllDetailWindows"
+                                BorderThickness="1"
+                                BorderBrush="DimGray"
+                                Background="White"
+                                Margin="2, 0, 0, 0"
+                                Padding="3"
+                                ToolTip="Close all detail windows"
+                            >
+                                <Button.ContentTemplate>
+                                    <DataTemplate>
+                                        <Border>
+                                            <Image x:Name="ImgCloseAllDetailWindows" Width="18" Height="18" Source="../../Images/icon-close-small-red.png"></Image>
                                         </Border>
                                     </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                                </Button.ContentTemplate>
+                            </Button>
+                            <!--<Button Content="Read now" Click="OnReadNow" Margin="1"></Button>
+                            <Button x:Name="BtnCloseAllDetailWindows" Content="Close all" Click="OnCloseAllDetailWindows" Margin="0 1 1 1"></Button>-->
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+            <Grid Grid.Row="1">
+                <ScrollViewer>
+                    <ItemsControl x:Name="LogEntries">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Key}" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 3 0 1" Foreground="Black"></TextBlock>
+                                    <ItemsControl ItemsSource="{Binding Path=LogEntries}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border
+                                                    Name="LogEntryBorder"
+                                                    Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}"
+                                                    Margin="1" 
+                                                    BorderBrush="Black" 
+                                                    BorderThickness="1 1 0 1"
+                                                    MouseEnter="OnMouseOverLogEntry"
+                                                    MouseLeave="OnMouseLeaveLogEntry"
+                                                >
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Column="0" Orientation="Horizontal" ToolTip="{Binding Path=ShortSummary}" MouseDown="OnLogEntryClick">
+                                                            <TextBlock VerticalAlignment="Center" 
+                                                                       Text="{Binding Path=Timestamp, Converter={StaticResource DateTimeToTimeStringConverter}}" 
+                                                                       FontSize="9" 
+                                                                       Margin="3 0 3 0"
+                                                            />
+                                                            <TextBlock VerticalAlignment="Center"
+                                                                       Text="{Binding Path=Source}"
+                                                                       FontSize="9"
+                                                            />
+                                                        </StackPanel>
+
+                                                        <Button Grid.Column="1" Click="OnShowLogEntryDetails" BorderThickness="1 0 1 0" BorderBrush="Black">
+                                                            <Button.ContentTemplate>
+                                                                <DataTemplate>
+                                                                    <Image Width="13" Height="13" Source="../../Images/icon-caret-right.png"></Image>
+                                                                </DataTemplate>
+                                                            </Button.ContentTemplate>
+                                                        </Button>
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+        <Grid x:Name="Overlay" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.4*"></RowDefinition>
+                <RowDefinition Height="0.2*"></RowDefinition>
+                <RowDefinition Height="0.4*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Border Background="Black" Opacity="0.6"></Border>
+            </Grid>
+            <Grid Grid.Row="1" Background="White" Opacity="1">
+                <TextBlock FontSize="16" Text="Refreshing..." HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+            <Grid Grid.Row="2">
+                <Border Background="Black" Opacity="0.6"></Border>
+            </Grid>
+        </Grid>
     </Grid>
 </Window>

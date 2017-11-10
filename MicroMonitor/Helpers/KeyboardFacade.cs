@@ -15,5 +15,11 @@ namespace MicroMonitor.Helpers
             var state = Keyboard.GetKeyStates(Key.LeftCtrl);
             return (state & KeyStates.Down) > 0;
         }
+
+        public static bool IsLeftAltDown()
+        {
+            var state = Keyboard.GetKeyStates(Key.LeftAlt);
+            return (state & KeyStates.Down) > 0;
+        }
     }
 }

@@ -82,6 +82,7 @@
     <Compile Include="Utilities\ColorExtensions.cs" />
     <Compile Include="Utilities\HexUtil.cs" />
     <Compile Include="Helpers\KeyboardFacade.cs" />
+    <Compile Include="Utilities\WpfExtensions.cs" />
     <Compile Include="Views\DetailsView\LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
     </Compile>
@@ -180,6 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\icon-check.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon-close-small-red.png" />
+    <Resource Include="Images\icon-refresh-small-green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\icon-close-small-gray.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

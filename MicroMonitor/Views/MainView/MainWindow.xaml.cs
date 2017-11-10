@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using MicroMonitor.Config;
 using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Engine.MicroLog;
@@ -41,12 +43,22 @@ namespace MicroMonitor.Views.MainView
             InitializeComponent();
 
             HeaderPanel.Visibility = Visibility.Collapsed;
-            BtnCloseAllDetailWindows.IsEnabled = false;
+            DisableCloseAllDetailWindowsButton();
             
             Loaded += OnLoaded;
-            KeyDown += OnKeyDown;
+            KeyDown += async (sender, args) => await OnKeyDown(sender, args);
             KeyUp += OnKeyUp;
-            Activated += OnActivated;
+            Activated += async (sender, args) => await OnActivated(sender, args);
+        }
+
+        private void EnableCloseAllDetailWindowsButton()
+        {
+            BtnCloseAllDetailWindows.IsEnabled = true;
+        }
+
+        private void DisableCloseAllDetailWindowsButton()
+        {
+            BtnCloseAllDetailWindows.IsEnabled = false;
         }
 
         private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
@@ -69,50 +81,33 @@ namespace MicroMonitor.Views.MainView
             }
         }
 
-        private void OnActivated(object o, EventArgs eventArgs)
+        private async Task OnActivated(object o, EventArgs eventArgs)
         {
             var logName = AppConfiguration.LogName();
-
-            // Get fresh events from event log if the window got focus,
-            // but the first time (when the app starts) it should also start polling on a timer.
-            if (_activatedOnce)
-            {
-                GetInitialEventViewerLogs(logName);
-            }
-            else
+            
+            if (!_activatedOnce)
             {
                 _activatedOnce = true;
-                
+
                 var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
 
-                GetInitialEventViewerLogs(logName);
+                await GetAndBindEvents(logName);
+
                 StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
             }
         }
 
-        private void OnKeyUp(object o, KeyEventArgs keyEventArgs)
+        private void OnKeyUp(object o, KeyEventArgs e)
         {
-            if (keyEventArgs.SystemKey == Key.LeftAlt)
+            if (e.Key == Key.E)
             {
                 HeaderPanel.Visibility = Visibility.Collapsed;
             }
-
-            if (keyEventArgs.Key == Key.G)
-            {
-                OverlayContainer.Visibility = Visibility.Visible;
-                Overlay.Visibility = Visibility.Visible;
-            }
-
-            if (keyEventArgs.Key == Key.H)
-            {
-                OverlayContainer.Visibility = Visibility.Collapsed;
-                Overlay.Visibility = Visibility.Collapsed;
-            }
         }
 
-        private void OnKeyDown(object o, KeyEventArgs e)
+        private async Task OnKeyDown(object o, KeyEventArgs e)
         {
-            if (e.SystemKey == Key.LeftAlt)
+            if (e.Key == Key.E)
             {
                 HeaderPanel.Visibility = Visibility.Visible;
             }
@@ -143,10 +138,19 @@ namespace MicroMonitor.Views.MainView
                 }
             }
 
-            if (e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
+            if (e.Key == Key.R || e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
             {
-                GetInitialEventViewerLogs(AppConfiguration.LogName());
+                await Refresh();
             }
+        }
+
+        private async Task Refresh()
+        {
+            ShowOverlay();
+
+            await GetAndBindEvents(AppConfiguration.LogName());
+
+            HideOverlay();
         }
 
         private void OpenPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
@@ -219,14 +223,25 @@ namespace MicroMonitor.Views.MainView
             });
         }
 
-        private void GetInitialEventViewerLogs(string logName)
+        private async Task GetAndBindEvents(string logName)
         {
-            var logEntries = _eventLogReader.ReadEventLog(logName).ToArray();
+            var logEntries = await _eventLogReader.ReadEventLogAsync(logName);
+
             GroupAndBindLogEntries(logEntries);
             
             UpdateLastRead();
         }
 
+        private void ShowOverlay()
+        {
+            Overlay.Visibility = Visibility.Visible;
+        }
+
+        private void HideOverlay()
+        {
+            Overlay.Visibility = Visibility.Collapsed;
+        }
+        
         private void GroupAndBindLogEntries(IEnumerable<MicroLogEntry> logEntries)
         {
             var grouped = logEntries.GroupBy(e => e.Timestamp.Date).Select(grp => new
@@ -284,10 +299,9 @@ namespace MicroMonitor.Views.MainView
             return detailsWindow;
         }
 
-        private void OnReadNow(object sender, RoutedEventArgs e)
+        private async void OnReadNow(object sender, RoutedEventArgs e)
         {
-            var logName = AppConfiguration.LogName();
-            GetInitialEventViewerLogs(logName);
+            await Refresh();
         }
         
         private void OnCloseAllDetailWindows(object sender, RoutedEventArgs e)
@@ -299,7 +313,7 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Clear();
 
-            BtnCloseAllDetailWindows.IsEnabled = false;
+            DisableCloseAllDetailWindowsButton();
         }
 
         private void OnLogEntryClick(object sender, MouseButtonEventArgs e)
