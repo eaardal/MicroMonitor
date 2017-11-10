@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using MicroMonitor.Config;
+using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 using MicroMonitor.Utilities;
 
@@ -11,34 +13,39 @@ namespace MicroMonitor.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var severity = (MicroLogSeverity) Enum.Parse(typeof(MicroLogSeverity), value.ToString());
-            var severityParam = parameter as string;
-
-            if (severityParam != null && severityParam == "Light")
+            var logEntry = value as MicroLogEntry;
+            
+            if (logEntry == null)
             {
-                switch (severity)
-                {
-                    case MicroLogSeverity.Info:
-                        return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColorLight);
-                    case MicroLogSeverity.Warning:
-                        return HexUtil.HexToSolidColorBrush(ColorConstants.WarningColorLight);
-                    case MicroLogSeverity.Error:
-                        return HexUtil.HexToSolidColorBrush(ColorConstants.ErrorColorLight);
-                    default:
-                        return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColorLight);
-                }
+                Logger.Error("LogEntry was null in converter: {0}, {1}, {2}, {3}", value, targetType, parameter, culture);
+
+                return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColor);
             }
 
-            switch (severity)
+            var isStale = AppConfiguration.LogEntryStaleEnabled() && 
+                (DateTime.Now - logEntry.Timestamp).TotalMinutes > AppConfiguration.LogEntryStaleThresholdInMinutes();
+
+            switch (logEntry.Severity)
             {
                 case MicroLogSeverity.Info:
-                    return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColor);
+                    return isStale
+                        ? HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorInfoStale())
+                        : HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorInfo());
+
                 case MicroLogSeverity.Warning:
-                    return HexUtil.HexToSolidColorBrush(ColorConstants.WarningColor);
+                    return isStale
+                        ? HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorWarningStale())
+                        : HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorWarning());
+
                 case MicroLogSeverity.Error:
-                    return HexUtil.HexToSolidColorBrush(ColorConstants.ErrorColor);
+                    return isStale
+                        ? HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorErrorStale())
+                        : HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorError());
+
                 default:
-                    return HexUtil.HexToSolidColorBrush(ColorConstants.InfoColor);
+                    return isStale
+                        ? HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorInfoStale())
+                        : HexUtil.HexToSolidColorBrush(AppConfiguration.LogEntryColorInfo());
             }
         }
 

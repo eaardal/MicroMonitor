@@ -83,7 +83,7 @@
                                             <DataTemplate>
                                                 <Border
                                                     Name="LogEntryBorder"
-                                                    Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}"
+                                                    Background="{Binding Path=DataContext, ElementName=LogEntryBorder, Converter={StaticResource SeverityToBackgroundColorConverter}}"
                                                     Margin="1" 
                                                     BorderBrush="Black" 
                                                     BorderThickness="1 1 0 1"

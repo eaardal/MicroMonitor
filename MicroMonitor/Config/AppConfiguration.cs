@@ -39,6 +39,30 @@ namespace MicroMonitor.Config
         public static int MainWindowFontSize() =>
             int.Parse(ConfigurationManager.AppSettings["MainWindow.FontSize"]);
 
+        public static int LogEntryStaleThresholdInMinutes() =>
+            int.Parse(ConfigurationManager.AppSettings["LogEntry.Stale.ThresholdInMinutes"]);
+
+        public static bool LogEntryStaleEnabled() =>
+            bool.Parse(ConfigurationManager.AppSettings["LogEntry.Stale.Enabled"]);
+
+        public static string LogEntryColorInfo() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Info"];
+
+        public static string LogEntryColorInfoStale() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Info.Stale"];
+
+        public static string LogEntryColorWarning() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Warning"];
+
+        public static string LogEntryColorWarningStale() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Warning.Stale"];
+
+        public static string LogEntryColorError() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Error"];
+
+        public static string LogEntryColorErrorStale() =>
+            ConfigurationManager.AppSettings["LogEntry.Color.Error.Stale"];
+
         public static LogEventLevel LogLevel() =>
             (LogEventLevel) Enum.Parse(typeof(LogEventLevel),
                 ConfigurationManager.AppSettings["SerilogLogLevel"]);

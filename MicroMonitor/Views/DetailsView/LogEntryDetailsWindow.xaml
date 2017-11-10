@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}}" Padding="3" BorderBrush="DimGray" BorderThickness="0 0 0 1" >
+        <Border Name="BorderHeader" Grid.Row="0" Background="{Binding Path=DataContext, ElementName=BorderHeader, Converter={StaticResource SeverityToBackgroundColorConverter}}" Padding="3" BorderBrush="DimGray" BorderThickness="0 0 0 1" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
@@ -38,7 +38,7 @@
                 <TextBlock Grid.Row="1" Grid.Column="1" x:Name="SourceValue"></TextBlock>
             </Grid>
         </Border>
-        <Border Grid.Row="1" Background="{Binding Path=Severity, Converter={StaticResource SeverityToBackgroundColorConverter}, ConverterParameter=Light}" Padding="3">
+        <Border Name="BorderMainContent" Grid.Row="1" Background="{Binding Path=DataContext, ElementName=BorderMainContent, Converter={StaticResource SeverityToBackgroundColorConverter}}" Padding="3">
             <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <TextBox Background="Transparent" BorderThickness="0" IsReadOnly="True" TextWrapping="Wrap" FontSize="9" x:Name="LogDetails"></TextBox>
             </ScrollViewer>

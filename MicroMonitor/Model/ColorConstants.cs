@@ -2,13 +2,13 @@
 {
     class ColorConstants
     {
-        public const string ErrorColor = "#D49090";
-        public const string ErrorColorLight = "#E8C3C3";
-
         public const string InfoColor = "#B2D490";
-        public const string InfoColorLight = "#D5E8C3";
+        public const string InfoColorStale = "#BCC9AF";
 
         public const string WarningColor = "#D4C496";
-        public const string WarningColorLight = "#EBE1C5";
+        public const string WarningColorStale = "#C2BAA3";
+
+        public const string ErrorColor = "#D49090";
+        public const string ErrorColorStale = "#BFA4A4";
     }
 }
