@@ -35,6 +35,7 @@ namespace MicroMonitor.Views.MainView
         private Window _peekWindow;
         private readonly List<Window> _openDetailWindows = new List<Window>();
         private bool _activatedOnce = false;
+        private IEnumerable<MicroLogEntry> _logEntries = new List<MicroLogEntry>();
 
         public MainWindow()
         {
@@ -142,7 +143,69 @@ namespace MicroMonitor.Views.MainView
             {
                 await Refresh();
             }
+
+            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                var key = e.Key.ToString().Last();
+                var keyNum = int.Parse(key.ToString());
+                
+                if (keyNum > _logEntries.Count())
+                {
+                    return;
+                }
+                
+                var logEntry = _logEntries.ElementAt(keyNum - 1);
+
+                if (KeyboardFacade.IsLeftCtrlDown())
+                {
+                    OpenNewDetailsWindow(logEntry, true);
+                }
+                else
+                {
+                    OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+                }
+            }
+
+            if (e.Key == Key.S || e.Key == Key.Down)
+            {
+                if (_logEntries.Count() >= _traversingIndex + 1)
+                {
+                    _traversingIndex++;
+
+                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+
+                    if (KeyboardFacade.IsLeftCtrlDown())
+                    {
+                        OpenNewDetailsWindow(logEntry, true);
+                    }
+                    else
+                    {
+                        OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+                    }
+                }
+            }
+
+            if (e.Key == Key.W || e.Key == Key.Up)
+            {
+                if (_traversingIndex - 1 >= 0)
+                {
+                    _traversingIndex--;
+
+                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+
+                    if (KeyboardFacade.IsLeftCtrlDown())
+                    {
+                        OpenNewDetailsWindow(logEntry, true);
+                    }
+                    else
+                    {
+                        OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+                    }
+                }
+            }
         }
+
+        private int _traversingIndex = -1;
 
         private async Task Refresh()
         {
@@ -217,7 +280,7 @@ namespace MicroMonitor.Views.MainView
                     _lastReadTime = DateTime.Now;
                     _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
 
-                    GroupAndBindLogEntries(newLogEntries);
+                    GroupAndBindLogEntries(newLogEntries.ToArray());
                     UpdateLastRead();
                 });
             });
@@ -227,7 +290,7 @@ namespace MicroMonitor.Views.MainView
         {
             var logEntries = await _eventLogReader.ReadEventLogAsync(logName);
 
-            GroupAndBindLogEntries(logEntries);
+            GroupAndBindLogEntries(logEntries.ToArray());
             
             UpdateLastRead();
         }
@@ -242,8 +305,10 @@ namespace MicroMonitor.Views.MainView
             Overlay.Visibility = Visibility.Collapsed;
         }
         
-        private void GroupAndBindLogEntries(IEnumerable<MicroLogEntry> logEntries)
+        private void GroupAndBindLogEntries(MicroLogEntry[] logEntries)
         {
+            _logEntries = logEntries;
+
             var grouped = logEntries.GroupBy(e => e.Timestamp.Date).Select(grp => new
             {
                 Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
@@ -266,7 +331,7 @@ namespace MicroMonitor.Views.MainView
             OpenNewDetailsWindow(logEntry);
         }
 
-        private void OpenNewDetailsWindow(MicroLogEntry logEntry)
+        private void OpenNewDetailsWindow(MicroLogEntry logEntry, bool keepFocus = false)
         {
             var detailsWindow = CreateDetailsWindow(logEntry);
             detailsWindow.Show();
@@ -274,6 +339,11 @@ namespace MicroMonitor.Views.MainView
             _openDetailWindows.Add(detailsWindow);
 
             BtnCloseAllDetailWindows.IsEnabled = _openDetailWindows.Any();
+
+            if (keepFocus)
+            {
+                Focus();
+            }
         }
 
         private Window CreateDetailsWindow(MicroLogEntry logEntry)
