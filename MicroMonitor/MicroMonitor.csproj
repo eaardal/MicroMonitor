@@ -90,6 +90,8 @@
     <Compile Include="Converters\SeverityToIconConverter.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Model\WindowSpawnMethod.cs" />
+    <Compile Include="Views\MainView\MainWindowModel.cs" />
+    <Compile Include="Views\MainView\MainWindowViewModel.cs" />
     <Page Include="Views\DetailsView\LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

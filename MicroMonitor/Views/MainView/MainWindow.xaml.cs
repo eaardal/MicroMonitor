@@ -37,50 +37,56 @@ namespace MicroMonitor.Views.MainView
         private bool _activatedOnce = false;
         private IEnumerable<MicroLogEntry> _logEntries = new List<MicroLogEntry>();
 
+        private readonly MainWindowViewModel _viewModel;
+
         public MainWindow()
         {
-            Logger.Create();
+            //Logger.Create();
 
             InitializeComponent();
 
-            HeaderPanel.Visibility = Visibility.Collapsed;
-            DisableCloseAllDetailWindowsButton();
+            _viewModel = new MainWindowViewModel(this);
+            DataContext = _viewModel.Model;
+
+            //HeaderPanel.Visibility = Visibility.Collapsed;
+            //DisableCloseAllDetailWindowsButton();
             
-            Loaded += OnLoaded;
+            //Loaded += OnLoaded;
+            Loaded += _viewModel.OnLoaded;
             KeyDown += async (sender, args) => await OnKeyDown(sender, args);
             KeyUp += OnKeyUp;
             Activated += async (sender, args) => await OnActivated(sender, args);
         }
 
-        private void EnableCloseAllDetailWindowsButton()
-        {
-            BtnCloseAllDetailWindows.IsEnabled = true;
-        }
+        //private void EnableCloseAllDetailWindowsButton()
+        //{
+        //    BtnCloseAllDetailWindows.IsEnabled = true;
+        //}
 
-        private void DisableCloseAllDetailWindowsButton()
-        {
-            BtnCloseAllDetailWindows.IsEnabled = false;
-        }
+        //private void DisableCloseAllDetailWindowsButton()
+        //{
+        //    BtnCloseAllDetailWindows.IsEnabled = false;
+        //}
 
-        private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
-        {
-            Width = AppConfiguration.MainWindowWidth();
-            Height = AppConfiguration.MainWindowHeight();
+        //private void OnLoaded(object o, RoutedEventArgs routedEventArgs)
+        //{
+        //    Width = AppConfiguration.MainWindowWidth();
+        //    Height = AppConfiguration.MainWindowHeight();
 
-            var spawnMethod = AppConfiguration.MainWindowSpawnMethod();
+        //    var spawnMethod = AppConfiguration.MainWindowSpawnMethod();
 
-            switch (spawnMethod)
-            {
-                case WindowSpawnMethod.Cursor:
-                    WindowHelper.PositionWindowAtMouseCursor(this);
-                    break;
-                case WindowSpawnMethod.CenterScreen:
-                    WindowHelper.PositionWindowAtCenterScreen(this);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
+        //    switch (spawnMethod)
+        //    {
+        //        case WindowSpawnMethod.Cursor:
+        //            WindowHelper.PositionWindowAtMouseCursor(this);
+        //            break;
+        //        case WindowSpawnMethod.CenterScreen:
+        //            WindowHelper.PositionWindowAtCenterScreen(this);
+        //            break;
+        //        default:
+        //            throw new ArgumentOutOfRangeException();
+        //    }
+        //}
 
         private async Task OnActivated(object o, EventArgs eventArgs)
         {
@@ -383,7 +389,8 @@ namespace MicroMonitor.Views.MainView
 
             _openDetailWindows.Clear();
 
-            DisableCloseAllDetailWindowsButton();
+            _viewModel.DisableCloseAllDetailWindowsButton();
+            //DisableCloseAllDetailWindowsButton();
         }
 
         private void OnLogEntryClick(object sender, MouseButtonEventArgs e)

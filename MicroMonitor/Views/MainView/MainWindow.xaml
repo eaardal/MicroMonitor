@@ -6,7 +6,17 @@
         xmlns:local="clr-namespace:MicroMonitor"
         xmlns:converters="clr-namespace:MicroMonitor.Converters"
         mc:Ignorable="d"
-        Title="Micro Monitor" WindowStyle="SingleBorderWindow" ResizeMode="NoResize" WindowStartupLocation="Manual">
+        Title="Micro Monitor"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize"
+        WindowStartupLocation="Manual"
+        MinWidth="{Binding Path=WindowWidth}"
+        MinHeight="{Binding Path=WindowHeight}"
+        MaxWidth="{Binding Path=WindowWidth}"
+        MaxHeight="{Binding Path=WindowHeight}"
+        Left="{Binding Path=WindowLeft, Mode=TwoWay}"
+        Top="{Binding Path=WindowTop, Mode=TwoWay}"
+        >
     <Window.Resources>
         <converters:DateTimeToTimeStringConverter x:Key="DateTimeToTimeStringConverter"></converters:DateTimeToTimeStringConverter>
         <converters:SeverityToBackgroundColorConverter x:Key="SeverityToBackgroundColorConverter"></converters:SeverityToBackgroundColorConverter>
@@ -27,7 +37,7 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Border x:Name="HeaderPanel" Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
+                <Border x:Name="HeaderPanel" Visibility="{Binding Path=HeaderPanelVisibility}" Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
                     <StackPanel Margin="0, 5, 0, 3">
                         <TextBlock HorizontalAlignment="Center" x:Name="LastRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
                         <TextBlock HorizontalAlignment="Center" x:Name="NextRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
@@ -50,6 +60,7 @@
                             <Button
                                 x:Name="BtnCloseAllDetailWindows"
                                 Click="OnCloseAllDetailWindows"
+                                IsEnabled="{Binding Path=IsCloseAllDetailWindowsButtonEnabled}"
                                 BorderThickness="1"
                                 BorderBrush="DimGray"
                                 Background="White"

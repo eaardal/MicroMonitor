@@ -8,7 +8,7 @@ namespace MicroMonitor.Helpers
 {
     class WindowHelper
     {
-        public static void PositionWindowAtMouseCursor(Window window)
+        public static (double left, double top) PositionWindowAtMouseCursor(Window window, double windowHeight, double windowWidth)
         {
             var mousePos = MouseInterop.GetPosition();
             Logger.Verbose($@"Mouse X{mousePos.X}, Y{mousePos.Y}");
@@ -30,10 +30,12 @@ namespace MicroMonitor.Helpers
             }
 
             // Set the window's upper left corner position so that it's positioned centered over the mouse cursor
-            window.Left = mousePos.X - window.Width / 2;
-            window.Top = mousePos.Y - (window.Height + yOffset);
+            var left = mousePos.X - windowWidth / 2;
+            var top = mousePos.Y - (windowHeight + yOffset);
 
-            Logger.Verbose($"Window positioned at {window.Left} left, {window.Top} top");
+            Logger.Verbose($"Window positioned at {left} left, {top} top");
+
+            return (left, top);
         }
 
         private static Screen GetScreen(Window window)
@@ -58,11 +60,13 @@ namespace MicroMonitor.Helpers
             return default(Point);
         }
 
-        public static void PositionWindowAtCenterScreen(Views.MainView.MainWindow window)
+        public static (double left, double top) PositionWindowAtCenterScreen(Views.MainView.MainWindow window)
         {
             var workingArea = GetScreen(window).WorkingArea;
-            window.Left = (int)(workingArea.Width / 2) - (window.Width / 2);
-            window.Top = (int) (workingArea.Height / 2) - (window.Height / 2);
+            var left = (int)(workingArea.Width / 2) - (window.Width / 2);
+            var top = (int) (workingArea.Height / 2) - (window.Height / 2);
+
+            return (left, top);
         }
     }
 }
