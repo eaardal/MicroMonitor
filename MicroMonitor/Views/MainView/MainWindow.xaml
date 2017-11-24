@@ -39,8 +39,8 @@
             <Grid Grid.Row="0">
                 <Border x:Name="HeaderPanel" Visibility="{Binding Path=HeaderPanelVisibility}" Background="LightGray" BorderBrush="DarkGray" BorderThickness="1" CornerRadius="3" Margin="5">
                     <StackPanel Margin="0, 5, 0, 3">
-                        <TextBlock HorizontalAlignment="Center" x:Name="LastRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
-                        <TextBlock HorizontalAlignment="Center" x:Name="NextRead" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" x:Name="LastRead" Text="{Binding Path=LastReadText}" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
+                        <TextBlock HorizontalAlignment="Center" x:Name="NextRead" Text="{Binding Path=NextReadText}" Foreground="Black" Margin="5, 0, 0, 0"></TextBlock>
                         <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="5">
                             <Button
                                 Click="OnReadNow"
@@ -84,7 +84,7 @@
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer>
-                    <ItemsControl x:Name="LogEntries">
+                    <ItemsControl x:Name="LogEntries" ItemsSource="{Binding Path=GroupedLogEntries}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>

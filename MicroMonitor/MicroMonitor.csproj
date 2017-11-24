@@ -78,6 +78,7 @@
     <Compile Include="Config\AppConfiguration.cs" />
     <Compile Include="Model\ColorConstants.cs" />
     <Compile Include="Interop\ConsoleWindow.cs" />
+    <Compile Include="Model\GroupedMicroLogEntry.cs" />
     <Compile Include="Model\GrowDirection.cs" />
     <Compile Include="Utilities\ColorExtensions.cs" />
     <Compile Include="Utilities\HexUtil.cs" />

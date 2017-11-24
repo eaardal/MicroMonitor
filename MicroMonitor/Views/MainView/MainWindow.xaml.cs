@@ -55,7 +55,7 @@ namespace MicroMonitor.Views.MainView
             Loaded += _viewModel.OnLoaded;
             KeyDown += async (sender, args) => await OnKeyDown(sender, args);
             KeyUp += OnKeyUp;
-            Activated += async (sender, args) => await OnActivated(sender, args);
+            Activated += async (sender, args) => await _viewModel.OnActivated(sender, args);
         }
 
         //private void EnableCloseAllDetailWindowsButton()
@@ -88,21 +88,21 @@ namespace MicroMonitor.Views.MainView
         //    }
         //}
 
-        private async Task OnActivated(object o, EventArgs eventArgs)
-        {
-            var logName = AppConfiguration.LogName();
+        //private async Task OnActivated(object o, EventArgs eventArgs)
+        //{
+        //    var logName = AppConfiguration.LogName();
             
-            if (!_activatedOnce)
-            {
-                _activatedOnce = true;
+        //    if (!_activatedOnce)
+        //    {
+        //        _activatedOnce = true;
 
-                var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
+        //        var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
 
-                await GetAndBindEvents(logName);
+        //        await GetAndBindEvents(logName);
 
-                StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
-            }
-        }
+        //        StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
+        //    }
+        //}
 
         private void OnKeyUp(object o, KeyEventArgs e)
         {
@@ -252,45 +252,45 @@ namespace MicroMonitor.Views.MainView
             _peekWindowId = logEntry.Id;
         }
         
-        private void StartPollingForEventViewerLogs(string logName, int pollIntervalSeconds)
-        {
-            _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
+        //private void StartPollingForEventViewerLogs(string logName, int pollIntervalSeconds)
+        //{
+        //    _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
 
-            var readInterval = pollIntervalSeconds + 2;
+        //    var readInterval = pollIntervalSeconds + 2;
 
-            _expectedNextReadTime = DateTime.Now.AddSeconds(readInterval);
+        //    _expectedNextReadTime = DateTime.Now.AddSeconds(readInterval);
 
-            _nextReadTimer.Interval = 1000;
-            _nextReadTimer.Elapsed += (sender, args) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (_expectedNextReadTime != DateTime.MinValue)
-                    {
-                        var nextReadInSeconds = _expectedNextReadTime.Subtract(DateTime.Now).Seconds;
-                        NextRead.Text = $"Next read: {nextReadInSeconds}s";
-                    }
-                    else
-                    {
-                        NextRead.Text = "Next read: TBD";
-                    }
+        //    _nextReadTimer.Interval = 1000;
+        //    _nextReadTimer.Elapsed += (sender, args) =>
+        //    {
+        //        Application.Current.Dispatcher.Invoke(() =>
+        //        {
+        //            if (_expectedNextReadTime != DateTime.MinValue)
+        //            {
+        //                var nextReadInSeconds = _expectedNextReadTime.Subtract(DateTime.Now).Seconds;
+        //                NextRead.Text = $"Next read: {nextReadInSeconds}s";
+        //            }
+        //            else
+        //            {
+        //                NextRead.Text = "Next read: TBD";
+        //            }
 
-                });
-            };
-            _nextReadTimer.Start();
+        //        });
+        //    };
+        //    _nextReadTimer.Start();
 
-            _microLogReader.ReadOnInterval(logName, readInterval, newLogEntries =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _lastReadTime = DateTime.Now;
-                    _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
+        //    _microLogReader.ReadOnInterval(logName, readInterval, newLogEntries =>
+        //    {
+        //        Application.Current.Dispatcher.Invoke(() =>
+        //        {
+        //            _lastReadTime = DateTime.Now;
+        //            _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
 
-                    GroupAndBindLogEntries(newLogEntries.ToArray());
-                    UpdateLastRead();
-                });
-            });
-        }
+        //            GroupAndBindLogEntries(newLogEntries.ToArray());
+        //            UpdateLastRead();
+        //        });
+        //    });
+        //}
 
         private async Task GetAndBindEvents(string logName)
         {
