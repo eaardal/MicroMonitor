@@ -12,7 +12,8 @@ namespace MicroMonitor.Reducers
 {
     class MainWindowReducer : IRequestHandler<RefreshEventLogEntriesStart>,
         IRequestHandler<RefreshEventLogEntriesSuccess>,
-        IRequestHandler<RefreshEventLogEntriesError>
+        IRequestHandler<RefreshEventLogEntriesError>,
+        IRequestHandler<ToggleHeaderPanelVisibility>
     {
         private readonly MainWindowModel _state;
 
@@ -40,6 +41,11 @@ namespace MicroMonitor.Reducers
         public void Handle(RefreshEventLogEntriesError message)
         {
             _state.OverlayVisibility = Visibility.Collapsed;
+        }
+
+        public void Handle(ToggleHeaderPanelVisibility message)
+        {
+            _state.HeaderPanelVisibility = message.Visibility;
         }
     }
 }

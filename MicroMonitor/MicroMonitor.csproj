@@ -96,15 +96,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\PeekWindowActions.cs" />
+    <Compile Include="Actions\PeekWindowActionsHandler.cs" />
+    <Compile Include="Actions\MainWindowActions.cs" />
     <Compile Include="Config\AppConfiguration.cs" />
     <Compile Include="Infrastructure\Bootstrapper.cs" />
+    <Compile Include="Infrastructure\Store.cs" />
     <Compile Include="KeyboardActions.cs" />
     <Compile Include="Model\ColorConstants.cs" />
     <Compile Include="Interop\ConsoleWindow.cs" />
     <Compile Include="Model\GroupedMicroLogEntry.cs" />
     <Compile Include="Model\GrowDirection.cs" />
-    <Compile Include="Requests\RefreshLogEvents.cs" />
-    <Compile Include="Services\EventLogRequestHandler.cs" />
+    <Compile Include="Actions\EventLogActions.cs" />
+    <Compile Include="Actions\EventLogActionsHandler.cs" />
+    <Compile Include="Reducers\MainWindowReducer.cs" />
+    <Compile Include="Reducers\PeekWindowReducer.cs" />
     <Compile Include="Services\EventLogService.cs" />
     <Compile Include="Services\IEventLogService.cs" />
     <Compile Include="Utilities\ColorExtensions.cs" />

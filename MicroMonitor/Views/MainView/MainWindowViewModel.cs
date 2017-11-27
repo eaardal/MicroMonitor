@@ -8,6 +8,8 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using MediatR;
+using MicroMonitor.Actions;
 using MicroMonitor.Config;
 using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Engine.MicroLog;
@@ -19,6 +21,7 @@ namespace MicroMonitor.Views.MainView
 {
     class MainWindowViewModel
     {
+        private readonly IMediator _mediator;
         private readonly EventLogReader _eventLogReader = new EventLogReader();
         private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
         private readonly MicroLogReader _microLogReader = new MicroLogReader();
@@ -35,8 +38,9 @@ namespace MicroMonitor.Views.MainView
 
         public MainWindowModel Model { get; }
 
-        public MainWindowViewModel(MainWindow window)
+        public MainWindowViewModel(MainWindow window, IMediator mediator)
         {
+            _mediator = mediator;
             _window = window ?? throw new ArgumentNullException(nameof(window));
 
             Model = new MainWindowModel();
@@ -44,39 +48,31 @@ namespace MicroMonitor.Views.MainView
             Logger.Create();
         }
 
-        public void OnKeyUp(object o, KeyEventArgs e)
+        public async Task OnKeyUp(object o, KeyEventArgs e)
         {
-            KeyboardActions.TryToggleHeaderPanel(e, Model);
+            if (e.Key == Key.E)
+            {
+                await _mediator.Send(new ToggleHeaderPanelVisibility(Visibility.Visible));
+            }
         }
 
         public async Task OnKeyDown(object o, KeyEventArgs e)
         {
-            KeyboardActions.TryToggleHeaderPanel(e, Model);
-            KeyboardActions.TryOpenPeekWindowForLogEntryUnderMouseCursor(e, Model);
-
-            KeyboardActions.TryRefresh(e, Model);
-
-            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            if (e.Key == Key.E)
             {
-                var key = e.Key.ToString().Last();
-                var keyNum = int.Parse(key.ToString());
-
-                if (keyNum > _logEntries.Count())
-                {
-                    return;
-                }
-
-                var logEntry = _logEntries.ElementAt(keyNum - 1);
-
-                if (KeyboardFacade.IsLeftCtrlDown())
-                {
-                    OpenNewDetailsWindow(logEntry, true);
-                }
-                else
-                {
-                   PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
-                }
+                await _mediator.Send(new ToggleHeaderPanelVisibility(Visibility.Collapsed));
             }
+
+            if (e.Key == Key.LeftShift)
+            {
+                await _mediator.Send(new OpenPeekWindowUnderMouseCursor(e));
+            }
+
+            //KeyboardActions.TryToggleHeaderPanel(e, Model);
+            //KeyboardActions.TryOpenPeekWindowForLogEntryUnderMouseCursor(e, Model);
+            KeyboardActions.TryRefresh(e, Model);
+            KeyboardActions.TryOpenPeekWindowForNumericKey(e, Model);
+            
 
             if (e.Key == Key.S || e.Key == Key.Down)
             {
