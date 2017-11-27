@@ -6,7 +6,7 @@ using MicroMonitor.Services;
 
 namespace MicroMonitor.Actions
 {
-    class EventLogActionsHandler : IAsyncRequestHandler<RefreshEventLogEntries>
+    class EventLogActionsHandler : IAsyncNotificationHandler<RefreshEventLogEntries>
     {
         private readonly IMediator _mediator;
         private readonly IEventLogService _eventLogService;
@@ -19,7 +19,7 @@ namespace MicroMonitor.Actions
 
         public async Task Handle(RefreshEventLogEntries message)
         {
-            await _mediator.Send(new RefreshEventLogEntriesStart());
+            await _mediator.Publish(new RefreshEventLogEntriesStart());
 
             var logName = AppConfiguration.LogName();
 
@@ -27,11 +27,11 @@ namespace MicroMonitor.Actions
             {
                 var eventLogEntries = await _eventLogService.GetEventLogEntries(logName);
 
-                await _mediator.Send(new RefreshEventLogEntriesSuccess(logName, eventLogEntries));
+                await _mediator.Publish(new RefreshEventLogEntriesSuccess(logName, eventLogEntries));
             }
             catch (Exception e)
             {
-                await _mediator.Send(new RefreshEventLogEntriesError(e));
+                await _mediator.Publish(new RefreshEventLogEntriesError(e));
             }
         }
     }

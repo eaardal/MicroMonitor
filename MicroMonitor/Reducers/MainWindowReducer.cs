@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using MediatR;
 using MicroMonitor.Actions;
@@ -10,10 +6,12 @@ using MicroMonitor.Views.MainView;
 
 namespace MicroMonitor.Reducers
 {
-    class MainWindowReducer : IRequestHandler<RefreshEventLogEntriesStart>,
-        IRequestHandler<RefreshEventLogEntriesSuccess>,
-        IRequestHandler<RefreshEventLogEntriesError>,
-        IRequestHandler<ToggleHeaderPanelVisibility>
+    class MainWindowReducer : INotificationHandler<RefreshEventLogEntriesStart>,
+        INotificationHandler<RefreshEventLogEntriesSuccess>,
+        INotificationHandler<RefreshEventLogEntriesError>,
+        INotificationHandler<ToggleHeaderPanelVisibility>,
+        INotificationHandler<CreatedNewDetailsWindow>,
+        INotificationHandler<SetTraversingIndex>
     {
         private readonly MainWindowModel _state;
 
@@ -46,6 +44,16 @@ namespace MicroMonitor.Reducers
         public void Handle(ToggleHeaderPanelVisibility message)
         {
             _state.HeaderPanelVisibility = message.Visibility;
+        }
+
+        public void Handle(CreatedNewDetailsWindow notification)
+        {
+            _state.IsCloseAllDetailWindowsButtonEnabled = true;
+        }
+
+        public void Handle(SetTraversingIndex notification)
+        {
+            _state.TraversingIndex = notification.TraversingIndex;
         }
     }
 }

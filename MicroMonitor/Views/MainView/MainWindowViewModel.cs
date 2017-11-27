@@ -21,6 +21,7 @@ namespace MicroMonitor.Views.MainView
 {
     class MainWindowViewModel
     {
+        private readonly IAppStore _store;
         private readonly IMediator _mediator;
         private readonly EventLogReader _eventLogReader = new EventLogReader();
         private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
@@ -38,9 +39,9 @@ namespace MicroMonitor.Views.MainView
 
         public MainWindowModel Model { get; }
 
-        public MainWindowViewModel(MainWindow window, IMediator mediator)
+        public MainWindowViewModel(MainWindow window, IAppStore store)
         {
-            _mediator = mediator;
+            _store = store;
             _window = window ?? throw new ArgumentNullException(nameof(window));
 
             Model = new MainWindowModel();
@@ -52,7 +53,7 @@ namespace MicroMonitor.Views.MainView
         {
             if (e.Key == Key.E)
             {
-                await _mediator.Send(new ToggleHeaderPanelVisibility(Visibility.Visible));
+                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Visible));
             }
         }
 
@@ -60,88 +61,33 @@ namespace MicroMonitor.Views.MainView
         {
             if (e.Key == Key.E)
             {
-                await _mediator.Send(new ToggleHeaderPanelVisibility(Visibility.Collapsed));
+                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Collapsed));
             }
 
             if (e.Key == Key.LeftShift)
             {
-                await _mediator.Send(new OpenPeekWindowUnderMouseCursor(e));
+                await _store.Dispatch(new OpenPeekWindowUnderMouseCursor(e));
             }
 
-            //KeyboardActions.TryToggleHeaderPanel(e, Model);
-            //KeyboardActions.TryOpenPeekWindowForLogEntryUnderMouseCursor(e, Model);
-            KeyboardActions.TryRefresh(e, Model);
-            KeyboardActions.TryOpenPeekWindowForNumericKey(e, Model);
+            if (e.Key == Key.R || e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
+            {
+                await _store.Dispatch(new RefreshEventLogEntries());
+            }
             
+            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                await _store.Dispatch(new OpenPeekWindowForNumericKey(e));
+            }
 
             if (e.Key == Key.S || e.Key == Key.Down)
             {
-                if (_logEntries.Count() >= _traversingIndex + 1)
-                {
-                    _traversingIndex++;
-
-                    var logEntry = _logEntries.ElementAt(_traversingIndex);
-
-                    if (KeyboardFacade.IsLeftCtrlDown())
-                    {
-                        OpenNewDetailsWindow(logEntry, true);
-                    }
-                    else
-                    {
-                        PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
-                    }
-                }
+                await _store.Dispatch(new TraverseDownAndOpenPeekWindow());
             }
 
             if (e.Key == Key.W || e.Key == Key.Up)
             {
-                if (_traversingIndex - 1 >= 0)
-                {
-                    _traversingIndex--;
-
-                    var logEntry = _logEntries.ElementAt(_traversingIndex);
-
-                    if (KeyboardFacade.IsLeftCtrlDown())
-                    {
-                        OpenNewDetailsWindow(logEntry, true);
-                    }
-                    else
-                    {
-                        PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
-                    }
-                }
+                await _store.Dispatch(new TraverseUpAndOpenPeekWindow());
             }
-        }
-        private void OpenNewDetailsWindow(MicroLogEntry logEntry, bool keepFocus = false)
-        {
-            var detailsWindow = DetailsWindow.CreateDetailsWindow(_window, logEntry);
-            detailsWindow.Show();
-
-            _openDetailWindows.Add(detailsWindow);
-
-            Model.IsCloseAllDetailWindowsButtonEnabled = _openDetailWindows.Any();
-
-            if (keepFocus)
-            {
-                _window.Focus();
-            }
-        }
-        private void ShowOverlay()
-        {
-            Model.OverlayVisibility = Visibility.Visible;
-        }
-
-        private void HideOverlay()
-        {
-            Model.OverlayVisibility = Visibility.Collapsed;
-        }
-        private async Task Refresh()
-        {
-            ShowOverlay();
-
-            await GetAndBindEvents(AppConfiguration.LogName());
-
-            HideOverlay();
         }
         
         public async Task OnActivated(object o, EventArgs eventArgs)

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using MicroMonitor.Model;
 
@@ -20,5 +21,8 @@ namespace MicroMonitor.Views.MainView
         public ObservableCollection<GroupedMicroLogEntry> GroupedLogEntries { get; set; } = new ObservableCollection<GroupedMicroLogEntry>();
 
         public bool IsCloseAllDetailWindowsButtonEnabled { get; set; }
+        public Window Window { get; set; }
+        public IReadOnlyCollection<MicroLogEntry> LogEntries { get; set; }
+        public int TraversingIndex { get; set; }
     }
 }

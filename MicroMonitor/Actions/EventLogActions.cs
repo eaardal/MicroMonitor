@@ -5,9 +5,9 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Actions
 {
-    class RefreshEventLogEntriesStart : IRequest { }
+    class RefreshEventLogEntriesStart : INotification { }
 
-    class RefreshEventLogEntriesSuccess : IRequest
+    class RefreshEventLogEntriesSuccess : INotification
     {
         public string LogName { get; }
         public IEnumerable<GroupedMicroLogEntry> EventLogEntries { get; }
@@ -19,7 +19,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class RefreshEventLogEntriesError : IRequest
+    class RefreshEventLogEntriesError : INotification
     {
         public Exception Exception { get; }
 
@@ -29,5 +29,5 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class RefreshEventLogEntries : IRequest { }
+    class RefreshEventLogEntries : INotification { }
 }

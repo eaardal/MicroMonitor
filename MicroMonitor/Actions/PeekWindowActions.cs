@@ -1,28 +1,67 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using MediatR;
 using MicroMonitor.Model;
 
 namespace MicroMonitor.Actions
 {
-    public class OpenPeekWindowUnderMouseCursor : IRequest
+    public class OpenPeekWindowUnderMouseCursor : INotification
     {
         public KeyEventArgs KeyEventArgs { get; }
+        public bool OpenFullscreen { get; }
 
-        public OpenPeekWindowUnderMouseCursor(KeyEventArgs keyEventArgs)
+        public OpenPeekWindowUnderMouseCursor(KeyEventArgs keyEventArgs, bool openFullscreen = false)
         {
             KeyEventArgs = keyEventArgs;
+            OpenFullscreen = openFullscreen;
+        }
+    }
+    
+    class OpenedNewPeekWindow : INotification
+    {
+        public Window NewPeekWindow { get; }
+        public string NewPeekWindowId { get; }
+
+        public OpenedNewPeekWindow(Window newPeekWindow, string newPeekWindowId)
+        {
+            NewPeekWindow = newPeekWindow;
+            NewPeekWindowId = newPeekWindowId;
         }
     }
 
-    class ShowPeekWindow
+    class OpenPeekWindowForNumericKey : INotification
     {
-        public MicroLogEntry LogEntry { get; }
-        public bool Fullscreen { get; }
+        public KeyEventArgs KeyEventArgs { get; }
+        public bool OpenFullscreen { get; }
 
-        public ShowPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
+        public OpenPeekWindowForNumericKey(KeyEventArgs keyEventArgs, bool openFullscreen = false)
         {
-            LogEntry = logEntry;
-            Fullscreen = fullscreen;
+            KeyEventArgs = keyEventArgs;
+            OpenFullscreen = openFullscreen;
+        }
+    }
+
+    class CreatedNewDetailsWindow : INotification
+    {
+        public Window NewDetailsWindow { get; }
+
+        public CreatedNewDetailsWindow(Window newDetailsWindow)
+        {
+            NewDetailsWindow = newDetailsWindow;
+        }
+    }
+
+    class TraverseDownAndOpenPeekWindow : INotification { }
+
+    class TraverseUpAndOpenPeekWindow : INotification { }
+
+    class SetTraversingIndex : INotification
+    {
+        public int TraversingIndex { get; }
+
+        public SetTraversingIndex(int traversingIndex)
+        {
+            TraversingIndex = traversingIndex;
         }
     }
 }

@@ -1,30 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace MicroMonitor.Infrastructure
 {
-    class Store
+    class Store<TState> : IStore<TState> where TState : class, new()
     {
-        public void Configure(params IReducer[] reducers)
+        private readonly IMediator _mediator;
+        private readonly TState _state;
+
+        public Store(IMediator mediator, TState initialState)
         {
-            
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _state = initialState ?? throw new ArgumentNullException(nameof(initialState));
         }
-    }
 
-    internal interface IState<out T>
-    {
-        T State { get; }
-    }
+        public TState GetState()
+        {
+            return _state;
+        }
 
-    internal interface IReducer
-    {
-    }
-
-    internal interface IRequestHandlerWithStore<IState<out T>>
-    {
-        
+        public async Task Dispatch<TMessage>(TMessage message) where TMessage : IRequest<TMessage>
+        {
+            await _mediator.Send(message);
+        }
     }
 }

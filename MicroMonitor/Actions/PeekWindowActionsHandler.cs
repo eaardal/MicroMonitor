@@ -1,25 +1,30 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MediatR;
+using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
-using MicroMonitor.Reducers;
 using MicroMonitor.Views.MainView;
 
 namespace MicroMonitor.Actions
 {
-    class PeekWindowActionsHandler : IRequestHandler<OpenPeekWindowUnderMouseCursor>
+    class PeekWindowActionsHandler : IAsyncNotificationHandler<OpenPeekWindowUnderMouseCursor>, 
+        IAsyncNotificationHandler<OpenPeekWindowForNumericKey>, 
+        IAsyncNotificationHandler<TraverseDownAndOpenPeekWindow>,
+        IAsyncNotificationHandler<TraverseUpAndOpenPeekWindow>
     {
-        private readonly IMediator _mediator;
+        private readonly IAppStore _store;
 
-        public PeekWindowActionsHandler(IMediator mediator)
+        public PeekWindowActionsHandler(IAppStore store)
         {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
-        public void Handle(OpenPeekWindowUnderMouseCursor message)
+        public async Task Handle(OpenPeekWindowUnderMouseCursor message)
         {
             var ele = Mouse.DirectlyOver as UIElement;
 
@@ -34,10 +39,139 @@ namespace MicroMonitor.Actions
                     Logger.Debug($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
                     return;
                 }
+                
+                await OpenPeekWindow(logEntry, message.OpenFullscreen);
+            }
+        }
 
-                _mediator.Send(new ShowPeekWindow(logEntry))
+        private async Task OpenPeekWindow(MicroLogEntry logEntry, bool openFullscreen)
+        {
+            var state = _store.GetState();
 
-                PeekWindow.Open((Window)message.KeyEventArgs.Source, logEntry);
+            var mainWindow = state.MainWindowState.Window;
+
+            var peekWindow = state.PeekWindowState.PeekWindow;
+            var peekWindowId = state.PeekWindowState.PeekWindowId;
+
+            if (peekWindow != null && peekWindowId != logEntry.Id)
+            {
+                peekWindow?.Close();
+            }
+
+            if (peekWindow == null)
+            {
+                ShowPeekWindow(mainWindow, logEntry, openFullscreen);
+            }
+
+            (var newPeekWindow, var newPeekWindowId) = ShowPeekWindow(mainWindow, logEntry, openFullscreen);
+
+            await _store.Dispatch(new OpenedNewPeekWindow(newPeekWindow, newPeekWindowId));
+
+            mainWindow.Focus();
+        }
+
+        private (Window newPeekWindow, string newPeekWindowId) ShowPeekWindow(Window parent, MicroLogEntry logEntry, bool fullscreen = false)
+        {
+            var newPeekWindow = DetailsWindow.CreateDetailsWindow(parent, logEntry);
+            newPeekWindow.Show();
+
+            if (fullscreen)
+            {
+                newPeekWindow.WindowState = WindowState.Maximized;
+            }
+
+            return (newPeekWindow, logEntry.Id);
+        }
+
+        public async Task Handle(OpenPeekWindowForNumericKey message)
+        {
+            var state = _store.GetState();
+            var logEntries = state.MainWindowState.LogEntries;
+
+            var key = message.KeyEventArgs.Key.ToString().Last();
+            var keyNum = int.Parse(key.ToString());
+
+            if (keyNum > logEntries.Count)
+            {
+                return;
+            }
+
+            var logEntry = logEntries.ElementAt(keyNum - 1);
+
+            if (KeyboardFacade.IsLeftCtrlDown())
+            {
+                var newDetailsWindow = OpenNewDetailsWindow(logEntry, true);
+
+                await _store.Dispatch(new CreatedNewDetailsWindow(newDetailsWindow));
+            }
+            else
+            {
+                await OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+            }
+        }
+
+        private Window OpenNewDetailsWindow(MicroLogEntry logEntry, bool keepFocus = false)
+        {
+            var mainWindow = _store.GetState().MainWindowState.Window;
+
+            var detailsWindow = DetailsWindow.CreateDetailsWindow(mainWindow, logEntry);
+            detailsWindow.Show();
+            
+            if (keepFocus)
+            {
+                mainWindow.Focus();
+            }
+
+            return detailsWindow;
+        }
+
+        public async Task Handle(TraverseDownAndOpenPeekWindow message)
+        {
+            var state = _store.GetState();
+            var logEntries = state.MainWindowState.LogEntries;
+            var traversingIndex = state.MainWindowState.TraversingIndex;
+
+            if (logEntries.Count >= traversingIndex + 1)
+            {
+                var newTraversingIndex = traversingIndex + 1;
+
+                await _store.Dispatch(new SetTraversingIndex(newTraversingIndex));
+
+                var logEntry = logEntries.ElementAt(newTraversingIndex);
+
+                if (KeyboardFacade.IsLeftCtrlDown())
+                {
+                    OpenNewDetailsWindow(logEntry, true);
+                }
+                else
+                {
+                    await OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+                }
+            }
+        }
+
+        public async Task Handle(TraverseUpAndOpenPeekWindow notification)
+        {
+            var state = _store.GetState();
+            var logEntries = state.MainWindowState.LogEntries;
+            var traversingIndex = state.MainWindowState.TraversingIndex;
+
+            if (traversingIndex - 1 >= 0)
+            {
+                var newTraversingIndex = traversingIndex - 1;
+
+                await _store.Dispatch(new SetTraversingIndex(newTraversingIndex));
+
+                var logEntry = logEntries.ElementAt(newTraversingIndex);
+
+                if (KeyboardFacade.IsLeftCtrlDown())
+                {
+                    OpenNewDetailsWindow(logEntry, true);
+                }
+                else
+                {
+                    await OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+                }
             }
         }
     }
