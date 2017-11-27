@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Threading.Tasks;
-using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Model;
+using MicroMonitor.Services.EventLog;
+using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Services
 {
@@ -21,18 +20,7 @@ namespace MicroMonitor.Services
         {
             var logEntries = await _eventLogReader.ReadEventLogAsync(logName);
 
-            return GroupLogEntriesByDate(logEntries);
-        }
-
-        private static IEnumerable<GroupedMicroLogEntry> GroupLogEntriesByDate(IEnumerable<MicroLogEntry> logEntries)
-        {
-            return logEntries
-                .GroupBy(e => e.Timestamp.Date)
-                .Select(grp => new GroupedMicroLogEntry
-                {
-                    Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
-                    LogEntries = grp.Select(e => e).ToImmutableList()
-                });
+            return LogEntryUtils.GroupLogEntriesByDate(logEntries);
         }
     }
 }

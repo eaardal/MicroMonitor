@@ -60,7 +60,7 @@ namespace MicroMonitor.Helpers
             return default(Point);
         }
 
-        public static (double left, double top) PositionWindowAtCenterScreen(Views.MainView.MainWindow window)
+        public static (double left, double top) PositionWindowAtCenterScreen(Window window)
         {
             var workingArea = GetScreen(window).WorkingArea;
             var left = (int)(workingArea.Width / 2) - (window.Width / 2);

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.NetworkInformation;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
-using Autofac.Builder;
 using Autofac.Extras.CommonServiceLocator;
 using Autofac.Features.Variance;
 using CommonServiceLocator;
 using MediatR;
-using MediatR.Pipeline;
 
 namespace MicroMonitor.Infrastructure
 {
@@ -21,8 +16,14 @@ namespace MicroMonitor.Infrastructure
 
             builder
                 .RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .Except<AppState>()
+                .Except<AppStore>()
+                .Except<IStore<AppState>>()
                 .AsSelf()
                 .AsImplementedInterfaces();
+            
+            builder.RegisterType<AppState>().AsSelf().SingleInstance();
+            builder.RegisterType<AppStore>().As<IStore<AppState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
 
             RegisterMediator(builder);
 

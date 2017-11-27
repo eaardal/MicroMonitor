@@ -5,9 +5,9 @@ using System.Timers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Engine.MicroLog
+namespace MicroMonitor.Services.MicroLog
 {
-    class MicroLogReader
+    class MicroLogReader : IMicroLogReader
     {
         private readonly Timer _timer = new Timer();
         

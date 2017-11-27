@@ -7,18 +7,10 @@ namespace MicroMonitor.Views
 {
     public partial class App
     {
-        public App()
+        protected override void OnActivated(EventArgs e)
         {
 #if DEBUG
-            LoadCompleted += (sender, args) =>
-            {
-                ConsoleWindow.Create();
-            };
-
-            Exit += (sender, args) =>
-            {
-                ConsoleWindow.Destroy();
-            };
+            ConsoleWindow.Create();
 #endif
 
             Application.Current.DispatcherUnhandledException += (sender, args) =>
@@ -30,6 +22,17 @@ namespace MicroMonitor.Views
             {
                 Logger.Error(args.ExceptionObject as Exception, "App domain unhandled exception");
             };
+
+            base.OnActivated(e);
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+#if DEBUG
+            ConsoleWindow.Destroy();
+#endif
+
+            base.OnExit(e);
         }
     }
 }

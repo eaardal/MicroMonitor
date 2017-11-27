@@ -5,7 +5,7 @@ namespace MicroMonitor
 {
     class AppState
     {
-        public MainWindowModel MainWindowState { get; set; }
-        public PeekWindowState PeekWindowState { get; set; }
+        public MainWindowState MainWindowState { get; } = new MainWindowState();
+        public PeekWindowState PeekWindowState { get; } = new PeekWindowState();
     }
 }

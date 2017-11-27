@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using MediatR;
 using MicroMonitor.Config;
-using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Services;
+using MicroMonitor.Services.EventLog;
 
 namespace MicroMonitor.Actions
 {

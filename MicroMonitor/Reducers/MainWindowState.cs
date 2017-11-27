@@ -3,9 +3,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Views.MainView
+namespace MicroMonitor.Reducers
 {
-    class MainWindowModel
+    class MainWindowState
     {
         public Visibility HeaderPanelVisibility { get; set; } = Visibility.Collapsed;
         public Visibility OverlayVisibility { get; set; } = Visibility.Collapsed;

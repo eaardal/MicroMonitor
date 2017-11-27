@@ -1,24 +1,32 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using MediatR;
 using MicroMonitor.Actions;
+using MicroMonitor.Utilities;
 using MicroMonitor.Views.MainView;
 
 namespace MicroMonitor.Reducers
 {
-    class MainWindowReducer : INotificationHandler<RefreshEventLogEntriesStart>,
+    class MainWindowReducer : 
+        INotificationHandler<RefreshEventLogEntriesStart>,
         INotificationHandler<RefreshEventLogEntriesSuccess>,
         INotificationHandler<RefreshEventLogEntriesError>,
         INotificationHandler<ToggleHeaderPanelVisibility>,
         INotificationHandler<CreatedNewDetailsWindow>,
         INotificationHandler<SetTraversingIndex>,
-        INotificationHandler<MainWindowActivated>
+        INotificationHandler<MainWindowActivated>,
+        INotificationHandler<WindowPositionChanged>,
+        INotificationHandler<WindowSizeChanged>,
+        INotificationHandler<SetMainWindow>,
+        INotificationHandler<SetLastReadText>,
+        INotificationHandler<UpdateEventLogEntries>
     {
-        private readonly MainWindowModel _state;
+        private readonly MainWindowState _state;
 
         public MainWindowReducer()
         {
-            _state = new MainWindowModel();
+            _state = new MainWindowState();
         }
 
         public void Handle(RefreshEventLogEntriesStart message)
@@ -47,19 +55,55 @@ namespace MicroMonitor.Reducers
             _state.HeaderPanelVisibility = message.Visibility;
         }
 
-        public void Handle(CreatedNewDetailsWindow notification)
+        public void Handle(CreatedNewDetailsWindow message)
         {
             _state.IsCloseAllDetailWindowsButtonEnabled = true;
         }
 
-        public void Handle(SetTraversingIndex notification)
+        public void Handle(SetTraversingIndex message)
         {
-            _state.TraversingIndex = notification.TraversingIndex;
+            _state.TraversingIndex = message.TraversingIndex;
         }
 
-        public void Handle(MainWindowActivated notification)
+        public void Handle(MainWindowActivated message)
         {
             _state.IsActivatedOnce = true;
+        }
+
+        public void Handle(WindowPositionChanged message)
+        {
+            _state.WindowLeft = message.Left;
+            _state.WindowTop = message.Top;
+        }
+
+        public void Handle(WindowSizeChanged message)
+        {
+            _state.WindowHeight = message.Height;
+            _state.WindowWidth = message.Width;
+        }
+
+        public void Handle(SetMainWindow notification)
+        {
+            _state.Window = notification.MainWindow;
+        }
+
+        public void Handle(SetLastReadText notification)
+        {
+            _state.LastReadText = notification.LastReadText;
+        }
+
+        public void Handle(UpdateEventLogEntries notification)
+        {
+            _state.LogEntries = notification.EventLogEntries.ToList();
+
+            _state.GroupedLogEntries.Clear();
+
+            var groupedLogEntries = LogEntryUtils.GroupLogEntriesByDate(_state.LogEntries);
+
+            foreach (var logEntry in groupedLogEntries)
+            {
+                _state.GroupedLogEntries.Add(logEntry);
+            }
         }
     }
 }

@@ -35,4 +35,16 @@ namespace MicroMonitor.Actions
     {
         
     }
+
+    class UpdateEventLogEntries : INotification
+    {
+        public string LogName { get; }
+        public IEnumerable<MicroLogEntry> EventLogEntries { get; }
+
+        public UpdateEventLogEntries(string logName, IEnumerable<MicroLogEntry> eventLogEntries)
+        {
+            LogName = logName;
+            EventLogEntries = eventLogEntries;
+        }
+    }
 }

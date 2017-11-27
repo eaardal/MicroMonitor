@@ -5,10 +5,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MediatR;
+using MicroMonitor.Config;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
-using MicroMonitor.Views.MainView;
+using MicroMonitor.Views.DetailsView;
 
 namespace MicroMonitor.Actions
 {
@@ -72,7 +73,7 @@ namespace MicroMonitor.Actions
 
         private (Window newPeekWindow, string newPeekWindowId) ShowPeekWindow(Window parent, MicroLogEntry logEntry, bool fullscreen = false)
         {
-            var newPeekWindow = DetailsWindow.CreateDetailsWindow(parent, logEntry);
+            var newPeekWindow = CreateDetailsWindow(parent, logEntry);
             newPeekWindow.Show();
 
             if (fullscreen)
@@ -114,13 +115,36 @@ namespace MicroMonitor.Actions
         {
             var mainWindow = _store.GetState().MainWindowState.Window;
 
-            var detailsWindow = DetailsWindow.CreateDetailsWindow(mainWindow, logEntry);
+            var detailsWindow = CreateDetailsWindow(mainWindow, logEntry);
             detailsWindow.Show();
             
             if (keepFocus)
             {
                 mainWindow.Focus();
             }
+
+            return detailsWindow;
+        }
+
+        private static Window CreateDetailsWindow(Window parent, MicroLogEntry logEntry)
+        {
+            var configuredHeight = AppConfiguration.DetailsWindowHeight();
+            var height = configuredHeight > 0 ? configuredHeight : parent.Height;
+
+            var top = AppConfiguration.DetailsWindowGrowDirection() == GrowDirection.Down
+                ? parent.Top
+                : parent.Top + (parent.Height - height);
+
+            const int marginBuffer = 20;
+
+            var detailsWindow = new LogEntryDetailsWindow
+            {
+                LogEntry = logEntry,
+                Left = parent.Left + parent.Width + marginBuffer,
+                Top = top,
+                Height = height,
+                Width = AppConfiguration.DetailsWindowWidth()
+            };
 
             return detailsWindow;
         }

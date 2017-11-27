@@ -5,22 +5,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
-using MicroMonitor.Engine.EventLog;
+using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
+using MicroMonitor.Services.EventLog;
+using MicroMonitor.Services.MicroLog;
 
 namespace MicroMonitor.Services
 {
     class EventLogPollingCoordinator
     {
+        private readonly IMicroLogReader _microLogReader;
         private readonly IAppStore _store;
         private readonly IEventLogPoller _eventLogPoller;
         private readonly Timer _nextReadTimer = new Timer();
         private DateTime _lastReadTime = DateTime.MinValue;
         private DateTime _expectedNextReadTime = DateTime.MinValue;
 
-        public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, IAppStore store)
+        public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, IMicroLogReader microLogReader, IAppStore store)
         {
-            _store = store;
+            _microLogReader = microLogReader ?? throw new ArgumentNullException(nameof(microLogReader));
+            _store = store ?? throw new ArgumentNullException(nameof(store));
             _eventLogPoller = eventLogPoller ?? throw new ArgumentNullException(nameof(eventLogPoller));
         }
 
@@ -33,32 +37,32 @@ namespace MicroMonitor.Services
             _expectedNextReadTime = DateTime.Now.AddSeconds(readInterval);
 
             _nextReadTimer.Interval = 1000;
-            _nextReadTimer.Elapsed += (sender, args) =>
+            _nextReadTimer.Elapsed += async (sender, args) =>
             {
-                await _store.Dispatch(new SetNextReadText())
+                string nextReadText;
 
                 if (_expectedNextReadTime != DateTime.MinValue)
                 {
                     var nextReadInSeconds = _expectedNextReadTime.Subtract(DateTime.Now).Seconds;
-                    Model.NextReadText = $"Next read: {nextReadInSeconds}s";
+                    nextReadText = $"Next read: {nextReadInSeconds}s";
                 }
                 else
                 {
-                    Model.NextReadText = "Next read: TBD";
+                    nextReadText = "Next read: TBD";
                 }
+
+                await _store.Dispatch(new SetNextReadText(nextReadText));
             };
+
             _nextReadTimer.Start();
 
-            _microLogReader.ReadOnInterval(logName, readInterval, newLogEntries =>
+            _microLogReader.ReadOnInterval(logName, readInterval, async newLogEntries =>
             {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _lastReadTime = DateTime.Now;
-                    _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
+                _lastReadTime = DateTime.Now;
+                _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
 
-                    GroupAndBindLogEntries(newLogEntries.ToArray());
-                    UpdateLastRead();
-                });
+                await _store.Dispatch(new UpdateEventLogEntries(logName, newLogEntries));
+                await _store.Dispatch(new SetLastReadText($"Last read: {DateTime.Now:HH:mm:ss}"));
             });
         }
     }

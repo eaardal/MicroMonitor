@@ -1,50 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using MediatR;
 using MicroMonitor.Actions;
-using MicroMonitor.Config;
-using MicroMonitor.Engine.EventLog;
-using MicroMonitor.Engine.MicroLog;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
+using MicroMonitor.Reducers;
 
 namespace MicroMonitor.Views.MainView
 {
     class MainWindowViewModel
     {
         private readonly IAppStore _store;
-        private readonly IMediator _mediator;
-        private readonly EventLogReader _eventLogReader = new EventLogReader();
-        private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
-        private readonly MicroLogReader _microLogReader = new MicroLogReader();
-        private readonly MainWindow _window;
-        private bool _activatedOnce;
-        private readonly Timer _nextReadTimer = new Timer();
-        private DateTime _lastReadTime = DateTime.MinValue;
-        private DateTime _expectedNextReadTime = DateTime.MinValue;
-        private string _peekWindowId;
-        private Window _peekWindow;
-        private readonly List<Window> _openDetailWindows = new List<Window>();
-        private IEnumerable<MicroLogEntry> _logEntries = new List<MicroLogEntry>();
-        private int _traversingIndex = -1;
 
-        public MainWindowModel Model { get; }
+        public MainWindowState State { get; }
 
         public MainWindowViewModel(MainWindow window, IAppStore store)
         {
             _store = store;
-            _window = window ?? throw new ArgumentNullException(nameof(window));
-
-            Model = new MainWindowModel();
+            _store.Dispatch(new SetMainWindow(window));
+            
+            State = _store.GetState().MainWindowState;
 
             Logger.Create();
         }
@@ -102,38 +80,42 @@ namespace MicroMonitor.Views.MainView
             }
         }
         
-        public void OnLoaded(object o, RoutedEventArgs routedEventArgs)
+        public async Task OnLoaded(object o, RoutedEventArgs routedEventArgs)
         {
-            SetWindowWidthAndHeight();
-            SetWindowPosition();
+            await _store.Dispatch(new SetDefaultWindowWidthAndHeight());
+
+            await _store.Dispatch(new SetDefaultWindowPosition());
         }
-
-        private void SetWindowPosition()
-        {
-            var spawnMethod = AppConfiguration.MainWindowSpawnMethod();
-
-            switch (spawnMethod)
-            {
-                case WindowSpawnMethod.Cursor:
-                    (Model.WindowLeft, Model.WindowTop) = WindowHelper.PositionWindowAtMouseCursor(_window, Model.WindowHeight, Model.WindowWidth);
-                    break;
-                case WindowSpawnMethod.CenterScreen:
-                    (Model.WindowLeft, Model.WindowTop) = WindowHelper.PositionWindowAtCenterScreen(_window);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void SetWindowWidthAndHeight()
-        {
-            Model.WindowWidth = AppConfiguration.MainWindowWidth();
-            Model.WindowHeight = AppConfiguration.MainWindowHeight();
-        }
-
+        
         public void DisableCloseAllDetailWindowsButton()
         {
-            Model.IsCloseAllDetailWindowsButtonEnabled = false;
+            State.IsCloseAllDetailWindowsButtonEnabled = false;
+        }
+
+        public void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
+        {
+            var btn = (Button)sender;
+            var logEntry = (MicroLogEntry)btn.DataContext;
+
+            OpenNewDetailsWindow(logEntry);
+        }
+
+        public async Task OnReadNow(object sender, RoutedEventArgs e)
+        {
+            await _store.Dispatch(new RefreshEventLogEntries());
+        }
+
+        public async Task OnCloseAllDetailWindows(object sender, RoutedEventArgs e)
+        {
+            foreach (var openDetailWindow in _openDetailWindows)
+            {
+                openDetailWindow.Close();
+            }
+
+            _openDetailWindows.Clear();
+
+            _viewModel.DisableCloseAllDetailWindowsButton();
+            //DisableCloseAllDetailWindowsButton();
         }
     }
 }

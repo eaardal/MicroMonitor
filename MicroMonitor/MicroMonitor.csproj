@@ -96,22 +96,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Actions\MainWindowActionsHandler.cs" />
     <Compile Include="Actions\PeekWindowActions.cs" />
     <Compile Include="Actions\PeekWindowActionsHandler.cs" />
     <Compile Include="Actions\MainWindowActions.cs" />
     <Compile Include="AppState.cs" />
     <Compile Include="Config\AppConfiguration.cs" />
-    <Compile Include="Engine\EventLog\IEventLogPoller.cs" />
-    <Compile Include="Engine\EventLog\IEventLogReader.cs" />
+    <Compile Include="Services\EventLog\IEventLogPoller.cs" />
+    <Compile Include="Services\EventLog\IEventLogReader.cs" />
     <Compile Include="Infrastructure\AppStore.cs" />
     <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Infrastructure\ConnectToStore.cs" />
     <Compile Include="Infrastructure\IReducer.cs" />
-    <Compile Include="Infrastructure\IRequestHandlerWithStore.cs" />
     <Compile Include="Infrastructure\IState.cs" />
     <Compile Include="Infrastructure\IStore.cs" />
     <Compile Include="Infrastructure\Store.cs" />
-    <Compile Include="KeyboardActions.cs" />
     <Compile Include="Model\ColorConstants.cs" />
     <Compile Include="Interop\ConsoleWindow.cs" />
     <Compile Include="Model\GroupedMicroLogEntry.cs" />
@@ -126,9 +125,11 @@
     <Compile Include="Services\EventLogPollingCoordinator.cs" />
     <Compile Include="Services\EventLogService.cs" />
     <Compile Include="Services\IEventLogService.cs" />
+    <Compile Include="Services\MicroLog\IMicroLogReader.cs" />
     <Compile Include="Utilities\ColorExtensions.cs" />
     <Compile Include="Utilities\HexUtil.cs" />
     <Compile Include="Helpers\KeyboardFacade.cs" />
+    <Compile Include="Utilities\LogEntryUtils.cs" />
     <Compile Include="Utilities\WpfExtensions.cs" />
     <Compile Include="Views\DetailsView\LogEntryDetailsWindow.xaml.cs">
       <DependentUpon>LogEntryDetailsWindow.xaml</DependentUpon>
@@ -137,10 +138,8 @@
     <Compile Include="Converters\SeverityToIconConverter.cs" />
     <Compile Include="Helpers\WindowHelper.cs" />
     <Compile Include="Model\WindowSpawnMethod.cs" />
-    <Compile Include="Views\MainView\DetailsWindow.cs" />
-    <Compile Include="Views\MainView\MainWindowModel.cs" />
+    <Compile Include="Reducers\MainWindowState.cs" />
     <Compile Include="Views\MainView\MainWindowViewModel.cs" />
-    <Compile Include="Views\MainView\PeekWindow.cs" />
     <Page Include="Views\DetailsView\LogEntryDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -154,9 +153,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\DateTimeToTimeStringConverter.cs" />
-    <Compile Include="Engine\MicroLog\MicroLogCache.cs" />
-    <Compile Include="Engine\EventLog\EventLogPoller.cs" />
-    <Compile Include="Engine\EventLog\EventLogReader.cs" />
+    <Compile Include="Services\MicroLog\MicroLogCache.cs" />
+    <Compile Include="Services\EventLog\EventLogPoller.cs" />
+    <Compile Include="Services\EventLog\EventLogReader.cs" />
     <Compile Include="Infrastructure\Logger.cs" />
     <Compile Include="Views\MainView\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -165,7 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MicroLogEntry.cs" />
-    <Compile Include="Engine\MicroLog\MicroLogReader.cs" />
+    <Compile Include="Services\MicroLog\MicroLogReader.cs" />
     <Compile Include="Model\MicroLogSeverity.cs" />
     <Compile Include="Model\MicroLogSeverityHelper.cs" />
     <Compile Include="Interop\MouseInterop.cs" />
