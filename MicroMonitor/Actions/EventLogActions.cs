@@ -30,4 +30,9 @@ namespace MicroMonitor.Actions
     }
 
     class RefreshEventLogEntries : INotification { }
+
+    class StartPollingForEventLogEntries : INotification
+    {
+        
+    }
 }

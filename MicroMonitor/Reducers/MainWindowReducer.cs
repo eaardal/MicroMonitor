@@ -11,7 +11,8 @@ namespace MicroMonitor.Reducers
         INotificationHandler<RefreshEventLogEntriesError>,
         INotificationHandler<ToggleHeaderPanelVisibility>,
         INotificationHandler<CreatedNewDetailsWindow>,
-        INotificationHandler<SetTraversingIndex>
+        INotificationHandler<SetTraversingIndex>,
+        INotificationHandler<MainWindowActivated>
     {
         private readonly MainWindowModel _state;
 
@@ -54,6 +55,11 @@ namespace MicroMonitor.Reducers
         public void Handle(SetTraversingIndex notification)
         {
             _state.TraversingIndex = notification.TraversingIndex;
+        }
+
+        public void Handle(MainWindowActivated notification)
+        {
+            _state.IsActivatedOnce = true;
         }
     }
 }

@@ -24,5 +24,6 @@ namespace MicroMonitor.Views.MainView
         public Window Window { get; set; }
         public IReadOnlyCollection<MicroLogEntry> LogEntries { get; set; }
         public int TraversingIndex { get; set; }
+        public bool IsActivatedOnce { get; set; }
     }
 }

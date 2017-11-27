@@ -22,4 +22,9 @@ namespace MicroMonitor.Actions
             Visibility = visibility;
         }
     }
+
+    class MainWindowActivated : INotification
+    {
+        
+    }
 }

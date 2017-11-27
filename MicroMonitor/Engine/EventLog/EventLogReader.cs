@@ -8,7 +8,7 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Engine.EventLog
 {
-    class EventLogReader
+    class EventLogReader : IEventLogReader
     {
         public IEnumerable<MicroLogEntry> ReadEventLog(string logName)
         {

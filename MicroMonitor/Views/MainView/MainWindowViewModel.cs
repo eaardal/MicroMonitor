@@ -92,90 +92,16 @@ namespace MicroMonitor.Views.MainView
         
         public async Task OnActivated(object o, EventArgs eventArgs)
         {
-            var logName = AppConfiguration.LogName();
-
-            if (!_activatedOnce)
+            var state = _store.GetState();
+            
+            if (!state.MainWindowState.IsActivatedOnce)
             {
-                _activatedOnce = true;
-
-                var pollIntervalSeconds = AppConfiguration.PollIntervalSeconds();
-
-                await GetAndBindEvents(logName);
-
-                StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
+                await _store.Dispatch(new MainWindowActivated());
+                await _store.Dispatch(new RefreshEventLogEntries());
+                await _store.Dispatch(new StartPollingForEventLogEntries());
             }
         }
-
-        private void StartPollingForEventViewerLogs(string logName, int pollIntervalSeconds)
-        {
-            _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
-
-            var readInterval = pollIntervalSeconds + 2;
-
-            _expectedNextReadTime = DateTime.Now.AddSeconds(readInterval);
-
-            _nextReadTimer.Interval = 1000;
-            _nextReadTimer.Elapsed += (sender, args) =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    if (_expectedNextReadTime != DateTime.MinValue)
-                    {
-                        var nextReadInSeconds = _expectedNextReadTime.Subtract(DateTime.Now).Seconds;
-                        Model.NextReadText = $"Next read: {nextReadInSeconds}s";
-                    }
-                    else
-                    {
-                        Model.NextReadText = "Next read: TBD";
-                    }
-
-                });
-            };
-            _nextReadTimer.Start();
-
-            _microLogReader.ReadOnInterval(logName, readInterval, newLogEntries =>
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _lastReadTime = DateTime.Now;
-                    _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
-
-                    GroupAndBindLogEntries(newLogEntries.ToArray());
-                    UpdateLastRead();
-                });
-            });
-        }
-
-        private void GroupAndBindLogEntries(MicroLogEntry[] logEntries)
-        {
-            _logEntries = logEntries;
-
-            var grouped = logEntries.GroupBy(e => e.Timestamp.Date).Select(grp => new GroupedMicroLogEntry
-            {
-                Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
-                LogEntries = new ObservableCollection<MicroLogEntry>(grp.Select(e => e))
-            });
-
-            foreach (var grp in grouped)
-            {
-                Model.GroupedLogEntries.Add(grp);
-            }
-        }
-
-        private void UpdateLastRead()
-        {
-            Model.LastReadText = $"Last read: {DateTime.Now:HH:mm:ss}";
-        }
-
-        private async Task GetAndBindEvents(string logName)
-        {
-            var logEntries = await _eventLogReader.ReadEventLogAsync(logName);
-
-            GroupAndBindLogEntries(logEntries.ToArray());
-
-            UpdateLastRead();
-        }
-
+        
         public void OnLoaded(object o, RoutedEventArgs routedEventArgs)
         {
             SetWindowWidthAndHeight();

@@ -7,7 +7,7 @@ using Timer = System.Timers.Timer;
 
 namespace MicroMonitor.Engine.EventLog
 {
-    public class EventLogPoller
+    public class EventLogPoller : IEventLogPoller
     {
         private readonly Timer _timer = new Timer();
         private readonly EventLogReader _eventLogReader = new EventLogReader();
