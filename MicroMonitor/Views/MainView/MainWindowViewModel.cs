@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using MicroMonitor.Config;
 using MicroMonitor.Engine.EventLog;
 using MicroMonitor.Engine.MicroLog;
@@ -29,6 +31,7 @@ namespace MicroMonitor.Views.MainView
         private Window _peekWindow;
         private readonly List<Window> _openDetailWindows = new List<Window>();
         private IEnumerable<MicroLogEntry> _logEntries = new List<MicroLogEntry>();
+        private int _traversingIndex = -1;
 
         public MainWindowModel Model { get; }
 
@@ -41,6 +44,110 @@ namespace MicroMonitor.Views.MainView
             Logger.Create();
         }
 
+        public void OnKeyUp(object o, KeyEventArgs e)
+        {
+            KeyboardActions.TryToggleHeaderPanel(e, Model);
+        }
+
+        public async Task OnKeyDown(object o, KeyEventArgs e)
+        {
+            KeyboardActions.TryToggleHeaderPanel(e, Model);
+            KeyboardActions.TryOpenPeekWindowForLogEntryUnderMouseCursor(e, Model);
+
+            KeyboardActions.TryRefresh(e, Model);
+
+            if (e.Key >= Key.D1 && e.Key <= Key.D9)
+            {
+                var key = e.Key.ToString().Last();
+                var keyNum = int.Parse(key.ToString());
+
+                if (keyNum > _logEntries.Count())
+                {
+                    return;
+                }
+
+                var logEntry = _logEntries.ElementAt(keyNum - 1);
+
+                if (KeyboardFacade.IsLeftCtrlDown())
+                {
+                    OpenNewDetailsWindow(logEntry, true);
+                }
+                else
+                {
+                   PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
+                }
+            }
+
+            if (e.Key == Key.S || e.Key == Key.Down)
+            {
+                if (_logEntries.Count() >= _traversingIndex + 1)
+                {
+                    _traversingIndex++;
+
+                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+
+                    if (KeyboardFacade.IsLeftCtrlDown())
+                    {
+                        OpenNewDetailsWindow(logEntry, true);
+                    }
+                    else
+                    {
+                        PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
+                    }
+                }
+            }
+
+            if (e.Key == Key.W || e.Key == Key.Up)
+            {
+                if (_traversingIndex - 1 >= 0)
+                {
+                    _traversingIndex--;
+
+                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+
+                    if (KeyboardFacade.IsLeftCtrlDown())
+                    {
+                        OpenNewDetailsWindow(logEntry, true);
+                    }
+                    else
+                    {
+                        PeekWindow.Open(_window, logEntry, KeyboardFacade.IsLeftShiftDown());
+                    }
+                }
+            }
+        }
+        private void OpenNewDetailsWindow(MicroLogEntry logEntry, bool keepFocus = false)
+        {
+            var detailsWindow = DetailsWindow.CreateDetailsWindow(_window, logEntry);
+            detailsWindow.Show();
+
+            _openDetailWindows.Add(detailsWindow);
+
+            Model.IsCloseAllDetailWindowsButtonEnabled = _openDetailWindows.Any();
+
+            if (keepFocus)
+            {
+                _window.Focus();
+            }
+        }
+        private void ShowOverlay()
+        {
+            Model.OverlayVisibility = Visibility.Visible;
+        }
+
+        private void HideOverlay()
+        {
+            Model.OverlayVisibility = Visibility.Collapsed;
+        }
+        private async Task Refresh()
+        {
+            ShowOverlay();
+
+            await GetAndBindEvents(AppConfiguration.LogName());
+
+            HideOverlay();
+        }
+        
         public async Task OnActivated(object o, EventArgs eventArgs)
         {
             var logName = AppConfiguration.LogName();

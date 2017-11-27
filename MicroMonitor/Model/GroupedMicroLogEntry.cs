@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Immutable;
 
 namespace MicroMonitor.Model
 {
     class GroupedMicroLogEntry
     {
         public string Key { get; set; }
-        public ObservableCollection<MicroLogEntry> LogEntries { get; set; } = new ObservableCollection<MicroLogEntry>();
+        public ImmutableList<MicroLogEntry> LogEntries { get; set; } = ImmutableList<MicroLogEntry>.Empty;
     }
 }

@@ -31,8 +31,7 @@ namespace MicroMonitor.Infrastructure
         {
             _serilog.Information(message, args);
         }
-
-
+        
         public static void Warning(string message, params object[] args)
         {
             _serilog.Warning(message, args);

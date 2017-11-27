@@ -53,8 +53,8 @@ namespace MicroMonitor.Views.MainView
             
             //Loaded += OnLoaded;
             Loaded += _viewModel.OnLoaded;
-            KeyDown += async (sender, args) => await OnKeyDown(sender, args);
-            KeyUp += OnKeyUp;
+            KeyDown += async (sender, args) => await _viewModel.OnKeyDown(sender, args);
+            KeyUp += _viewModel.OnKeyUp;
             Activated += async (sender, args) => await _viewModel.OnActivated(sender, args);
         }
 
@@ -104,112 +104,112 @@ namespace MicroMonitor.Views.MainView
         //    }
         //}
 
-        private void OnKeyUp(object o, KeyEventArgs e)
-        {
-            if (e.Key == Key.E)
-            {
-                HeaderPanel.Visibility = Visibility.Collapsed;
-            }
-        }
+        //private void OnKeyUp(object o, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.E)
+        //    {
+        //        HeaderPanel.Visibility = Visibility.Collapsed;
+        //    }
+        //}
 
-        private async Task OnKeyDown(object o, KeyEventArgs e)
-        {
-            if (e.Key == Key.E)
-            {
-                HeaderPanel.Visibility = Visibility.Visible;
-            }
+        //private async Task OnKeyDown(object o, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.E)
+        //    {
+        //        HeaderPanel.Visibility = Visibility.Visible;
+        //    }
 
-            if (e.Key == Key.LeftShift)
-            {
-                var ele = Mouse.DirectlyOver as UIElement;
+        //    if (e.Key == Key.LeftShift)
+        //    {
+        //        var ele = Mouse.DirectlyOver as UIElement;
                 
-                var textBlock = ele as TextBlock;
+        //        var textBlock = ele as TextBlock;
 
-                if (textBlock != null)
-                {
-                    Logger.Debug("Mouse is over TextBlock");
+        //        if (textBlock != null)
+        //        {
+        //            Logger.Debug("Mouse is over TextBlock");
 
-                    var logEntry = textBlock.DataContext as MicroLogEntry;
+        //            var logEntry = textBlock.DataContext as MicroLogEntry;
 
-                    if (logEntry == null)
-                    {
-                        Logger.Debug($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
-                        return;
-                    }
+        //            if (logEntry == null)
+        //            {
+        //                Logger.Debug($"Could not cast TextBlock.DataContext to {typeof(MicroLogEntry).FullName}");
+        //                return;
+        //            }
 
-                    OpenPeekWindow(logEntry);
-                }
-                else
-                {
-                    Logger.Debug("Mouse is not over TextBlock");
-                }
-            }
+        //            OpenPeekWindow(logEntry);
+        //        }
+        //        else
+        //        {
+        //            Logger.Debug("Mouse is not over TextBlock");
+        //        }
+        //    }
 
-            if (e.Key == Key.R || e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
-            {
-                await Refresh();
-            }
+        //    if (e.Key == Key.R || e.Key == Key.R && KeyboardFacade.IsLeftCtrlDown())
+        //    {
+        //        await Refresh();
+        //    }
 
-            if (e.Key >= Key.D1 && e.Key <= Key.D9)
-            {
-                var key = e.Key.ToString().Last();
-                var keyNum = int.Parse(key.ToString());
+        //    if (e.Key >= Key.D1 && e.Key <= Key.D9)
+        //    {
+        //        var key = e.Key.ToString().Last();
+        //        var keyNum = int.Parse(key.ToString());
                 
-                if (keyNum > _logEntries.Count())
-                {
-                    return;
-                }
+        //        if (keyNum > _logEntries.Count())
+        //        {
+        //            return;
+        //        }
                 
-                var logEntry = _logEntries.ElementAt(keyNum - 1);
+        //        var logEntry = _logEntries.ElementAt(keyNum - 1);
 
-                if (KeyboardFacade.IsLeftCtrlDown())
-                {
-                    OpenNewDetailsWindow(logEntry, true);
-                }
-                else
-                {
-                    OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
-                }
-            }
+        //        if (KeyboardFacade.IsLeftCtrlDown())
+        //        {
+        //            OpenNewDetailsWindow(logEntry, true);
+        //        }
+        //        else
+        //        {
+        //            OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+        //        }
+        //    }
 
-            if (e.Key == Key.S || e.Key == Key.Down)
-            {
-                if (_logEntries.Count() >= _traversingIndex + 1)
-                {
-                    _traversingIndex++;
+        //    if (e.Key == Key.S || e.Key == Key.Down)
+        //    {
+        //        if (_logEntries.Count() >= _traversingIndex + 1)
+        //        {
+        //            _traversingIndex++;
 
-                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+        //            var logEntry = _logEntries.ElementAt(_traversingIndex);
 
-                    if (KeyboardFacade.IsLeftCtrlDown())
-                    {
-                        OpenNewDetailsWindow(logEntry, true);
-                    }
-                    else
-                    {
-                        OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
-                    }
-                }
-            }
+        //            if (KeyboardFacade.IsLeftCtrlDown())
+        //            {
+        //                OpenNewDetailsWindow(logEntry, true);
+        //            }
+        //            else
+        //            {
+        //                OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+        //            }
+        //        }
+        //    }
 
-            if (e.Key == Key.W || e.Key == Key.Up)
-            {
-                if (_traversingIndex - 1 >= 0)
-                {
-                    _traversingIndex--;
+        //    if (e.Key == Key.W || e.Key == Key.Up)
+        //    {
+        //        if (_traversingIndex - 1 >= 0)
+        //        {
+        //            _traversingIndex--;
 
-                    var logEntry = _logEntries.ElementAt(_traversingIndex);
+        //            var logEntry = _logEntries.ElementAt(_traversingIndex);
 
-                    if (KeyboardFacade.IsLeftCtrlDown())
-                    {
-                        OpenNewDetailsWindow(logEntry, true);
-                    }
-                    else
-                    {
-                        OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
-                    }
-                }
-            }
-        }
+        //            if (KeyboardFacade.IsLeftCtrlDown())
+        //            {
+        //                OpenNewDetailsWindow(logEntry, true);
+        //            }
+        //            else
+        //            {
+        //                OpenPeekWindow(logEntry, KeyboardFacade.IsLeftShiftDown());
+        //            }
+        //        }
+        //    }
+        //}
 
         private int _traversingIndex = -1;
 
