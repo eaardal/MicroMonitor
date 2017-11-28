@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Services.MicroLog
+namespace MicroMonitor.Services
 {
-    class MicroLogCache
+    class EventLogCache : IEventLogCache
     {
         private readonly ConcurrentDictionary<string, IEnumerable<MicroLogEntry>> _cache = new ConcurrentDictionary<string, IEnumerable<MicroLogEntry>>();
-        private static MicroLogCache _instance;
 
         public void InsertOrUpdate(string key, IEnumerable<MicroLogEntry> value)
         {
@@ -21,7 +20,5 @@ namespace MicroMonitor.Services.MicroLog
         {
             return _cache.ContainsKey(key) ? _cache[key] : new List<MicroLogEntry>();
         }
-
-        public static MicroLogCache Instance => _instance ?? (_instance = new MicroLogCache());
     }
 }

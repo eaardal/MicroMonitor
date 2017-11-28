@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
+using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class DetailsWindowState
+    class DetailsWindowState : ObservableObject
     {
-        public List<Window> OpenDetailsWindows { get; set; } = new List<Window>();
+        private ObservableCollection<Window> _openDetailsWindows = new ObservableCollection<Window>();
+
+        public ObservableCollection<Window> OpenDetailsWindows
+        {
+            get => _openDetailsWindows;
+            set => SetProperty(ref _openDetailsWindows, value);
+        }
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MicroMonitor.Model;
-using MicroMonitor.Services.EventLog;
 using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Services

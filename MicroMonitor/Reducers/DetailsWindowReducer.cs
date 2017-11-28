@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using MicroMonitor.Actions;
+using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class DetailsWindowReducer : INotificationHandler<CreatedNewDetailsWindow>
+    class DetailsWindowReducer : IReducer, INotificationHandler<CreatedNewDetailsWindow>
     {
         private readonly DetailsWindowState _state;
 

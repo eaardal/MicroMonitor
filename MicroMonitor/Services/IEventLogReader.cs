@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Services.EventLog
+namespace MicroMonitor.Services
 {
     internal interface IEventLogReader
     {

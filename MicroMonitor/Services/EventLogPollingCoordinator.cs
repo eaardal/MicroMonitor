@@ -7,23 +7,21 @@ using System.Timers;
 using System.Windows;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
-using MicroMonitor.Services.EventLog;
-using MicroMonitor.Services.MicroLog;
 
 namespace MicroMonitor.Services
 {
     class EventLogPollingCoordinator
     {
-        private readonly IMicroLogReader _microLogReader;
+        private readonly ICachePoller _cachePoller;
         private readonly IAppStore _store;
         private readonly IEventLogPoller _eventLogPoller;
         private readonly Timer _nextReadTimer = new Timer();
         private DateTime _lastReadTime = DateTime.MinValue;
         private DateTime _expectedNextReadTime = DateTime.MinValue;
 
-        public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, IMicroLogReader microLogReader, IAppStore store)
+        public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, ICachePoller cachePoller, IAppStore store)
         {
-            _microLogReader = microLogReader ?? throw new ArgumentNullException(nameof(microLogReader));
+            _cachePoller = cachePoller ?? throw new ArgumentNullException(nameof(cachePoller));
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _eventLogPoller = eventLogPoller ?? throw new ArgumentNullException(nameof(eventLogPoller));
         }
@@ -56,7 +54,7 @@ namespace MicroMonitor.Services
 
             _nextReadTimer.Start();
 
-            _microLogReader.ReadOnInterval(logName, readInterval, async newLogEntries =>
+            _cachePoller.ReadOnInterval(logName, readInterval, async newLogEntries =>
             {
                 _lastReadTime = DateTime.Now;
                 _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);

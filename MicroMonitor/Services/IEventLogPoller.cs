@@ -1,4 +1,4 @@
-﻿namespace MicroMonitor.Services.EventLog
+﻿namespace MicroMonitor.Services
 {
     public interface IEventLogPoller
     {

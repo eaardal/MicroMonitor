@@ -3,12 +3,12 @@ using System.Linq;
 using System.Windows;
 using MediatR;
 using MicroMonitor.Actions;
+using MicroMonitor.Infrastructure;
 using MicroMonitor.Utilities;
-using MicroMonitor.Views.MainView;
 
 namespace MicroMonitor.Reducers
 {
-    class MainWindowReducer : 
+    class MainWindowReducer : IReducer,
         INotificationHandler<RefreshEventLogEntriesStart>,
         INotificationHandler<RefreshEventLogEntriesSuccess>,
         INotificationHandler<RefreshEventLogEntriesError>,
@@ -82,19 +82,24 @@ namespace MicroMonitor.Reducers
             _state.WindowWidth = message.Width;
         }
 
-        public void Handle(SetMainWindow notification)
+        public void Handle(SetMainWindow message)
         {
-            _state.Window = notification.MainWindow;
+            _state.Window = message.MainWindow;
         }
 
-        public void Handle(SetLastReadText notification)
+        public void Handle(SetLastReadText message)
         {
-            _state.LastReadText = notification.LastReadText;
+            _state.LastReadText = message.LastReadText;
         }
 
-        public void Handle(UpdateEventLogEntries notification)
+        public void Handle(UpdateEventLogEntries message)
         {
-            _state.LogEntries = notification.EventLogEntries.ToList();
+            _state.LogEntries.Clear();
+
+            foreach (var logEntry in message.EventLogEntries)
+            {
+                _state.LogEntries.Add(logEntry);
+            }
 
             _state.GroupedLogEntries.Clear();
 

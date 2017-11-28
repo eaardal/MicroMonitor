@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using MicroMonitor.Infrastructure;
-using MicroMonitor.Services.MicroLog;
+﻿using MicroMonitor.Infrastructure;
 using Timer = System.Timers.Timer;
 
-namespace MicroMonitor.Services.EventLog
+namespace MicroMonitor.Services
 {
     public delegate void AfterEventLogPoll();
 
@@ -27,7 +22,7 @@ namespace MicroMonitor.Services.EventLog
             {
                 var logEntries = _eventLogReader.ReadEventLog(logName);
 
-                MicroLogCache.Instance.InsertOrUpdate(logName, logEntries);
+                EventLogCache.Instance.InsertOrUpdate(logName, logEntries);
 
                 OnAfterEventLogPoll?.Invoke();
 

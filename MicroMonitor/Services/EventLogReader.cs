@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 
-namespace MicroMonitor.Services.EventLog
+namespace MicroMonitor.Services
 {
     class EventLogReader : IEventLogReader
     {

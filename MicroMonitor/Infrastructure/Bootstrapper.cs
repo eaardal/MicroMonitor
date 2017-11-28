@@ -5,6 +5,8 @@ using Autofac.Extras.CommonServiceLocator;
 using Autofac.Features.Variance;
 using CommonServiceLocator;
 using MediatR;
+using MicroMonitor.Reducers;
+using MicroMonitor.Services;
 
 namespace MicroMonitor.Infrastructure
 {
@@ -14,14 +16,18 @@ namespace MicroMonitor.Infrastructure
         {
             var builder = new ContainerBuilder();
 
+            var thisAssembly = Assembly.GetExecutingAssembly();
+
             builder
-                .RegisterAssemblyTypes(Assembly.GetExecutingAssembly())
+                .RegisterAssemblyTypes(thisAssembly)
                 .Except<AppState>()
                 .Except<AppStore>()
                 .Except<IStore<AppState>>()
+                .Except<CachePoller>()
                 .AsSelf()
                 .AsImplementedInterfaces();
-            
+
+            builder.RegisterType<CachePoller>().As<ICachePoller>().SingleInstance();
             builder.RegisterType<AppState>().AsSelf().SingleInstance();
             builder.RegisterType<AppStore>().As<IStore<AppState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
 

@@ -13,8 +13,7 @@ using MicroMonitor.Config;
 using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
-using MicroMonitor.Services.EventLog;
-using MicroMonitor.Services.MicroLog;
+using MicroMonitor.Services;
 using MicroMonitor.Utilities;
 using MicroMonitor.Views.DetailsView;
 using Application = System.Windows.Application;
@@ -28,7 +27,7 @@ namespace MicroMonitor.Views.MainView
     {
         private readonly EventLogReader _eventLogReader = new EventLogReader();
         private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
-        private readonly MicroLogReader _microLogReader = new MicroLogReader();
+        private readonly CachePoller _cachePoller = new CachePoller();
         private readonly Timer _nextReadTimer = new Timer();
         private DateTime _lastReadTime = DateTime.MinValue;
         private DateTime _expectedNextReadTime = DateTime.MinValue;

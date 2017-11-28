@@ -102,8 +102,9 @@
     <Compile Include="Actions\MainWindowActions.cs" />
     <Compile Include="AppState.cs" />
     <Compile Include="Config\AppConfiguration.cs" />
-    <Compile Include="Services\EventLog\IEventLogPoller.cs" />
-    <Compile Include="Services\EventLog\IEventLogReader.cs" />
+    <Compile Include="Infrastructure\ObservableObject.cs" />
+    <Compile Include="Services\IEventLogPoller.cs" />
+    <Compile Include="Services\IEventLogReader.cs" />
     <Compile Include="Infrastructure\AppStore.cs" />
     <Compile Include="Infrastructure\Bootstrapper.cs" />
     <Compile Include="Infrastructure\ConnectToStore.cs" />
@@ -125,7 +126,8 @@
     <Compile Include="Services\EventLogPollingCoordinator.cs" />
     <Compile Include="Services\EventLogService.cs" />
     <Compile Include="Services\IEventLogService.cs" />
-    <Compile Include="Services\MicroLog\IMicroLogReader.cs" />
+    <Compile Include="Services\ICachePoller.cs" />
+    <Compile Include="Services\IEventLogCache.cs" />
     <Compile Include="Utilities\ColorExtensions.cs" />
     <Compile Include="Utilities\HexUtil.cs" />
     <Compile Include="Helpers\KeyboardFacade.cs" />
@@ -153,9 +155,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Converters\DateTimeToTimeStringConverter.cs" />
-    <Compile Include="Services\MicroLog\MicroLogCache.cs" />
-    <Compile Include="Services\EventLog\EventLogPoller.cs" />
-    <Compile Include="Services\EventLog\EventLogReader.cs" />
+    <Compile Include="Services\EventLogCache.cs" />
+    <Compile Include="Services\EventLogPoller.cs" />
+    <Compile Include="Services\EventLogReader.cs" />
     <Compile Include="Infrastructure\Logger.cs" />
     <Compile Include="Views\MainView\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -164,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\MicroLogEntry.cs" />
-    <Compile Include="Services\MicroLog\MicroLogReader.cs" />
+    <Compile Include="Services\CachePoller.cs" />
     <Compile Include="Model\MicroLogSeverity.cs" />
     <Compile Include="Model\MicroLogSeverityHelper.cs" />
     <Compile Include="Interop\MouseInterop.cs" />

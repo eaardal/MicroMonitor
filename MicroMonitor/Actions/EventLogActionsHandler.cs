@@ -4,7 +4,6 @@ using System.Windows;
 using MediatR;
 using MicroMonitor.Config;
 using MicroMonitor.Services;
-using MicroMonitor.Services.EventLog;
 
 namespace MicroMonitor.Actions
 {
