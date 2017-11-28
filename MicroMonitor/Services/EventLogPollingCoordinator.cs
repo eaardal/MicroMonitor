@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
-using System.Windows;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
 
@@ -12,7 +8,6 @@ namespace MicroMonitor.Services
 {
     class EventLogPollingCoordinator
     {
-        private readonly ICachePoller _cachePoller;
         private readonly IAppStore _store;
         private readonly IEventLogPoller _eventLogPoller;
         private readonly Timer _nextReadTimer = new Timer();
@@ -21,9 +16,20 @@ namespace MicroMonitor.Services
 
         public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, ICachePoller cachePoller, IAppStore store)
         {
-            _cachePoller = cachePoller ?? throw new ArgumentNullException(nameof(cachePoller));
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _eventLogPoller = eventLogPoller ?? throw new ArgumentNullException(nameof(eventLogPoller));
+            if (cachePoller == null) throw new ArgumentNullException(nameof(cachePoller));
+
+            cachePoller.CachePolled += CachePollerCachePolled;
+        }
+
+        private async Task CachePollerCachePolled(CachePollResult pollResult)
+        {
+            _lastReadTime = DateTime.Now;
+            _expectedNextReadTime = _lastReadTime.AddSeconds(pollResult.Interval);
+
+            await _store.Dispatch(new UpdateEventLogEntries(pollResult.LogName, pollResult.LogEntries));
+            await _store.Dispatch(new SetLastReadText($"Last read: {DateTime.Now:HH:mm:ss}"));
         }
 
         public void Start(string logName, int pollIntervalSeconds)
@@ -53,15 +59,6 @@ namespace MicroMonitor.Services
             };
 
             _nextReadTimer.Start();
-
-            _cachePoller.ReadOnInterval(logName, readInterval, async newLogEntries =>
-            {
-                _lastReadTime = DateTime.Now;
-                _expectedNextReadTime = _lastReadTime.AddSeconds(readInterval);
-
-                await _store.Dispatch(new UpdateEventLogEntries(logName, newLogEntries));
-                await _store.Dispatch(new SetLastReadText($"Last read: {DateTime.Now:HH:mm:ss}"));
-            });
         }
     }
 }

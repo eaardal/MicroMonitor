@@ -2,7 +2,7 @@
 {
     public interface IEventLogPoller
     {
-        event AfterEventLogPoll OnAfterEventLogPoll;
+        event EventLogPolled EventLogPolled;
         void StartPollingAtIntervals(string logName, double pollIntervalSeconds);
         void StopPolling();
     }

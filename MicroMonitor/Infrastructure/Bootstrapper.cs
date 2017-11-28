@@ -24,10 +24,14 @@ namespace MicroMonitor.Infrastructure
                 .Except<AppStore>()
                 .Except<IStore<AppState>>()
                 .Except<CachePoller>()
+                .Except<EventLogCache>()
+                .Except<EventLogPoller>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
             builder.RegisterType<CachePoller>().As<ICachePoller>().SingleInstance();
+            builder.RegisterType<EventLogCache>().As<IEventLogCache>().SingleInstance();
+            builder.RegisterType<EventLogPoller>().As<IEventLogPoller>().SingleInstance();
             builder.RegisterType<AppState>().AsSelf().SingleInstance();
             builder.RegisterType<AppStore>().As<IStore<AppState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
 

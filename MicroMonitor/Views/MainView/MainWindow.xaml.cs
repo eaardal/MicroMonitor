@@ -1,42 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using CommonServiceLocator;
 using MicroMonitor.Config;
-using MicroMonitor.Helpers;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
-using MicroMonitor.Services;
 using MicroMonitor.Utilities;
 using MicroMonitor.Views.DetailsView;
-using Application = System.Windows.Application;
-using Button = System.Windows.Controls.Button;
-using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using Timer = System.Timers.Timer;
 
 namespace MicroMonitor.Views.MainView
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-        private readonly EventLogReader _eventLogReader = new EventLogReader();
-        private readonly EventLogPoller _eventLogPoller = new EventLogPoller();
-        private readonly CachePoller _cachePoller = new CachePoller();
-        private readonly Timer _nextReadTimer = new Timer();
-        private DateTime _lastReadTime = DateTime.MinValue;
-        private DateTime _expectedNextReadTime = DateTime.MinValue;
-        private string _peekWindowId;
-        private Window _peekWindow;
-        private readonly List<Window> _openDetailWindows = new List<Window>();
-        private bool _activatedOnce = false;
-        private IEnumerable<MicroLogEntry> _logEntries = new List<MicroLogEntry>();
-
         private readonly MainWindowViewModel _viewModel;
 
         public MainWindow()
@@ -53,110 +32,11 @@ namespace MicroMonitor.Views.MainView
             Activated += async (sender, args) => await _viewModel.OnActivated(sender, args);
         }
         
-        private async Task Refresh()
-        {
-            ShowOverlay();
-
-            await GetAndBindEvents(AppConfiguration.LogName());
-
-            HideOverlay();
-        }
-
-        private void OpenPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
-        {
-            if (_peekWindow != null && _peekWindowId != logEntry.Id)
-            {
-                _peekWindow?.Close();
-
-                ShowPeekWindow(logEntry, fullscreen);
-                Focus();
-            }
-
-            if (_peekWindow == null)
-            {
-                ShowPeekWindow(logEntry, fullscreen);
-                Focus();
-            }
-        }
-
-        private void ShowPeekWindow(MicroLogEntry logEntry, bool fullscreen = false)
-        {
-            _peekWindow = CreateDetailsWindow(logEntry);
-            _peekWindow.Show();
-
-            if (fullscreen)
-            {
-                _peekWindow.WindowState = WindowState.Maximized;
-            }
-
-            _peekWindowId = logEntry.Id;
-        }
-       
-        private async Task GetAndBindEvents(string logName)
-        {
-            var logEntries = await _eventLogReader.ReadEventLogAsync(logName);
-
-            GroupAndBindLogEntries(logEntries.ToArray());
-            
-            UpdateLastRead();
-        }
-
-        private void ShowOverlay()
-        {
-            Overlay.Visibility = Visibility.Visible;
-        }
-
-        private void HideOverlay()
-        {
-            Overlay.Visibility = Visibility.Collapsed;
-        }
-        
-        private void GroupAndBindLogEntries(MicroLogEntry[] logEntries)
-        {
-            _logEntries = logEntries;
-
-            var grouped = logEntries.GroupBy(e => e.Timestamp.Date).Select(grp => new
-            {
-                Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
-                LogEntries = grp.Select(e => e)
-            });
-
-            LogEntries.ItemsSource = grouped;
-        }
-
-        private void UpdateLastRead()
-        {
-            LastRead.Text = $"Last read: {DateTime.Now:HH:mm:ss}";
-        }
-
         private void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
         {
             _viewModel.OnShowLogEntryDetails(sender, e);
         }
         
-        private Window CreateDetailsWindow(MicroLogEntry logEntry)
-        {
-            var configuredHeight = AppConfiguration.DetailsWindowHeight();
-            var height = configuredHeight > 0 ? configuredHeight : Height;
-
-            var top = AppConfiguration.DetailsWindowGrowDirection() == GrowDirection.Down
-                ? Top
-                : Top + (Height - height);
-
-            const int marginBuffer = 20;
-
-            var detailsWindow = new LogEntryDetailsWindow
-            {
-                LogEntry = logEntry,
-                Left = Left + Width + marginBuffer,
-                Top = top,
-                Height = height,
-                Width = AppConfiguration.DetailsWindowWidth()
-            };
-            
-            return detailsWindow;
-        }
-
         private async void OnReadNow(object sender, RoutedEventArgs e)
         {
             await _viewModel.OnReadNow(sender, e);
