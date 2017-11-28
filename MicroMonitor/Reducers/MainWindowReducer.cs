@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using MediatR;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
@@ -20,7 +21,10 @@ namespace MicroMonitor.Reducers
         INotificationHandler<WindowSizeChanged>,
         INotificationHandler<SetMainWindow>,
         INotificationHandler<SetLastReadText>,
-        INotificationHandler<UpdateEventLogEntries>
+        INotificationHandler<UpdateEventLogEntries>,
+        INotificationHandler<CloseAllOpenDetailsWindows>,
+        INotificationHandler<MouseEnterLogEntryBoundaries>,
+        INotificationHandler<MouseLeaveLogEntryBoundaries>
     {
         private readonly MainWindowState _state;
 
@@ -108,6 +112,34 @@ namespace MicroMonitor.Reducers
             foreach (var logEntry in groupedLogEntries)
             {
                 _state.GroupedLogEntries.Add(logEntry);
+            }
+        }
+
+        public void Handle(CloseAllOpenDetailsWindows message)
+        {
+            _state.IsCloseAllDetailWindowsButtonEnabled = false;
+        }
+
+        public void Handle(MouseEnterLogEntryBoundaries message)
+        {
+            _state.CurrentMouseOverBorder = message.Border;
+
+            var brush = (SolidColorBrush)message.Border.Background;
+            _state.CurrentMouseOverBorder.Background = new SolidColorBrush(brush.Color.ChangeLightness(3));
+
+            // Store original brush in Tag so it can be restored later
+            _state.CurrentMouseOverBorder.Tag = brush;
+        }
+
+        public void Handle(MouseLeaveLogEntryBoundaries message)
+        {
+            var currentMouseOverBorder = _state.CurrentMouseOverBorder;
+
+            if (currentMouseOverBorder != null && Equals(message.Border, currentMouseOverBorder))
+            {
+                // Restore original brush
+                var brush = (SolidColorBrush)currentMouseOverBorder.Tag;
+                currentMouseOverBorder.Background = brush;
             }
         }
     }

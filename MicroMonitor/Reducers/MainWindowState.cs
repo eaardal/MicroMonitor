@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
 
@@ -21,6 +22,13 @@ namespace MicroMonitor.Reducers
         private ObservableCollection<MicroLogEntry> _logEntries = new ObservableCollection<MicroLogEntry>();
         private int _traversingIndex;
         private bool _isActivatedOnce;
+        private Border _currentMouseOverBorder;
+
+        public Border CurrentMouseOverBorder
+        {
+            get => _currentMouseOverBorder;
+            set => SetProperty(ref _currentMouseOverBorder, value);
+        }
 
         public Visibility HeaderPanelVisibility
         {

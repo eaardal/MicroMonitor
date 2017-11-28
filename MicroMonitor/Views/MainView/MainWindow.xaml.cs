@@ -1,16 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 using CommonServiceLocator;
-using MicroMonitor.Config;
 using MicroMonitor.Infrastructure;
-using MicroMonitor.Model;
-using MicroMonitor.Utilities;
-using MicroMonitor.Views.DetailsView;
 
 namespace MicroMonitor.Views.MainView
 {
@@ -47,46 +38,19 @@ namespace MicroMonitor.Views.MainView
             await _viewModel.OnCloseAllDetailWindows(sender, e);
         }
 
-        private void OnLogEntryClick(object sender, MouseButtonEventArgs e)
+        private async void OnLogEntryClick(object sender, MouseButtonEventArgs e)
         {
-            var stackPanel = (StackPanel) sender;
-            var logEntry = (MicroLogEntry) stackPanel.DataContext;
-
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                OpenPeekWindow(logEntry);
-            }
-
-            if (e.ChangedButton == MouseButton.Right)
-            {
-                OpenPeekWindow(logEntry, true);
-            }
+            await _viewModel.OnLogEntryClick(sender, e);
         }
-
-        private Border _currentMouseOverBorder;
         
-        private void OnMouseOverLogEntry(object sender, MouseEventArgs e)
+        private async void OnMouseOverLogEntry(object sender, MouseEventArgs e)
         {
-            var border = (Border)sender;
-            _currentMouseOverBorder = border;
-
-            var brush = (SolidColorBrush)border.Background;
-            border.Background = new SolidColorBrush(brush.Color.ChangeLightness(3));
-
-            // Store original brush in Tag so it can be restored later
-            border.Tag = brush;
+            await _viewModel.OnMouseOverLogEntry(sender, e);
         }
 
-        private void OnMouseLeaveLogEntry(object sender, MouseEventArgs e)
+        private async void OnMouseLeaveLogEntry(object sender, MouseEventArgs e)
         {
-            var border = (Border)sender;
-
-            if (_currentMouseOverBorder != null && Equals(border, _currentMouseOverBorder))
-            {
-                // Restore original brush
-                var brush = (SolidColorBrush)border.Tag;
-                border.Background = brush;
-            }
+            await _viewModel.OnMouseLeaveLogEntry(sender, e);
         }
     }
 }

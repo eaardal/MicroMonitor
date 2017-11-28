@@ -29,6 +29,18 @@ namespace MicroMonitor.Actions
         }
     }
 
+    class OpenPeekWindow : INotification
+    {
+        public MicroLogEntry LogEntry { get; }
+        public bool OpenFullscreen { get; }
+
+        public OpenPeekWindow(MicroLogEntry logEntry, bool openFullscreen = false)
+        {
+            LogEntry = logEntry;
+            OpenFullscreen = openFullscreen;
+        }
+    }
+
     class OpenPeekWindowForNumericKey : INotification
     {
         public KeyEventArgs KeyEventArgs { get; }

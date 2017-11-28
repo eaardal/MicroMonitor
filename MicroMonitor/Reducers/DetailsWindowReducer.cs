@@ -4,7 +4,9 @@ using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class DetailsWindowReducer : IReducer, INotificationHandler<CreatedNewDetailsWindow>
+    class DetailsWindowReducer : IReducer, 
+        INotificationHandler<CreatedNewDetailsWindow>,
+        INotificationHandler<CloseAllOpenDetailsWindows>
     {
         private readonly DetailsWindowState _state;
 
@@ -16,6 +18,16 @@ namespace MicroMonitor.Reducers
         public void Handle(CreatedNewDetailsWindow message)
         {
             _state.OpenDetailsWindows.Add(message.NewDetailsWindow);
+        }
+
+        public void Handle(CloseAllOpenDetailsWindows notification)
+        {
+            foreach (var openDetailWindow in _state.OpenDetailsWindows)
+            {
+                openDetailWindow.Close();
+            }
+
+            _state.OpenDetailsWindows.Clear();
         }
     }
 }

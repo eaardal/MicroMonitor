@@ -13,7 +13,8 @@ using MicroMonitor.Views.DetailsView;
 
 namespace MicroMonitor.Actions
 {
-    class PeekWindowActionsHandler : IAsyncNotificationHandler<OpenPeekWindowUnderMouseCursor>, 
+    class PeekWindowActionsHandler : 
+        IAsyncNotificationHandler<OpenPeekWindowUnderMouseCursor>, 
         IAsyncNotificationHandler<OpenPeekWindowForNumericKey>, 
         IAsyncNotificationHandler<TraverseDownAndOpenPeekWindow>,
         IAsyncNotificationHandler<TraverseUpAndOpenPeekWindow>
@@ -71,7 +72,7 @@ namespace MicroMonitor.Actions
             mainWindow.Focus();
         }
 
-        private (Window newPeekWindow, string newPeekWindowId) ShowPeekWindow(Window parent, MicroLogEntry logEntry, bool fullscreen = false)
+        private static (Window newPeekWindow, string newPeekWindowId) ShowPeekWindow(Window parent, MicroLogEntry logEntry, bool fullscreen = false)
         {
             var newPeekWindow = CreateDetailsWindow(parent, logEntry);
             newPeekWindow.Show();

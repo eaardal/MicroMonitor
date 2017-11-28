@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using MediatR;
 using MicroMonitor.Views.MainView;
 
@@ -81,6 +82,26 @@ namespace MicroMonitor.Actions
         public SetLastReadText(string lastReadText)
         {
             LastReadText = lastReadText;
+        }
+    }
+
+    class SetCurrentMouseOverBorder : INotification
+    {
+        public Border Border { get; }
+
+        public SetCurrentMouseOverBorder(Border border)
+        {
+            Border = border;
+        }
+    }
+
+    class MouseLeaveLogEntry : INotification
+    {
+        public Border Border { get; }
+
+        public MouseLeaveLogEntry(Border border)
+        {
+            Border = border;
         }
     }
 }

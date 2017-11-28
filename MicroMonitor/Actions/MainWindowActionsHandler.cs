@@ -8,7 +8,9 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Actions
 {
-    class MainWindowActionsHandler : IAsyncNotificationHandler<SetDefaultWindowWidthAndHeight>, IAsyncNotificationHandler<SetDefaultWindowPosition>
+    class MainWindowActionsHandler : 
+        IAsyncNotificationHandler<SetDefaultWindowWidthAndHeight>, 
+        IAsyncNotificationHandler<SetDefaultWindowPosition>
     {
         private readonly IAppStore _store;
 

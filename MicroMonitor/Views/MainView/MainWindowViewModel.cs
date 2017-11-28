@@ -92,12 +92,12 @@ namespace MicroMonitor.Views.MainView
             State.IsCloseAllDetailWindowsButtonEnabled = false;
         }
 
-        public void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
+        public async Task OnShowLogEntryDetails(object sender, RoutedEventArgs e)
         {
             var btn = (Button)sender;
             var logEntry = (MicroLogEntry)btn.DataContext;
 
-            OpenNewDetailsWindow(logEntry);
+            await _store.Dispatch(new OpenNewDetailsWindow(logEntry));
         }
 
         public async Task OnReadNow(object sender, RoutedEventArgs e)
@@ -107,15 +107,33 @@ namespace MicroMonitor.Views.MainView
 
         public async Task OnCloseAllDetailWindows(object sender, RoutedEventArgs e)
         {
-            foreach (var openDetailWindow in _openDetailWindows)
+            await _store.Dispatch(new CloseAllOpenDetailsWindows());
+        }
+
+        public async Task OnLogEntryClick(object sender, MouseButtonEventArgs e)
+        {
+            var stackPanel = (StackPanel)sender;
+            var logEntry = (MicroLogEntry)stackPanel.DataContext;
+
+            if (e.ChangedButton == MouseButton.Left)
             {
-                openDetailWindow.Close();
+                await _store.Dispatch(new OpenPeekWindow(logEntry));
             }
 
-            _openDetailWindows.Clear();
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                await _store.Dispatch(new OpenPeekWindow(logEntry, true));
+            }
+        }
 
-            _viewModel.DisableCloseAllDetailWindowsButton();
-            //DisableCloseAllDetailWindowsButton();
+        public async Task OnMouseOverLogEntry(object sender, MouseEventArgs e)
+        {
+            await _store.Dispatch(new MouseEnterLogEntryBoundaries((Border)sender));
+        }
+
+        public async Task OnMouseLeaveLogEntry(object sender, MouseEventArgs e)
+        {
+            await _store.Dispatch(new MouseLeaveLogEntryBoundaries((Border)sender));
         }
     }
 }
