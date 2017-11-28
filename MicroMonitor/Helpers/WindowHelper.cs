@@ -8,7 +8,7 @@ namespace MicroMonitor.Helpers
 {
     class WindowHelper
     {
-        public static (double left, double top) PositionWindowAtMouseCursor(Window window, double windowHeight, double windowWidth)
+        public static (double left, double top) GetMouseCursorPosition(Window window, double windowHeight, double windowWidth)
         {
             var mousePos = MouseInterop.GetPosition();
             Logger.Verbose($@"Mouse X{mousePos.X}, Y{mousePos.Y}");
@@ -60,7 +60,7 @@ namespace MicroMonitor.Helpers
             return default(Point);
         }
 
-        public static (double left, double top) PositionWindowAtCenterScreen(Window window)
+        public static (double left, double top) GetCenterScreenPosition(Window window)
         {
             var workingArea = GetScreen(window).WorkingArea;
             var left = (int)(workingArea.Width / 2) - (window.Width / 2);

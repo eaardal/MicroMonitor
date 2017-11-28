@@ -20,9 +20,9 @@ namespace MicroMonitor.Infrastructure
             return _state;
         }
 
-        public async Task Dispatch<TMessage>(TMessage message) where TMessage : IRequest<TMessage>
+        public async Task Dispatch<TMessage>(TMessage message) where TMessage : INotification
         {
-            await _mediator.Send(message);
+            await _mediator.Publish(message);
         }
     }
 }

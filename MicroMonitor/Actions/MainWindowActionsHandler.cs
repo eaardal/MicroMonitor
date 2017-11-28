@@ -40,10 +40,10 @@ namespace MicroMonitor.Actions
             switch (spawnMethod)
             {
                 case WindowSpawnMethod.Cursor:
-                    (left, top) = WindowHelper.PositionWindowAtMouseCursor(mainWindow, state.MainWindowState.WindowHeight, state.MainWindowState.WindowWidth);
+                    (left, top) = WindowHelper.GetMouseCursorPosition(mainWindow, state.MainWindowState.WindowHeight, state.MainWindowState.WindowWidth);
                     break;
                 case WindowSpawnMethod.CenterScreen:
-                    (left, top) = WindowHelper.PositionWindowAtCenterScreen(mainWindow);
+                    (left, top) = WindowHelper.GetCenterScreenPosition(mainWindow);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

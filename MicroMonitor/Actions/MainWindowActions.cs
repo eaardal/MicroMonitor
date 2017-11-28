@@ -85,21 +85,21 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class SetCurrentMouseOverBorder : INotification
+    class MouseEnterLogEntryBoundaries : INotification
     {
         public Border Border { get; }
 
-        public SetCurrentMouseOverBorder(Border border)
+        public MouseEnterLogEntryBoundaries(Border border)
         {
             Border = border;
         }
     }
 
-    class MouseLeaveLogEntry : INotification
+    class MouseLeaveLogEntryBoundaries : INotification
     {
         public Border Border { get; }
 
-        public MouseLeaveLogEntry(Border border)
+        public MouseLeaveLogEntryBoundaries(Border border)
         {
             Border = border;
         }
