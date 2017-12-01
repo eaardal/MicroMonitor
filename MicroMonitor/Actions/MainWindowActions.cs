@@ -5,7 +5,7 @@ using MicroMonitor.Views.MainView;
 
 namespace MicroMonitor.Actions
 {
-    class ToggleHeaderPanelVisibility : INotification
+    public class ToggleHeaderPanelVisibility : INotification
     {
         public Visibility Visibility { get; }
 
@@ -15,7 +15,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class ToggleOverlayVisibility : INotification
+    public class ToggleOverlayVisibility : INotification
     {
         public Visibility Visibility { get; }
 
@@ -25,11 +25,11 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class MainWindowActivated : INotification { }
+    public class MainWindowActivated : INotification { }
 
-    class SetDefaultWindowWidthAndHeight : INotification { }
+    public class SetDefaultWindowWidthAndHeight : INotification { }
 
-    class WindowPositionChanged : INotification
+    public class WindowPositionChanged : INotification
     {
         public double Left { get; }
         public double Top { get; }
@@ -41,7 +41,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class WindowSizeChanged : INotification
+    public class WindowSizeChanged : INotification
     {
         public int Width { get; }
         public int Height { get; }
@@ -53,9 +53,9 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class SetDefaultWindowPosition : INotification { }
+    public class SetDefaultWindowPosition : INotification { }
 
-    class SetMainWindow : INotification
+    public class SetMainWindow : INotification
     {
         public MainWindow MainWindow { get; }
 
@@ -65,7 +65,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class SetNextReadText : INotification
+    public class SetNextReadText : INotification
     {
         public string NextReadText { get; }
 
@@ -75,7 +75,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class SetLastReadText : INotification
+    public class SetLastReadText : INotification
     {
         public string LastReadText { get; }
 
@@ -85,7 +85,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class MouseEnterLogEntryBoundaries : INotification
+    public class MouseEnterLogEntryBoundaries : INotification
     {
         public Border Border { get; }
 
@@ -95,7 +95,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class MouseLeaveLogEntryBoundaries : INotification
+    public class MouseLeaveLogEntryBoundaries : INotification
     {
         public Border Border { get; }
 

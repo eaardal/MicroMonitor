@@ -1,6 +1,6 @@
 ﻿namespace MicroMonitor.Infrastructure
 {
-    internal interface IReducer
+    public interface IReducer
     {
     }
 }

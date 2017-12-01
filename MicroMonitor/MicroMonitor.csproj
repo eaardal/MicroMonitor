@@ -105,9 +105,11 @@
     <Compile Include="AppState.cs" />
     <Compile Include="Config\AppConfiguration.cs" />
     <Compile Include="Infrastructure\ActionHandler.cs" />
+    <Compile Include="Infrastructure\IAppStore.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\Reducer.cs" />
     <Compile Include="Services\IEventLogPoller.cs" />
+    <Compile Include="Services\IEventLogPollingCoordinator.cs" />
     <Compile Include="Services\IEventLogReader.cs" />
     <Compile Include="Infrastructure\AppStore.cs" />
     <Compile Include="Infrastructure\Bootstrapper.cs" />

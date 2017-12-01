@@ -5,9 +5,9 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Actions
 {
-    class RefreshEventLogEntriesStart : INotification { }
+    public class RefreshEventLogEntriesStart : INotification { }
 
-    class RefreshEventLogEntriesSuccess : INotification
+    public class RefreshEventLogEntriesSuccess : INotification
     {
         public string LogName { get; }
         public IEnumerable<GroupedMicroLogEntry> EventLogEntries { get; }
@@ -19,7 +19,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class RefreshEventLogEntriesError : INotification
+    public class RefreshEventLogEntriesError : INotification
     {
         public Exception Exception { get; }
 
@@ -29,14 +29,14 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class RefreshEventLogEntries : INotification { }
+    public class RefreshEventLogEntries : INotification { }
 
-    class StartPollingForEventLogEntries : INotification
+    public class StartPollingForEventLogEntries : INotification
     {
         
     }
 
-    class UpdateEventLogEntries : INotification
+    public class UpdateEventLogEntries : INotification
     {
         public string LogName { get; }
         public IEnumerable<MicroLogEntry> EventLogEntries { get; }

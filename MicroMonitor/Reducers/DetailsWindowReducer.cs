@@ -4,7 +4,7 @@ using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class DetailsWindowReducer : IReducer, 
+    public class DetailsWindowReducer : IDetailsWindowReducer, 
         INotificationHandler<CreatedNewDetailsWindow>,
         INotificationHandler<CloseAllOpenDetailsWindows>
     {

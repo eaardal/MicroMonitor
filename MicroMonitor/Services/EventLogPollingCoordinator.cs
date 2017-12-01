@@ -6,7 +6,7 @@ using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Services
 {
-    class EventLogPollingCoordinator
+    class EventLogPollingCoordinator : IEventLogPollingCoordinator
     {
         private readonly IAppStore _store;
         private readonly IEventLogPoller _eventLogPoller;

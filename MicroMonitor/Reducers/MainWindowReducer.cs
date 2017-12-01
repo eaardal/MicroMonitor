@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using MediatR;
 using MicroMonitor.Actions;
-using MicroMonitor.Infrastructure;
 using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Reducers
 {
-    class MainWindowReducer : IReducer,
+    public class MainWindowReducer : IMainWindowReducer,
         INotificationHandler<RefreshEventLogEntriesStart>,
         INotificationHandler<RefreshEventLogEntriesSuccess>,
         INotificationHandler<RefreshEventLogEntriesError>,

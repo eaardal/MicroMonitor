@@ -23,9 +23,9 @@ namespace MicroMonitor.Views.MainView
             Activated += async (sender, args) => await _viewModel.OnActivated(sender, args);
         }
         
-        private void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
+        private async void OnShowLogEntryDetails(object sender, RoutedEventArgs e)
         {
-            _viewModel.OnShowLogEntryDetails(sender, e);
+            await _viewModel.OnShowLogEntryDetails(sender, e);
         }
         
         private async void OnReadNow(object sender, RoutedEventArgs e)

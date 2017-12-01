@@ -20,7 +20,7 @@ namespace MicroMonitor.Views.MainView
         public MainWindowViewModel(MainWindow window, IAppStore store)
         {
             _store = store;
-            _store.Dispatch(new SetMainWindow(window));
+            _store.Dispatch(new SetMainWindow(window)).Wait();
             
             State = _store.GetState().MainWindowState;
 

@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using MicroMonitor.Actions;
-using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class PeekWindowReducer : IReducer, INotificationHandler<OpenedNewPeekWindow>
+    public class PeekWindowReducer : IPeekWindowReducer, INotificationHandler<OpenedNewPeekWindow>
     {
         private readonly PeekWindowState _state;
 

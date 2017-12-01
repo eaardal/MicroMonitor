@@ -6,7 +6,7 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Reducers
 {
-    class MainWindowState : ObservableObject
+    public class MainWindowState : ObservableObject
     {
         private Visibility _headerPanelVisibility = Visibility.Collapsed;
         private Visibility _overlayVisibility = Visibility.Collapsed;
@@ -86,7 +86,7 @@ namespace MicroMonitor.Reducers
 
         public bool IsCloseAllDetailWindowsButtonEnabled
         {
-            get => IsCloseAllDetailWindowsButtonEnabled;
+            get => _isCloseAllDetailWindowsButtonEnabled;
             set => SetProperty(ref _isCloseAllDetailWindowsButtonEnabled, value);
         }
 

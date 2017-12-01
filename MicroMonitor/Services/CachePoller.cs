@@ -8,16 +8,16 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Services
 {
-    delegate Task CachePolled(CachePollResult result);
+    public delegate Task CachePolled(CachePollResult result);
 
-    internal class CachePollResult
+    public class CachePollResult
     {
         public IEnumerable<MicroLogEntry> LogEntries { get; set; }
         public double Interval { get; set; }
         public string LogName { get; set; }
     }
 
-    class CachePoller : ICachePoller
+    public class CachePoller : ICachePoller
     {
         private readonly IEventLogCache _eventLogCache;
         private readonly Timer _timer = new Timer();

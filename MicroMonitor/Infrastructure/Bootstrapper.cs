@@ -10,7 +10,7 @@ using MicroMonitor.Services;
 
 namespace MicroMonitor.Infrastructure
 {
-    class Bootstrapper
+    public class Bootstrapper
     {
         public static void Wire()
         {
@@ -20,20 +20,27 @@ namespace MicroMonitor.Infrastructure
 
             builder
                 .RegisterAssemblyTypes(thisAssembly)
-                .Except<AppState>()
-                .Except<AppStore>()
-                .Except<IStore<AppState>>()
                 .Except<CachePoller>()
                 .Except<EventLogCache>()
                 .Except<EventLogPoller>()
+                .Except<IEventLogPollingCoordinator>()
+                .Except<AppState>()
+                .Except<AppStore>()
+                .Except<MainWindowReducer>()
+                .Except<DetailsWindowReducer>()
+                .Except<PeekWindowReducer>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterType<CachePoller>().As<ICachePoller>().SingleInstance();
-            builder.RegisterType<EventLogCache>().As<IEventLogCache>().SingleInstance();
-            builder.RegisterType<EventLogPoller>().As<IEventLogPoller>().SingleInstance();
+            builder.RegisterType<CachePoller>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<EventLogCache>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<EventLogPoller>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<IEventLogPollingCoordinator>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<AppState>().AsSelf().SingleInstance();
-            builder.RegisterType<AppStore>().As<IStore<AppState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<AppStore>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<MainWindowReducer>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<DetailsWindowReducer>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<PeekWindowReducer>().AsImplementedInterfaces().SingleInstance();
 
             RegisterMediator(builder);
 
@@ -43,7 +50,7 @@ namespace MicroMonitor.Infrastructure
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocator);
         }
 
-        public static void RegisterMediator(ContainerBuilder builder)
+        private static void RegisterMediator(ContainerBuilder builder)
         {
             // https://github.com/jbogard/MediatR/wiki
 

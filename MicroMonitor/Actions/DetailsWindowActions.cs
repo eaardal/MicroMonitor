@@ -3,7 +3,7 @@ using MicroMonitor.Model;
 
 namespace MicroMonitor.Actions
 {
-    class OpenNewDetailsWindow : INotification
+    public class OpenNewDetailsWindow : INotification
     {
         public MicroLogEntry LogEntry { get; }
 
@@ -13,7 +13,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class CloseAllOpenDetailsWindows : INotification
+    public class CloseAllOpenDetailsWindows : INotification
     {
         
     }

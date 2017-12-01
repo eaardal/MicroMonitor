@@ -4,7 +4,7 @@ using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class DetailsWindowState : ObservableObject
+    public class DetailsWindowState : ObservableObject
     {
         private ObservableCollection<Window> _openDetailsWindows = new ObservableCollection<Window>();
 

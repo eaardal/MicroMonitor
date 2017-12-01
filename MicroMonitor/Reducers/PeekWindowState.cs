@@ -3,7 +3,7 @@ using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
-    class PeekWindowState : ObservableObject
+    public class PeekWindowState : ObservableObject
     {
         private string _peekWindowId;
         private Window _peekWindow;

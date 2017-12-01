@@ -4,7 +4,7 @@ using MediatR;
 
 namespace MicroMonitor.Infrastructure
 {
-    class Store<TState> : IStore<TState> where TState : class, new()
+    public class Store<TState> : IStore<TState> where TState : class, new()
     {
         private readonly IMediator _mediator;
         private readonly TState _state;

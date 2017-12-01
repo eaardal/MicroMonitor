@@ -16,8 +16,8 @@ namespace MicroMonitor.Actions
             OpenFullscreen = openFullscreen;
         }
     }
-    
-    class OpenedNewPeekWindow : INotification
+
+    public class OpenedNewPeekWindow : INotification
     {
         public Window NewPeekWindow { get; }
         public string NewPeekWindowId { get; }
@@ -29,7 +29,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class OpenPeekWindow : INotification
+    public class OpenPeekWindow : INotification
     {
         public MicroLogEntry LogEntry { get; }
         public bool OpenFullscreen { get; }
@@ -41,7 +41,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class OpenPeekWindowForNumericKey : INotification
+    public class OpenPeekWindowForNumericKey : INotification
     {
         public KeyEventArgs KeyEventArgs { get; }
         public bool OpenFullscreen { get; }
@@ -53,7 +53,7 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class CreatedNewDetailsWindow : INotification
+    public class CreatedNewDetailsWindow : INotification
     {
         public Window NewDetailsWindow { get; }
 
@@ -63,11 +63,11 @@ namespace MicroMonitor.Actions
         }
     }
 
-    class TraverseDownAndOpenPeekWindow : INotification { }
+    public class TraverseDownAndOpenPeekWindow : INotification { }
 
-    class TraverseUpAndOpenPeekWindow : INotification { }
+    public class TraverseUpAndOpenPeekWindow : INotification { }
 
-    class SetTraversingIndex : INotification
+    public class SetTraversingIndex : INotification
     {
         public int TraversingIndex { get; }
 
