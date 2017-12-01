@@ -18,6 +18,7 @@ namespace MicroMonitor.UnitTests
         [TestCase(typeof(AppState))]
         [TestCase(typeof(IAppStore))]
         [TestCase(typeof(IStore<AppState>))]
+        [TestCase(typeof(Store<AppState>))]
         [TestCase(typeof(IMainWindowReducer))]
         [TestCase(typeof(IDetailsWindowReducer))]
         [TestCase(typeof(IPeekWindowReducer))]

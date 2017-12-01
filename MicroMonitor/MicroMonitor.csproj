@@ -108,6 +108,9 @@
     <Compile Include="Infrastructure\IAppStore.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\Reducer.cs" />
+    <Compile Include="Reducers\IDetailsWindowReducer.cs" />
+    <Compile Include="Reducers\IMainWindowReducer.cs" />
+    <Compile Include="Reducers\IPeekWindowReducer.cs" />
     <Compile Include="Services\IEventLogPoller.cs" />
     <Compile Include="Services\IEventLogPollingCoordinator.cs" />
     <Compile Include="Services\IEventLogReader.cs" />

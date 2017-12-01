@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using MediatR;
 using MicroMonitor.Actions;
+using MicroMonitor.Infrastructure;
 using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Reducers
@@ -26,9 +27,9 @@ namespace MicroMonitor.Reducers
     {
         private readonly MainWindowState _state;
 
-        public MainWindowReducer()
+        public MainWindowReducer(IAppStore store)
         {
-            _state = new MainWindowState();
+            _state = store.GetState().MainWindowState;
         }
 
         public void Handle(RefreshEventLogEntriesStart message)

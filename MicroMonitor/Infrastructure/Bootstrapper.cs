@@ -35,9 +35,10 @@ namespace MicroMonitor.Infrastructure
             builder.RegisterType<CachePoller>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogCache>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogPoller>().AsImplementedInterfaces().SingleInstance();
-            builder.RegisterType<IEventLogPollingCoordinator>().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<EventLogPollingCoordinator>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<AppState>().AsSelf().SingleInstance();
             builder.RegisterType<AppStore>().AsSelf().AsImplementedInterfaces().SingleInstance();
+            builder.RegisterType<Store<AppState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<MainWindowReducer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<DetailsWindowReducer>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<PeekWindowReducer>().AsImplementedInterfaces().SingleInstance();

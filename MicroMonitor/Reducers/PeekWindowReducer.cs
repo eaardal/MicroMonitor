@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MicroMonitor.Actions;
+using MicroMonitor.Infrastructure;
 
 namespace MicroMonitor.Reducers
 {
@@ -7,9 +8,9 @@ namespace MicroMonitor.Reducers
     {
         private readonly PeekWindowState _state;
 
-        public PeekWindowReducer()
+        public PeekWindowReducer(IAppStore store)
         {
-            _state = new PeekWindowState();
+            _state = store.GetState().PeekWindowState;
         }
 
         public void Handle(OpenedNewPeekWindow message)

@@ -10,9 +10,9 @@ namespace MicroMonitor.Reducers
     {
         private readonly DetailsWindowState _state;
 
-        public DetailsWindowReducer()
+        public DetailsWindowReducer(IAppStore store)
         {
-            _state = new DetailsWindowState();
+            _state = store.GetState().DetailsWindowState;
         }
         
         public void Handle(CreatedNewDetailsWindow message)
