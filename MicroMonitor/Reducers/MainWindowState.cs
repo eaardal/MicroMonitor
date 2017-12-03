@@ -21,6 +21,10 @@ namespace MicroMonitor.Reducers
         private int _traversingIndex;
         private bool _isActivatedOnce;
         private Border _currentMouseOverBorder;
+        
+        public ObservableCollection<GroupedMicroLogEntry> GroupedLogEntries { get; } = new ObservableCollection<GroupedMicroLogEntry>();
+
+        public ObservableCollection<MicroLogEntry> LogEntries { get; } = new ObservableCollection<MicroLogEntry>();
 
         public Border CurrentMouseOverBorder
         {
@@ -76,8 +80,6 @@ namespace MicroMonitor.Reducers
             set => SetProperty(ref _lastReadText, value);
         }
 
-        public ObservableCollection<GroupedMicroLogEntry> GroupedLogEntries { get; } = new ObservableCollection<GroupedMicroLogEntry>();
-
         public bool IsCloseAllDetailWindowsButtonEnabled
         {
             get => _isCloseAllDetailWindowsButtonEnabled;
@@ -89,9 +91,7 @@ namespace MicroMonitor.Reducers
             get => _window;
             set => SetProperty(ref _window, value);
         }
-
-        public ObservableCollection<MicroLogEntry> LogEntries { get; } = new ObservableCollection<MicroLogEntry>();
-
+        
         public int TraversingIndex
         {
             get => _traversingIndex;

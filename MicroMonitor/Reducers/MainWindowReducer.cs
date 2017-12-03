@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -34,6 +35,10 @@ namespace MicroMonitor.Reducers
         public MainWindowReducer(IAppStore store)
         {
             _state = store.GetState().MainWindowState;
+            //_state.GroupedLogEntries.CollectionChanged += (sender, args) =>
+            //{
+            //    Logger.Debug("GroupedLogEntries: {@ChangeType}", args.Action);
+            //};
         }
 
         public void Handle(RefreshEventLogEntriesStart message)
@@ -112,7 +117,9 @@ namespace MicroMonitor.Reducers
 
             foreach (var logEntry in newLogEntries)
             {
-                _state.LogEntries.Insert(0, logEntry);
+                //_state.LogEntries.Insert(0, logEntry);
+                _state.LogEntries.Add(logEntry);
+                //_state.LogEntries.Move(_state.LogEntries.Count, 0);
             }
 
             var groupedLogEntries = LogEntryUtils.GroupLogEntriesByDate(newLogEntries);
@@ -126,12 +133,16 @@ namespace MicroMonitor.Reducers
 
                     foreach (var entry in grouping.LogEntries.OrderBy(e => e.Timestamp))
                     {
-                        grp.LogEntries.Insert(0, entry);
+                        //grp.LogEntries.Insert(0, entry);
+                        grp.LogEntries.Add(entry);
+                        //grp.LogEntries.Move(grp.LogEntries.Count, 0);
                     }
                 }
                 else
                 {
-                    _state.GroupedLogEntries.Insert(0, grouping);
+                    //_state.GroupedLogEntries.Insert(0, grouping);
+                    _state.GroupedLogEntries.Add(grouping);
+                    //_state.GroupedLogEntries.Move(_state.GroupedLogEntries.Count, 0);
                 }
             }
         }

@@ -84,12 +84,12 @@
             </Grid>
             <Grid Grid.Row="1">
                 <ScrollViewer>
-                    <ItemsControl x:Name="LogEntries" ItemsSource="{Binding Path=GroupedLogEntries, Mode=OneWay}">
+                    <ItemsControl x:Name="LogEntries" ItemsSource="{Binding Path=GroupedLogEntries, Mode=TwoWay}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
                                     <TextBlock Text="{Binding Path=Key}" FontSize="9" FontWeight="Bold" HorizontalAlignment="Center" Margin="0 3 0 1" Foreground="Black"></TextBlock>
-                                    <ItemsControl ItemsSource="{Binding Path=LogEntries, Mode=OneWay}">
+                                    <ItemsControl ItemsSource="{Binding Path=LogEntries, Mode=TwoWay}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Border

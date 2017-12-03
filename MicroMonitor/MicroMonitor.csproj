@@ -119,6 +119,7 @@
     <Compile Include="Infrastructure\Action.cs" />
     <Compile Include="Infrastructure\ActionHandler.cs" />
     <Compile Include="Infrastructure\IAppStore.cs" />
+    <Compile Include="Infrastructure\ObservableCollection2.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
     <Compile Include="Infrastructure\Reducer.cs" />
     <Compile Include="Reducers\IDetailsWindowReducer.cs" />
