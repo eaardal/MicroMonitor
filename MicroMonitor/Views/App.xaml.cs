@@ -9,7 +9,7 @@ namespace MicroMonitor.Views
     {
         public App()
         {
-            CreateConsoleWindowIfDebugging();
+            //CreateConsoleWindowIfDebugging();
 
             Bootstrapper.Wire();
 
@@ -26,7 +26,7 @@ namespace MicroMonitor.Views
         
         protected override void OnExit(ExitEventArgs e)
         {
-            DestroyConsoleWindowIfDebugging();
+            //DestroyConsoleWindowIfDebugging();
 
             base.OnExit(e);
         }

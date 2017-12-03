@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using MediatR;
@@ -97,20 +99,37 @@ namespace MicroMonitor.Reducers
 
         public void Handle(UpdateEventLogEntries message)
         {
-            _state.LogEntries.Clear();
+            var existingLogEntries = _state.LogEntries.Select(e => e.Id);
+            Logger.Debug("Existing entries: {LogEntries}", existingLogEntries);
 
-            foreach (var logEntry in message.EventLogEntries)
+            var newLogEntries = message.EventLogEntries
+                .Where(entry => !existingLogEntries.Contains(entry.Id))
+                .OrderBy(entry => entry.Timestamp)
+                .ToImmutableList();
+
+            foreach (var logEntry in newLogEntries)
             {
-                _state.LogEntries.Add(logEntry);
+                _state.LogEntries.Insert(0, logEntry);
             }
 
-            _state.GroupedLogEntries.Clear();
+            var groupedLogEntries = LogEntryUtils.GroupLogEntriesByDate(newLogEntries);
+            var existingGroups = _state.GroupedLogEntries.Select(grp => grp.Key).ToArray();
 
-            var groupedLogEntries = LogEntryUtils.GroupLogEntriesByDate(_state.LogEntries);
-
-            foreach (var logEntry in groupedLogEntries)
+            foreach (var grouping in groupedLogEntries)
             {
-                _state.GroupedLogEntries.Add(logEntry);
+                if (existingGroups.Contains(grouping.Key))
+                {
+                    var grp = _state.GroupedLogEntries.Single(g => g.Key == grouping.Key);
+
+                    foreach (var entry in grouping.LogEntries.OrderBy(e => e.Timestamp))
+                    {
+                        grp.LogEntries.Insert(0, entry);
+                    }
+                }
+                else
+                {
+                    _state.GroupedLogEntries.Insert(0, grouping);
+                }
             }
         }
 

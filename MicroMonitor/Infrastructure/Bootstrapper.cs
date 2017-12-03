@@ -5,6 +5,7 @@ using Autofac.Extras.CommonServiceLocator;
 using Autofac.Features.Variance;
 using CommonServiceLocator;
 using MediatR;
+using MicroMonitor.Config;
 using MicroMonitor.Reducers;
 using MicroMonitor.Services;
 
@@ -14,6 +15,9 @@ namespace MicroMonitor.Infrastructure
     {
         public static void Wire()
         {
+            var configuration = new Configuration();
+            Logger.Create(configuration);
+
             var builder = new ContainerBuilder();
 
             var thisAssembly = Assembly.GetExecutingAssembly();
@@ -29,9 +33,11 @@ namespace MicroMonitor.Infrastructure
                 .Except<MainWindowReducer>()
                 .Except<DetailsWindowReducer>()
                 .Except<PeekWindowReducer>()
+                .Except<Configuration>()
                 .AsSelf()
                 .AsImplementedInterfaces();
 
+            builder.RegisterInstance(configuration).SingleInstance();
             builder.RegisterType<CachePoller>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogCache>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogPoller>().AsImplementedInterfaces().SingleInstance();

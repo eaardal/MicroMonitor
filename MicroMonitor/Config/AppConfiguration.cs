@@ -5,66 +5,85 @@ using Serilog.Events;
 
 namespace MicroMonitor.Config
 {
-    class AppConfiguration
+    public class AppConfiguration
     {
         public static string LogName() =>
-            ConfigurationManager.AppSettings["LogName"];
+            ReadValue<string>("LogName");
 
         public static int PollIntervalSeconds() =>
-            int.Parse(ConfigurationManager.AppSettings["PollIntervalSeconds"]);
+            ReadValue("PollIntervalSeconds", DefaultConfiguration.PollIntervalSeconds());
 
         public static int DetailsWindowWidth() =>
-            int.Parse(ConfigurationManager.AppSettings["DetailsWindow.Width"]);
+            ReadValue("DetailsWindow.Width", DefaultConfiguration.DetailsWindowWidth());
 
         public static int DetailsWindowHeight() =>
-            int.Parse(ConfigurationManager.AppSettings["DetailsWindow.Height"]);
+            ReadValue("DetailsWindow.Height", DefaultConfiguration.DetailsWindowHeight());
 
         public static GrowDirection DetailsWindowGrowDirection() =>
-            (GrowDirection) Enum.Parse(typeof(GrowDirection),
-                ConfigurationManager.AppSettings["DetailsWindow.GrowDirection"]);
+            ReadValue("DetailsWindow.GrowDirection", DefaultConfiguration.DetailsWindowGrowDirection());
 
         public static int DetailsWindowFontSize() =>
-            int.Parse(ConfigurationManager.AppSettings["DetailsWindow.FontSize"]);
+            ReadValue("DetailsWindow.FontSize", DefaultConfiguration.DetailsWindowFontSize());
 
         public static int MainWindowHeight() =>
-            int.Parse(ConfigurationManager.AppSettings["MainWindow.Height"]);
+            ReadValue("MainWindow.Height", DefaultConfiguration.MainWindowHeight());
 
         public static int MainWindowWidth() =>
-            int.Parse(ConfigurationManager.AppSettings["MainWindow.Width"]);
+            ReadValue("MainWindow.Width", DefaultConfiguration.MainWindowWidth());
 
         public static WindowSpawnMethod MainWindowSpawnMethod() =>
-            (WindowSpawnMethod) Enum.Parse(typeof(WindowSpawnMethod),
-                ConfigurationManager.AppSettings["MainWindow.SpawnMethod"]);
+            ReadValue("MainWindow.SpawnMethod", DefaultConfiguration.MainWindowSpawnMethod());
 
         public static int MainWindowFontSize() =>
-            int.Parse(ConfigurationManager.AppSettings["MainWindow.FontSize"]);
+            ReadValue("MainWindow.FontSize", DefaultConfiguration.MainWindowFontSize());
 
         public static int LogEntryStaleThresholdInMinutes() =>
-            int.Parse(ConfigurationManager.AppSettings["LogEntry.Stale.ThresholdInMinutes"]);
+            ReadValue("LogEntry.Stale.ThresholdInMinutes", DefaultConfiguration.LogEntryStaleThresholdInMinutes());
 
         public static bool LogEntryStaleEnabled() =>
-            bool.Parse(ConfigurationManager.AppSettings["LogEntry.Stale.Enabled"]);
+            ReadValue("LogEntry.Stale.Enabled", DefaultConfiguration.LogEntryStaleEnabled());
 
         public static string LogEntryColorInfo() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Info"];
+            ReadValue("LogEntry.Color.Info", DefaultConfiguration.LogEntryColorInfo());
 
         public static string LogEntryColorInfoStale() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Info.Stale"];
+            ReadValue("LogEntry.Color.Info.Stale", DefaultConfiguration.LogEntryColorInfoStale());
 
         public static string LogEntryColorWarning() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Warning"];
+            ReadValue("LogEntry.Color.Warning", DefaultConfiguration.LogEntryColorWarning());
 
         public static string LogEntryColorWarningStale() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Warning.Stale"];
+            ReadValue("LogEntry.Color.Warning.Stale", DefaultConfiguration.LogEntryColorWarningStale());
 
         public static string LogEntryColorError() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Error"];
+            ReadValue("LogEntry.Color.Error", DefaultConfiguration.LogEntryColorError());
 
         public static string LogEntryColorErrorStale() =>
-            ConfigurationManager.AppSettings["LogEntry.Color.Error.Stale"];
+            ReadValue("LogEntry.Color.Error.Stale", DefaultConfiguration.LogEntryColorErrorStale());
 
         public static LogEventLevel LogLevel() =>
-            (LogEventLevel) Enum.Parse(typeof(LogEventLevel),
-                ConfigurationManager.AppSettings["SerilogLogLevel"]);
+            ReadValue("SerilogLogLevel", DefaultConfiguration.LogLevel());
+
+        private static T ReadValue<T>(string key)
+        {
+            return ReadValue(key, default(T), true);
+        }
+
+        private static T ReadValue<T>(string key, T defaultValue, bool throwOnException = false)
+        {
+            try
+            {
+                var value = ConfigurationManager.AppSettings[key];
+                return (T) Convert.ChangeType(value, typeof(T));
+            }
+            catch (Exception)
+            {
+                if (throwOnException)
+                {
+                    throw;
+                }
+                return defaultValue;
+            }
+        }
     }
 }

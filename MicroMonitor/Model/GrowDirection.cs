@@ -1,6 +1,6 @@
 ﻿namespace MicroMonitor.Model
 {
-    internal enum GrowDirection
+    public enum GrowDirection
     {
         Up, Down
     }

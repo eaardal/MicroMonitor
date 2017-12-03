@@ -12,17 +12,19 @@ namespace MicroMonitor.Actions
         IAsyncNotificationHandler<SetDefaultWindowWidthAndHeight>, 
         IAsyncNotificationHandler<SetDefaultWindowPosition>
     {
+        private readonly IAppConfiguration _configuration;
         private readonly IAppStore _store;
 
-        public MainWindowActionsHandler(IAppStore store)
+        public MainWindowActionsHandler(IAppStore store, IAppConfiguration configuration)
         {
+            _configuration = configuration;
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
         public async Task Handle(SetDefaultWindowWidthAndHeight notification)
         {
-            var width = AppConfiguration.MainWindowWidth();
-            var height = AppConfiguration.MainWindowHeight();
+            var width = _configuration.MainWindowWidth();
+            var height = _configuration.MainWindowHeight();
 
             await _store.Dispatch(new WindowSizeChanged(width, height));
         }
@@ -32,7 +34,7 @@ namespace MicroMonitor.Actions
             var state = _store.GetState();
             var mainWindow = state.MainWindowState.Window;
 
-            var spawnMethod = AppConfiguration.MainWindowSpawnMethod();
+            var spawnMethod = _configuration.MainWindowSpawnMethod();
 
             double left;
             double top;

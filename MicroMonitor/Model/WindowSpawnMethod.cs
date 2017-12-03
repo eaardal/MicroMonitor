@@ -1,6 +1,6 @@
 ﻿namespace MicroMonitor.Model
 {
-    internal enum WindowSpawnMethod
+    public enum WindowSpawnMethod
     {
         Cursor, CenterScreen
     }

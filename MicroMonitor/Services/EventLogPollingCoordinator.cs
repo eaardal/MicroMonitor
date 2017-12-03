@@ -8,6 +8,7 @@ namespace MicroMonitor.Services
 {
     class EventLogPollingCoordinator : IEventLogPollingCoordinator
     {
+        private readonly ICachePoller _cachePoller;
         private readonly IAppStore _store;
         private readonly IEventLogPoller _eventLogPoller;
         private readonly Timer _nextReadTimer = new Timer();
@@ -16,6 +17,7 @@ namespace MicroMonitor.Services
 
         public EventLogPollingCoordinator(IEventLogPoller eventLogPoller, ICachePoller cachePoller, IAppStore store)
         {
+            _cachePoller = cachePoller;
             _store = store ?? throw new ArgumentNullException(nameof(store));
             _eventLogPoller = eventLogPoller ?? throw new ArgumentNullException(nameof(eventLogPoller));
             if (cachePoller == null) throw new ArgumentNullException(nameof(cachePoller));
@@ -35,8 +37,9 @@ namespace MicroMonitor.Services
         public void Start(string logName, int pollIntervalSeconds)
         {
             _eventLogPoller.StartPollingAtIntervals(logName, pollIntervalSeconds);
-
+            
             var readInterval = pollIntervalSeconds + 2;
+            _cachePoller.ReadOnInterval(logName, readInterval);
 
             _expectedNextReadTime = DateTime.Now.AddSeconds(readInterval);
 

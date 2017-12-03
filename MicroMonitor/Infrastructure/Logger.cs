@@ -7,12 +7,12 @@ namespace MicroMonitor.Infrastructure
     public class Logger
     {
         private static ILogger _serilog;
-
-        public static void Create()
+        
+        public static void Create(IAppConfiguration configuration)
         {
             var config = new LoggerConfiguration();
-            config.WriteTo.RollingFile("Logs\\{Date}.txt");
-            config.MinimumLevel.Is(AppConfiguration.LogLevel());
+            config.WriteTo.RollingFile("Logs\\{Date}.txt").WriteTo.Seq("http://localhost:5341");
+            config.MinimumLevel.Is(configuration.LogLevel());
 
             _serilog = config.CreateLogger();
         }
