@@ -3,7 +3,7 @@ using Serilog.Events;
 
 namespace MicroMonitor.Config
 {
-    public interface IAppConfiguration
+    public interface IConfiguration
     {
         string LogName();
         int PollIntervalSeconds();

@@ -1,5 +1,4 @@
-﻿using System;
-using MicroMonitor.Model;
+﻿using MicroMonitor.Model;
 using Serilog.Events;
 
 namespace MicroMonitor.Config
@@ -7,35 +6,39 @@ namespace MicroMonitor.Config
     public class DefaultConfiguration
     {
         public static string LogEntryColorErrorStale() => "";
+
         public static LogEventLevel LogLevel() => LogEventLevel.Debug;
-        public static string LogEntryColorError() => throw new NotImplementedException();
-        public static string LogEntryColorWarningStale() => throw new NotImplementedException();
-        public static string LogEntryColorWarning() => throw new NotImplementedException();
 
-        public static string LogEntryColorInfoStale() => throw new NotImplementedException();
+        public static string LogEntryColorError() => ColorConstants.ErrorColor;
 
-        public static string LogEntryColorInfo() => throw new NotImplementedException();
+        public static string LogEntryColorWarningStale() => ColorConstants.WarningColorStale;
 
-        public static bool LogEntryStaleEnabled() => throw new NotImplementedException();
+        public static string LogEntryColorWarning() => ColorConstants.WarningColor;
 
-        public static int LogEntryStaleThresholdInMinutes() => throw new NotImplementedException();
+        public static string LogEntryColorInfoStale() => ColorConstants.InfoColorStale;
 
-        public static int MainWindowFontSize() => throw new NotImplementedException();
+        public static string LogEntryColorInfo() => ColorConstants.InfoColor;
 
-        public static WindowSpawnMethod MainWindowSpawnMethod() => throw new NotImplementedException();
+        public static bool LogEntryStaleEnabled() => true;
 
-        public static int MainWindowWidth() => throw new NotImplementedException();
+        public static int LogEntryStaleThresholdInMinutes() => 30;
 
-        public static int MainWindowHeight() => throw new NotImplementedException();
+        public static int MainWindowFontSize() => 11;
 
-        public static int DetailsWindowFontSize() => throw new NotImplementedException();
+        public static WindowSpawnMethod MainWindowSpawnMethod() => WindowSpawnMethod.Cursor;
 
-        public static GrowDirection DetailsWindowGrowDirection() => throw new NotImplementedException();
+        public static int MainWindowWidth() => 200;
 
-        public static int DetailsWindowHeight() => throw new NotImplementedException();
+        public static int MainWindowHeight() => 300;
 
-        public static int DetailsWindowWidth() => throw new NotImplementedException();
+        public static int DetailsWindowFontSize() => 11;
 
-        public static int PollIntervalSeconds() => throw new NotImplementedException();
+        public static GrowDirection DetailsWindowGrowDirection() => GrowDirection.Up;
+
+        public static int DetailsWindowHeight() => MainWindowHeight() + 200;
+
+        public static int DetailsWindowWidth() => 600;
+
+        public static int PollIntervalSeconds() => 10;
     }
 }

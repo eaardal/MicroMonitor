@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using MicroMonitor.Model;
 
@@ -12,10 +11,22 @@ namespace MicroMonitor.Utilities
         {
             return logEntries
                 .GroupBy(e => e.Timestamp.Date)
-                .Select(grp => new GroupedMicroLogEntry
+                .Select(grp =>
                 {
-                    Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy"),
-                    LogEntries = new ObservableCollection<MicroLogEntry>(grp.Select(e => e).OrderByDescending(e => e.Timestamp))
+                    var entry = new GroupedMicroLogEntry
+                    {
+                        Key = grp.Key.Date == DateTime.Today ? "Today" : grp.Key.ToString("dd.MM.yy")
+                    };
+
+                    var entries = grp.Select(e => e)
+                        .OrderByDescending(e => e.Timestamp);
+
+                    foreach (var e in entries)
+                    {
+                        entry.LogEntries.Add(e);
+                    }
+
+                    return entry;
                 });
         }
     }

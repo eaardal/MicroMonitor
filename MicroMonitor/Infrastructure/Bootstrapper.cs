@@ -37,7 +37,7 @@ namespace MicroMonitor.Infrastructure
                 .AsSelf()
                 .AsImplementedInterfaces();
 
-            builder.RegisterInstance(configuration).SingleInstance();
+            builder.RegisterInstance(configuration).AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<CachePoller>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogCache>().AsImplementedInterfaces().SingleInstance();
             builder.RegisterType<EventLogPoller>().AsImplementedInterfaces().SingleInstance();

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace MicroMonitor.Services
         {
             if (!EventLog.Exists(logName))
             {
-                Logger.Warning($"Event Log \"{logName}\" does not exist");
+                Logger.Error($"Event Log \"{logName}\" does not exist");
                 return new List<MicroLogEntry>();
             }
 
@@ -26,11 +25,11 @@ namespace MicroMonitor.Services
 
             eventLog.Entries.CopyTo(eventLogEntriesBuffer, 0);
 
-            Logger.Debug($"Read {eventLogEntriesBuffer.Length} log entries from Event Log \"{logName}\"");
+            Logger.Verbose($"Read {eventLogEntriesBuffer.Length} log entries from Event Log \"{logName}\"");
 
             return eventLogEntriesBuffer.Select(l => new MicroLogEntry
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = $"{logName}_{l.Source}_{l.EntryType}_{l.TimeWritten.Ticks}",
                 Source = l.Source,
                 Message = l.Message,
                 Severity = MicroLogSeverityHelper.MapSeverity(l),

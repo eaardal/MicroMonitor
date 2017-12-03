@@ -1,25 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
-using MediatR;
 using MicroMonitor.Model;
+using Action = MicroMonitor.Infrastructure.Action;
 
 namespace MicroMonitor.Actions
 {
-    public class RefreshEventLogEntriesStart : INotification { }
+    public class RefreshEventLogEntriesStart : Action
+    {
+        public override string ToString()
+        {
+            return "REFRESH_EVENT_LOG_ENTRIES/START";
+        }
+    }
 
-    public class RefreshEventLogEntriesSuccess : INotification
+    public class RefreshEventLogEntriesSuccess : Action
     {
         public string LogName { get; }
-        public IEnumerable<GroupedMicroLogEntry> EventLogEntries { get; }
+        public IEnumerable<MicroLogEntry> EventLogEntries { get; }
 
-        public RefreshEventLogEntriesSuccess(string logName, IEnumerable<GroupedMicroLogEntry> eventLogEntries)
+        public RefreshEventLogEntriesSuccess(string logName, IEnumerable<MicroLogEntry> eventLogEntries)
         {
             LogName = logName;
             EventLogEntries = eventLogEntries;
         }
+
+        public override string ToString()
+        {
+            return "REFRESH_EVENT_LOG_ENTRIES/SUCCESS";
+        }
     }
 
-    public class RefreshEventLogEntriesError : INotification
+    public class RefreshEventLogEntriesError : Action
     {
         public Exception Exception { get; }
 
@@ -27,16 +38,30 @@ namespace MicroMonitor.Actions
         {
             Exception = exception;
         }
+
+        public override string ToString()
+        {
+            return "REFRESH_EVENT_LOG_ENTRIES/ERROR";
+        }
     }
 
-    public class RefreshEventLogEntries : INotification { }
-
-    public class StartPollingForEventLogEntries : INotification
+    public class RefreshEventLogEntries : Action
     {
-        
+        public override string ToString()
+        {
+            return "REFRESH_EVENT_LOG_ENTRIES";
+        }
     }
 
-    public class UpdateEventLogEntries : INotification
+    public class StartPollingForEventLogEntries : Action
+    {
+        public override string ToString()
+        {
+            return "START_POLLING_FOR_EVENT_LOG_ENTRIES";
+        }
+    }
+
+    public class UpdateEventLogEntries : Action
     {
         public string LogName { get; }
         public IEnumerable<MicroLogEntry> EventLogEntries { get; }
@@ -45,6 +70,11 @@ namespace MicroMonitor.Actions
         {
             LogName = logName;
             EventLogEntries = eventLogEntries;
+        }
+
+        public override string ToString()
+        {
+            return "UPDATE_EVENT_LOG_ENTRIES";
         }
     }
 }

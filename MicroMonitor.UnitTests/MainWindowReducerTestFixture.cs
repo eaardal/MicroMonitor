@@ -15,7 +15,7 @@ namespace MicroMonitor.UnitTests
     {
         public AppState State { get; } = new AppState();
         public Mock<IAppStore> Store { get; } = new Mock<IAppStore>();
-        public Mock<IAppConfiguration> Configuration { get; } = new Mock<IAppConfiguration>();
+        public Mock<IConfiguration> Configuration { get; } = new Mock<IConfiguration>();
 
         public MainWindowReducerTestFixture()
         {

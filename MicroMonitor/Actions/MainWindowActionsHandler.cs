@@ -12,10 +12,10 @@ namespace MicroMonitor.Actions
         IAsyncNotificationHandler<SetDefaultWindowWidthAndHeight>, 
         IAsyncNotificationHandler<SetDefaultWindowPosition>
     {
-        private readonly IAppConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         private readonly IAppStore _store;
 
-        public MainWindowActionsHandler(IAppStore store, IAppConfiguration configuration)
+        public MainWindowActionsHandler(IAppStore store, IConfiguration configuration)
         {
             _configuration = configuration;
             _store = store ?? throw new ArgumentNullException(nameof(store));

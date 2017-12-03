@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Windows;
@@ -6,6 +7,7 @@ using System.Windows.Media;
 using MediatR;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
+using MicroMonitor.Model;
 using MicroMonitor.Utilities;
 
 namespace MicroMonitor.Reducers
@@ -44,10 +46,7 @@ namespace MicroMonitor.Reducers
             _state.OverlayVisibility = Visibility.Collapsed;
             _state.LastReadText = $"Last read: {DateTime.Now:HH:mm:ss}";
 
-            foreach (var logEntry in message.EventLogEntries)
-            {
-                _state.GroupedLogEntries.Add(logEntry);
-            }
+            UpdateEventLogEntries(message.EventLogEntries);
         }
 
         public void Handle(RefreshEventLogEntriesError message)
@@ -99,10 +98,14 @@ namespace MicroMonitor.Reducers
 
         public void Handle(UpdateEventLogEntries message)
         {
-            var existingLogEntries = _state.LogEntries.Select(e => e.Id);
-            Logger.Debug("Existing entries: {LogEntries}", existingLogEntries);
+            UpdateEventLogEntries(message.EventLogEntries);
+        }
 
-            var newLogEntries = message.EventLogEntries
+        private void UpdateEventLogEntries(IEnumerable<MicroLogEntry> logEntries)
+        {
+            var existingLogEntries = _state.LogEntries.Select(e => e.Id);
+
+            var newLogEntries = logEntries
                 .Where(entry => !existingLogEntries.Contains(entry.Id))
                 .OrderBy(entry => entry.Timestamp)
                 .ToImmutableList();

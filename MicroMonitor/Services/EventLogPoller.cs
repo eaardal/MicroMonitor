@@ -44,7 +44,7 @@ namespace MicroMonitor.Services
             _timer.Elapsed += TimerOnElapsed;
             _timer.Start();
 
-            Logger.Debug($"Timer polling Event Log {logName} every {pollIntervalSeconds}s / {_timer.Interval}ms");
+            Logger.Verbose($"Timer polling Event Log {logName} every {pollIntervalSeconds}s / {_timer.Interval}ms");
         }
 
         public void StopPolling()

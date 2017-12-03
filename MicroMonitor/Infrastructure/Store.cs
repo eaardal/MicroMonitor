@@ -20,8 +20,10 @@ namespace MicroMonitor.Infrastructure
             return _state;
         }
 
-        public async Task Dispatch<TMessage>(TMessage message) where TMessage : INotification
+        public async Task Dispatch<TMessage>(TMessage message) where TMessage : Action
         {
+            Logger.Debug("{@Action}", message);
+
             await _mediator.Publish(message);
         }
     }

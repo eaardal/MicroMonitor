@@ -114,7 +114,9 @@
     <Compile Include="AppState.cs" />
     <Compile Include="Config\AppConfiguration.cs" />
     <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Config\IAppConfiguration.cs" />
+    <Compile Include="Config\DefaultConfiguration.cs" />
+    <Compile Include="Config\IConfiguration.cs" />
+    <Compile Include="Infrastructure\Action.cs" />
     <Compile Include="Infrastructure\ActionHandler.cs" />
     <Compile Include="Infrastructure\IAppStore.cs" />
     <Compile Include="Infrastructure\ObservableObject.cs" />
@@ -144,8 +146,6 @@
     <Compile Include="Reducers\PeekWindowReducer.cs" />
     <Compile Include="Reducers\PeekWindowState.cs" />
     <Compile Include="Services\EventLogPollingCoordinator.cs" />
-    <Compile Include="Services\EventLogService.cs" />
-    <Compile Include="Services\IEventLogService.cs" />
     <Compile Include="Services\ICachePoller.cs" />
     <Compile Include="Services\IEventLogCache.cs" />
     <Compile Include="Utilities\ColorExtensions.cs" />

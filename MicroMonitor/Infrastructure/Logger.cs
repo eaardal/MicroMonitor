@@ -8,7 +8,7 @@ namespace MicroMonitor.Infrastructure
     {
         private static ILogger _serilog;
         
-        public static void Create(IAppConfiguration configuration)
+        public static void Create(IConfiguration configuration)
         {
             var config = new LoggerConfiguration();
             config.WriteTo.RollingFile("Logs\\{Date}.txt").WriteTo.Seq("http://localhost:5341");

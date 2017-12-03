@@ -1,10 +1,9 @@
-﻿using System;
-using MicroMonitor.Model;
+﻿using MicroMonitor.Model;
 using Serilog.Events;
 
 namespace MicroMonitor.Config
 {
-    public class Configuration : IAppConfiguration
+    public class Configuration : IConfiguration
     {
         public string LogName()
         {

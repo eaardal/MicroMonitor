@@ -29,7 +29,7 @@ namespace MicroMonitor.Views.MainView
         {
             if (e.Key == Key.E)
             {
-                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Visible));
+                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Collapsed));
             }
         }
 
@@ -37,7 +37,7 @@ namespace MicroMonitor.Views.MainView
         {
             if (e.Key == Key.E)
             {
-                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Collapsed));
+                await _store.Dispatch(new ToggleHeaderPanelVisibility(Visibility.Visible));
             }
 
             if (e.Key == Key.LeftShift)
