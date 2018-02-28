@@ -143,9 +143,7 @@ namespace MicroMonitor.Reducers
 
             foreach (var logEntry in newLogEntries)
             {
-                //_state.LogEntries.Insert(0, logEntry);
-                _state.LogEntries.Add(logEntry);
-                //_state.LogEntries.Move(_state.LogEntries.Count, 0);
+                _state.LogEntries.Insert(0, logEntry);
             }
 
             var groupedLogEntries = LogEntryUtils.GroupLogEntriesByDate(newLogEntries);
@@ -159,16 +157,12 @@ namespace MicroMonitor.Reducers
 
                     foreach (var entry in grouping.LogEntries.OrderBy(e => e.Timestamp))
                     {
-                        //grp.LogEntries.Insert(0, entry);
-                        grp.LogEntries.Add(entry);
-                        //grp.LogEntries.Move(grp.LogEntries.Count, 0);
+                        grp.LogEntries.Insert(0, entry);
                     }
                 }
                 else
                 {
-                    //_state.GroupedLogEntries.Insert(0, grouping);
-                    _state.GroupedLogEntries.Add(grouping);
-                    //_state.GroupedLogEntries.Move(_state.GroupedLogEntries.Count, 0);
+                    _state.GroupedLogEntries.Insert(0, grouping);
                 }
             }
         }
