@@ -22,7 +22,7 @@ namespace MicroMonitor.Infrastructure
 
         public async Task Dispatch<TMessage>(TMessage message) where TMessage : Action
         {
-            Logger.Debug("{@Action}", message);
+            /*Logger.Debug("{@Action}", message);*/
 
             await _mediator.Publish(message);
         }

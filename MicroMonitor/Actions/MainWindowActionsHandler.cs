@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using MicroMonitor.Config;
@@ -9,8 +10,8 @@ using MicroMonitor.Model;
 namespace MicroMonitor.Actions
 {
     class MainWindowActionsHandler : 
-        IAsyncNotificationHandler<SetDefaultWindowWidthAndHeight>, 
-        IAsyncNotificationHandler<SetDefaultWindowPosition>
+        INotificationHandler<SetDefaultWindowWidthAndHeight>, 
+        INotificationHandler<SetDefaultWindowPosition>
     {
         private readonly IConfiguration _configuration;
         private readonly IAppStore _store;
@@ -21,7 +22,7 @@ namespace MicroMonitor.Actions
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
-        public async Task Handle(SetDefaultWindowWidthAndHeight notification)
+        public async Task Handle(SetDefaultWindowWidthAndHeight notification, CancellationToken cancellationToken)
         {
             var width = _configuration.MainWindowWidth();
             var height = _configuration.MainWindowHeight();
@@ -29,7 +30,7 @@ namespace MicroMonitor.Actions
             await _store.Dispatch(new WindowSizeChanged(width, height));
         }
 
-        public async Task Handle(SetDefaultWindowPosition notification)
+        public async Task Handle(SetDefaultWindowPosition notification, CancellationToken cancellationToken)
         {
             var state = _store.GetState();
             var mainWindow = state.MainWindowState.Window;

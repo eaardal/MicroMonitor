@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
 
@@ -15,12 +17,14 @@ namespace MicroMonitor.Reducers
             _state = store.GetState().DetailsWindowState;
         }
         
-        public void Handle(CreatedNewDetailsWindow message)
+        public Task Handle(CreatedNewDetailsWindow message, CancellationToken cancellationToken)
         {
             _state.OpenDetailsWindows.Add(message.NewDetailsWindow);
+
+            return Task.CompletedTask;
         }
 
-        public void Handle(CloseAllOpenDetailsWindows notification)
+        public Task Handle(CloseAllOpenDetailsWindows notification, CancellationToken cancellationToken)
         {
             foreach (var openDetailWindow in _state.OpenDetailsWindows)
             {
@@ -28,6 +32,8 @@ namespace MicroMonitor.Reducers
             }
 
             _state.OpenDetailsWindows.Clear();
+
+            return Task.CompletedTask;
         }
     }
 }

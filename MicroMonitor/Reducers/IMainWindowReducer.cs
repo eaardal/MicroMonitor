@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
 
@@ -5,20 +7,20 @@ namespace MicroMonitor.Reducers
 {
     public interface IMainWindowReducer : IReducer
     {
-        void Handle(RefreshEventLogEntriesStart message);
-        void Handle(RefreshEventLogEntriesSuccess message);
-        void Handle(RefreshEventLogEntriesError message);
-        void Handle(ToggleHeaderPanelVisibility message);
-        void Handle(CreatedNewDetailsWindow message);
-        void Handle(SetTraversingIndex message);
-        void Handle(MainWindowActivated message);
-        void Handle(WindowPositionChanged message);
-        void Handle(WindowSizeChanged message);
-        void Handle(SetMainWindow message);
-        void Handle(SetLastReadText message);
-        void Handle(UpdateEventLogEntries message);
-        void Handle(CloseAllOpenDetailsWindows message);
-        void Handle(MouseEnterLogEntryBoundaries message);
-        void Handle(MouseLeaveLogEntryBoundaries message);
+        Task Handle(RefreshEventLogEntriesStart message, CancellationToken cancellationToken);
+        Task Handle(RefreshEventLogEntriesSuccess message, CancellationToken cancellationToken);
+        Task Handle(RefreshEventLogEntriesError message, CancellationToken cancellationToken);
+        Task Handle(ToggleHeaderPanelVisibility message, CancellationToken cancellationToken);
+        Task Handle(CreatedNewDetailsWindow message, CancellationToken cancellationToken);
+        Task Handle(SetTraversingIndex message, CancellationToken cancellationToken);
+        Task Handle(MainWindowActivated message, CancellationToken cancellationToken);
+        Task Handle(WindowPositionChanged message, CancellationToken cancellationToken);
+        Task Handle(WindowSizeChanged message, CancellationToken cancellationToken);
+        Task Handle(SetMainWindow message, CancellationToken cancellationToken);
+        Task Handle(SetLastReadText message, CancellationToken cancellationToken);
+        Task Handle(UpdateEventLogEntries message, CancellationToken cancellationToken);
+        Task Handle(CloseAllOpenDetailsWindows message, CancellationToken cancellationToken);
+        Task Handle(MouseEnterLogEntryBoundaries message, CancellationToken cancellationToken);
+        Task Handle(MouseLeaveLogEntryBoundaries message, CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using MicroMonitor.Config;
@@ -6,7 +7,7 @@ using MicroMonitor.Services;
 
 namespace MicroMonitor.Actions
 {
-    class EventLogActionsHandler : IAsyncNotificationHandler<RefreshEventLogEntries>, INotificationHandler<StartPollingForEventLogEntries>
+    internal class EventLogActionsHandler : INotificationHandler<RefreshEventLogEntries>, INotificationHandler<StartPollingForEventLogEntries>
     {
         private readonly IEventLogReader _eventLogReader;
         private readonly IConfiguration _configuration;
@@ -21,9 +22,9 @@ namespace MicroMonitor.Actions
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        public async Task Handle(RefreshEventLogEntries message)
+        public async Task Handle(RefreshEventLogEntries message, CancellationToken cancellationToken)
         {
-            await _mediator.Publish(new RefreshEventLogEntriesStart());
+            await _mediator.Publish(new RefreshEventLogEntriesStart(), cancellationToken);
 
             var logName = _configuration.LogName();
 
@@ -31,20 +32,20 @@ namespace MicroMonitor.Actions
             {
                 var eventLogEntries = await _eventLogReader.ReadEventLogAsync(logName);
 
-                await _mediator.Publish(new RefreshEventLogEntriesSuccess(logName, eventLogEntries));
+                await _mediator.Publish(new RefreshEventLogEntriesSuccess(logName, eventLogEntries), cancellationToken);
             }
             catch (Exception e)
             {
-                await _mediator.Publish(new RefreshEventLogEntriesError(e));
+                await _mediator.Publish(new RefreshEventLogEntriesError(e), cancellationToken);
             }
         }
 
-        public void Handle(StartPollingForEventLogEntries notification)
+        public async Task Handle(StartPollingForEventLogEntries notification, CancellationToken cancellationToken)
         {
             var logName = _configuration.LogName();
             var pollIntervalSeconds = _configuration.PollIntervalSeconds();
             
-            _eventLogPoller.Start(logName, pollIntervalSeconds);
+            await Task.Run(() => _eventLogPoller.Start(logName, pollIntervalSeconds), cancellationToken);
         }
     }
 }

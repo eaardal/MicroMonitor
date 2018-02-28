@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
 using MicroMonitor.Model;
@@ -47,7 +48,7 @@ namespace MicroMonitor.UnitTests
 
             var action = new UpdateEventLogEntries(LogName, logEntries);
 
-            sut.Handle(action);
+            sut.Handle(action, CancellationToken.None);
 
             var state = _fixture.State.MainWindowState;
 
@@ -88,7 +89,7 @@ namespace MicroMonitor.UnitTests
             
             var action = new UpdateEventLogEntries(LogName, newLogEntries);
 
-            sut.Handle(action);
+            sut.Handle(action, CancellationToken.None);
 
             var state = _fixture.State.MainWindowState;
 

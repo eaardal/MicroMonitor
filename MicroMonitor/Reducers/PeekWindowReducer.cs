@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
 using MicroMonitor.Actions;
 using MicroMonitor.Infrastructure;
 
@@ -13,10 +15,12 @@ namespace MicroMonitor.Reducers
             _state = store.GetState().PeekWindowState;
         }
 
-        public void Handle(OpenedNewPeekWindow message)
+        public Task Handle(OpenedNewPeekWindow message, CancellationToken cancellationToken)
         {
             _state.PeekWindow = message.NewPeekWindow;
             _state.PeekWindowId = message.NewPeekWindowId;
+            
+            return Task.CompletedTask;
         }
     }
 }

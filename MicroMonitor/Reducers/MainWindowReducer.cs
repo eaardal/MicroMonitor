@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using MediatR;
@@ -41,69 +43,93 @@ namespace MicroMonitor.Reducers
             //};
         }
 
-        public void Handle(RefreshEventLogEntriesStart message)
+        public Task Handle(RefreshEventLogEntriesStart message, CancellationToken cancellationToken)
         {
             _state.OverlayVisibility = Visibility.Visible;
+
+            return Task.CompletedTask;
         }
 
-        public void Handle(RefreshEventLogEntriesSuccess message)
+        public Task Handle(RefreshEventLogEntriesSuccess message, CancellationToken cancellationToken)
         {
             _state.OverlayVisibility = Visibility.Collapsed;
             _state.LastReadText = $"Last read: {DateTime.Now:HH:mm:ss}";
 
             UpdateEventLogEntries(message.EventLogEntries);
+
+            return Task.CompletedTask;
         }
 
-        public void Handle(RefreshEventLogEntriesError message)
+        public Task Handle(RefreshEventLogEntriesError message, CancellationToken cancellationToken)
         {
             _state.OverlayVisibility = Visibility.Collapsed;
+
+            return Task.CompletedTask;
         }
 
-        public void Handle(ToggleHeaderPanelVisibility message)
+        public Task Handle(ToggleHeaderPanelVisibility message, CancellationToken cancellationToken)
         {
             _state.HeaderPanelVisibility = message.Visibility;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(CreatedNewDetailsWindow message)
+        public Task Handle(CreatedNewDetailsWindow message, CancellationToken cancellationToken)
         {
             _state.IsCloseAllDetailWindowsButtonEnabled = true;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(SetTraversingIndex message)
+        public Task Handle(SetTraversingIndex message, CancellationToken cancellationToken)
         {
             _state.TraversingIndex = message.TraversingIndex;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(MainWindowActivated message)
+        public Task Handle(MainWindowActivated message, CancellationToken cancellationToken)
         {
             _state.IsActivatedOnce = true;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(WindowPositionChanged message)
+        public Task Handle(WindowPositionChanged message, CancellationToken cancellationToken)
         {
             _state.WindowLeft = message.Left;
             _state.WindowTop = message.Top;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(WindowSizeChanged message)
+        public Task Handle(WindowSizeChanged message, CancellationToken cancellationToken)
         {
             _state.WindowHeight = message.Height;
             _state.WindowWidth = message.Width;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(SetMainWindow message)
+        public Task Handle(SetMainWindow message, CancellationToken cancellationToken)
         {
             _state.Window = message.MainWindow;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(SetLastReadText message)
+        public Task Handle(SetLastReadText message, CancellationToken cancellationToken)
         {
             _state.LastReadText = message.LastReadText;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(UpdateEventLogEntries message)
+        public Task Handle(UpdateEventLogEntries message, CancellationToken cancellationToken)
         {
             UpdateEventLogEntries(message.EventLogEntries);
+            
+            return Task.CompletedTask;
         }
 
         private void UpdateEventLogEntries(IEnumerable<MicroLogEntry> logEntries)
@@ -147,12 +173,14 @@ namespace MicroMonitor.Reducers
             }
         }
 
-        public void Handle(CloseAllOpenDetailsWindows message)
+        public Task Handle(CloseAllOpenDetailsWindows message, CancellationToken cancellationToken)
         {
             _state.IsCloseAllDetailWindowsButtonEnabled = false;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(MouseEnterLogEntryBoundaries message)
+        public Task Handle(MouseEnterLogEntryBoundaries message, CancellationToken cancellationToken)
         {
             _state.CurrentMouseOverBorder = message.Border;
 
@@ -161,9 +189,11 @@ namespace MicroMonitor.Reducers
 
             // Store original brush in Tag so it can be restored later
             _state.CurrentMouseOverBorder.Tag = brush;
+            
+            return Task.CompletedTask;
         }
 
-        public void Handle(MouseLeaveLogEntryBoundaries message)
+        public Task Handle(MouseLeaveLogEntryBoundaries message, CancellationToken cancellationToken)
         {
             var currentMouseOverBorder = _state.CurrentMouseOverBorder;
 
@@ -173,6 +203,8 @@ namespace MicroMonitor.Reducers
                 var brush = (SolidColorBrush)currentMouseOverBorder.Tag;
                 currentMouseOverBorder.Background = brush;
             }
+
+            return Task.CompletedTask;
         }
     }
 }

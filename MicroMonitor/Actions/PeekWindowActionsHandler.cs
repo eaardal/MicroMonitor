@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,11 +14,11 @@ using MicroMonitor.Views.DetailsView;
 
 namespace MicroMonitor.Actions
 {
-    class PeekWindowActionsHandler : 
-        IAsyncNotificationHandler<OpenPeekWindowUnderMouseCursor>, 
-        IAsyncNotificationHandler<OpenPeekWindowForNumericKey>, 
-        IAsyncNotificationHandler<TraverseDownAndOpenPeekWindow>,
-        IAsyncNotificationHandler<TraverseUpAndOpenPeekWindow>
+    internal class PeekWindowActionsHandler : 
+        INotificationHandler<OpenPeekWindowUnderMouseCursor>, 
+        INotificationHandler<OpenPeekWindowForNumericKey>, 
+        INotificationHandler<TraverseDownAndOpenPeekWindow>,
+        INotificationHandler<TraverseUpAndOpenPeekWindow>
     {
         private readonly IAppStore _store;
 
@@ -26,7 +27,7 @@ namespace MicroMonitor.Actions
             _store = store ?? throw new ArgumentNullException(nameof(store));
         }
 
-        public async Task Handle(OpenPeekWindowUnderMouseCursor message)
+        public async Task Handle(OpenPeekWindowUnderMouseCursor message, CancellationToken cancellationToken)
         {
             var ele = Mouse.DirectlyOver as UIElement;
 
@@ -85,7 +86,7 @@ namespace MicroMonitor.Actions
             return (newPeekWindow, logEntry.Id);
         }
 
-        public async Task Handle(OpenPeekWindowForNumericKey message)
+        public async Task Handle(OpenPeekWindowForNumericKey message, CancellationToken cancellationToken)
         {
             var state = _store.GetState();
             var logEntries = state.MainWindowState.LogEntries;
@@ -150,7 +151,7 @@ namespace MicroMonitor.Actions
             return detailsWindow;
         }
 
-        public async Task Handle(TraverseDownAndOpenPeekWindow message)
+        public async Task Handle(TraverseDownAndOpenPeekWindow message, CancellationToken cancellationToken)
         {
             var state = _store.GetState();
             var logEntries = state.MainWindowState.LogEntries;
@@ -175,7 +176,7 @@ namespace MicroMonitor.Actions
             }
         }
 
-        public async Task Handle(TraverseUpAndOpenPeekWindow notification)
+        public async Task Handle(TraverseUpAndOpenPeekWindow notification, CancellationToken cancellationToken)
         {
             var state = _store.GetState();
             var logEntries = state.MainWindowState.LogEntries;

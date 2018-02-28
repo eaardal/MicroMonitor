@@ -37,14 +37,24 @@ namespace MicroMonitor.UnitTests
 
         public MainWindowReducerTestFixture SetupLogEntries(List<MicroLogEntry> logEntries)
         {
-            State.MainWindowState.LogEntries = new ObservableCollection<MicroLogEntry>(logEntries.OrderByDescending(e => e.Timestamp));
+            State.MainWindowState.LogEntries.Clear();
+
+            foreach (var microLogEntry in logEntries.OrderByDescending(e => e.Timestamp))
+            {
+                State.MainWindowState.LogEntries.Add(microLogEntry);
+            }
+            
             return this;
         }
 
         public MainWindowReducerTestFixture SetupGroupedLogEntries(List<MicroLogEntry> logEntries)
         {
-            State.MainWindowState.GroupedLogEntries =
-                new ObservableCollection<GroupedMicroLogEntry>(LogEntryUtils.GroupLogEntriesByDate(logEntries));
+            State.MainWindowState.GroupedLogEntries.Clear();
+
+            foreach (var microLogEntry in LogEntryUtils.GroupLogEntriesByDate(logEntries))
+            {
+                State.MainWindowState.GroupedLogEntries.Add(microLogEntry);
+            }
 
             return this;
         }
