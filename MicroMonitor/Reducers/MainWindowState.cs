@@ -21,8 +21,8 @@ namespace MicroMonitor.Reducers
         private int _traversingIndex;
         private bool _isActivatedOnce;
         private Border _currentMouseOverBorder;
-        private ObservableCollection<GroupedMicroLogEntry> _groupedLogEntries;
-        private ObservableCollection<MicroLogEntry> _logEntries;
+        private ObservableCollection<GroupedMicroLogEntry> _groupedLogEntries = new ObservableCollection<GroupedMicroLogEntry>();
+        private ObservableCollection<MicroLogEntry> _logEntries = new ObservableCollection<MicroLogEntry>();
         
         public ObservableCollection<GroupedMicroLogEntry> GroupedLogEntries
         {

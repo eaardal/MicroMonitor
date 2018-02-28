@@ -15,7 +15,7 @@ namespace MicroMonitor.Views.MainView
             
             var store = ServiceLocator.Current.GetInstance<IAppStore>();
             _viewModel = new MainWindowViewModel(this, store);
-            DataContext = _viewModel.State;
+            DataContext = store.State.MainWindowState;
             
             Loaded += async (sender, args) => await _viewModel.OnLoaded(sender, args);
             KeyDown += async (sender, args) => await _viewModel.OnKeyDown(sender, args);

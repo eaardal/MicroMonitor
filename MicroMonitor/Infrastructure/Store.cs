@@ -20,6 +20,8 @@ namespace MicroMonitor.Infrastructure
             return _state;
         }
 
+        public TState State => _state;
+
         public async Task Dispatch<TMessage>(TMessage message) where TMessage : Action
         {
             /*Logger.Debug("{@Action}", message);*/

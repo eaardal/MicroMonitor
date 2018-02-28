@@ -22,7 +22,7 @@ namespace MicroMonitor.Views.MainView
             _store = store;
             _store.Dispatch(new SetMainWindow(window)).Wait();
             
-            State = _store.GetState().MainWindowState;
+            State = _store.State.MainWindowState;
         }
 
         public async Task OnKeyUp(object o, KeyEventArgs e)

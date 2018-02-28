@@ -36,7 +36,7 @@ namespace MicroMonitor.Reducers
 
         public MainWindowReducer(IAppStore store)
         {
-            _state = store.GetState().MainWindowState;
+            _state = store.State.MainWindowState;
             //_state.GroupedLogEntries.CollectionChanged += (sender, args) =>
             //{
             //    Logger.Debug("GroupedLogEntries: {@ChangeType}", args.Action);
