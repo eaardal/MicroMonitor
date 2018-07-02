@@ -94,6 +94,23 @@ namespace MicroMonitor.Views.MainView
                 await GetAndBindEvents(logName);
 
                 StartPollingForEventViewerLogs(logName, pollIntervalSeconds);
+
+                ShowNoLogEntriesFoundMessageIfEmpty();
+            }
+        }
+
+        private void ShowNoLogEntriesFoundMessageIfEmpty()
+        {
+            if (LogEntries.HasItems)
+            {
+                ScrlLogEntries.Visibility = Visibility.Visible;
+                TxtNoItems.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                ScrlLogEntries.Visibility = Visibility.Collapsed;
+                TxtNoItems.Visibility = Visibility.Visible;
+                TxtNoItems.Text = $"No log entries found for \"{AppConfiguration.LogName()}\"";
             }
         }
 
@@ -149,6 +166,8 @@ namespace MicroMonitor.Views.MainView
             ShowOverlay();
 
             await GetAndBindEvents(AppConfiguration.LogName());
+
+            ShowNoLogEntriesFoundMessageIfEmpty();
 
             HideOverlay();
         }

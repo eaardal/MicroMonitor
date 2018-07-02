@@ -72,7 +72,8 @@
                 </Border>
             </Grid>
             <Grid Grid.Row="1">
-                <ScrollViewer>
+                <TextBlock x:Name="TxtNoItems" Visibility="Collapsed" Text="No log entries found" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" FontStyle="Italic" Foreground="Gray" />
+                <ScrollViewer x:Name="ScrlLogEntries" Visibility="Visible">
                     <ItemsControl x:Name="LogEntries">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
